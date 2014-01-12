@@ -2,16 +2,16 @@
   <body>
 	<canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;"></canvas>
 
+	<script src="js/util.js"></script>        
 	<script src="js/math/frac.js"></script>
 	<script src="js/math/empty.js"></script>	
 	
 	<script>
-	  var c=document.getElementById("myCanvas");
-	  var ctx=c.getContext("2d");
-	  ctx.fillStyle="#FF0000";
-	  ctx.fillRect(0,0,150,75);
+	  var c = document.getElementById("myCanvas");
+	  var context = c.getContext("2d");
 
-	  var test = math.frac.fracFactory();
+	  var f = math.frac.fracFactory();
+	  f.draw( util.getTranslatedContext(context, 0, 0) );
 	</script>
 	
   </body>
