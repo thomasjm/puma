@@ -40,7 +40,6 @@ math.frac.fracFactory = function(num, denom) {
     };
     
     var init = function() {
-        console.log("Initializing fraction!");
         return that;
     };
 
