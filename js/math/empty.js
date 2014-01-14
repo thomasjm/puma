@@ -17,16 +17,26 @@ math.empty.emptyFactory = function() {
             height: 30
         };
     };
-    
+
     var draw = that.draw = function(context) {
         var width = that.getWidth();
         var height = that.getHeight();
-        
-        context.strokeRect(0, 0, width, height);        
+
+        // context.strokeRect(0, 0, width, height);
+		var origin = context.getOrigin();
+		
+		new CanvasText( context.getCanvas(), {
+			x: 0,
+			y: 0,
+			width: width,
+			height: height,
+			context: context,
+			placeholder: 'Enter your username...'
+		} );
+
     };
-    
+
     var init = function() {
-        console.log("Initializing empty!");
         return that;
     };
 

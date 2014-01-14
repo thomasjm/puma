@@ -35,8 +35,8 @@ math.frac.fracFactory = function(num, denom) {
         context.lineTo(lineX + width, lineY);
         context.stroke();
 
-        num.draw( util.getTranslatedContext(context, 0, 0) );
-        denom.draw( util.getTranslatedContext(context, 0, lineY + LINE_Y_PADDING) );            
+        num.draw( util.getTranslatedContext(context, context.getCanvas(), 0, 0) );
+        denom.draw( util.getTranslatedContext(context, context.getCanvas(), 0, lineY + LINE_Y_PADDING) );            
     };
     
     var init = function() {
