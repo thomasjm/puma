@@ -4,7 +4,7 @@ util.getTranslatedContext = function(context, canv, x0, y0) {
 
     var delegate = that.delegate = context;
 	var canvas = canv;
-	
+
 	var getOrigin = that.getOrigin = function() {
 		return {x: x0, y: y0};
 	};
@@ -12,7 +12,7 @@ util.getTranslatedContext = function(context, canv, x0, y0) {
 	var getCanvas = that.getCanvas = function() {
 		return canvas;
 	};
-    
+
     var moveTo = that.moveTo = function(x, y) {
         delegate.moveTo(x + x0, y + y0);
     };
@@ -28,11 +28,11 @@ util.getTranslatedContext = function(context, canv, x0, y0) {
     var fillText = that.fillText = function(text, x, y, maxWidth) {
         delegate.fillText(text, x + x0, y + y0, maxWidth);
     };
-	
+
     var strokeRect = that.strokeRect = function(x, y, width, height) {
         delegate.strokeRect(x + x0, y + y0, width, height);
     };
-    
+
     var rect = that.rect = function(x, y, width, height) {
         delegate.rect(x + x0, y + y0, width, height);
     };
@@ -44,7 +44,7 @@ util.getTranslatedContext = function(context, canv, x0, y0) {
 	var measureText = that.measureText = function(text) {
 		return delegate.measureText(text);
 	};
-	
+
     var setFillStyle = that.setFillStyle = function(fillStyle) {
         delegate.fillStyle = fillStyle;
     };
@@ -56,7 +56,7 @@ util.getTranslatedContext = function(context, canv, x0, y0) {
     var setStrokeStyle = that.setStrokeStyle = function(strokeStyle) {
         delegate.strokeStyle = strokeStyle;
     };
-    
+
     var beginPath = that.beginPath = function() {
         delegate.beginPath();
     };
@@ -72,7 +72,18 @@ util.getTranslatedContext = function(context, canv, x0, y0) {
     var fill = that.fill = function() {
         delegate.fill();
     };
-    
+
+    var clearRect = that.clearRect = function(x, y, width, height) {
+        delegate.clearRect(x + x0, y + y0, width, height);
+    };
+
+    var drawImage = that.drawImage = function(canvas, x, y) {
+        delegate.drawImage(canvas, x + x0, y + y0);
+    };
+
+    // /* Exposed variables */
+    // var canvas = that.canvas = delegate.canvas;
+
     var init = function() {
         return that;
     };

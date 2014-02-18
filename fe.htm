@@ -1,32 +1,38 @@
 <html>
   <body>
-	<canvas id="myCanvas" width="200" height="200" style="border:1px solid #000000;"></canvas>
+	<canvas id="myCanvas" width="500" height="500" style="border:1px solid #000000;"></canvas>
 
 	<script type="text/javascript" src="libs/Canvas-Input/src/canvasinput.js"></script>
-	<script src="js/util.js"></script>        
+
+	<script type="text/javascript" src="libs/CanvasInput/CanvasInput.js"></script>
+
+	<script src="js/util.js"></script>
 	<script src="js/math/frac.js"></script>
-	<script src="js/math/empty.js"></script>	
+	<script src="js/math/empty.js"></script>
 
 	<script>
-	  var c = document.getElementById("myCanvas");
-	  var context = c.getContext("2d");
+        var fe = fe || {};
+        fe.c = document.getElementById("myCanvas");
 
-	  var f = math.frac.fracFactory();
-	  f.draw( util.getTranslatedContext(context, c, 10, 10) );
+	    var context = fe.c.getContext("2d");
 
-	  var f2 = math.frac.fracFactory();
-	  f2.draw( util.getTranslatedContext(context, c, 50, 10) );
+	    var f = math.frac.fracFactory();
+	    f.draw( util.getTranslatedContext(context, fe.c, 10, 10) );
 
-	  var test = new CanvasText( c, {
-	  x: 0,
-	  y: 0,
-	  width: 50,
-	  height: 50,
-	  context: util.getTranslatedContext(context, c, 150, 100),
-	  placeholder: 'Enter your username...'
-	  } );
-	  
-	</script>
-	
+	    var f2 = math.frac.fracFactory();
+	    f2.draw( util.getTranslatedContext(context, fe.c, 50, 10) );
+
+	  <!-- var test = new CanvasText( c, { -->
+	  <!-- x: 0, -->
+	  <!-- y: 0, -->
+	  <!-- width: 50, -->
+	  <!-- height: 50, -->
+	  <!-- context: util.getTranslatedContext(context, c, 150, 100), -->
+	  <!-- placeholder: 'Enter your username...' -->
+	  <!-- } ); -->
+
+
+    </script>
+
   </body>
 </html>
