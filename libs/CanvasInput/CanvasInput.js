@@ -64,10 +64,10 @@
     self._calcWH();
 
     // setup the off-DOM canvas
-    self._renderCanvas = self._canvas; //document.createElement('canvas');
-    // self._renderCanvas.setAttribute('width', self.outerW);
-    // self._renderCanvas.setAttribute('height', self.outerH);
-    self._renderCtx = self._ctx; //self._renderCanvas.getContext('2d');
+    self._renderCanvas = document.createElement('canvas');
+    self._renderCanvas.setAttribute('width', self.outerW);
+    self._renderCanvas.setAttribute('height', self.outerH);
+    self._renderCtx = self._renderCanvas.getContext('2d');
 
     // // setup another off-DOM canvas for inner-shadows
     // self._shadowCanvas = document.createElement('canvas');
@@ -979,7 +979,7 @@
         sh = self.shadowH;
 
       // clear the canvas
-      ctx.clearRect(0, 0, ctx.getCanvas().width, ctx.getCanvas().height);
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
       // setup the box shadow
       ctx.shadowOffsetX = self._boxShadow.x;
@@ -1041,44 +1041,6 @@
           isOffsetY = self._innerShadow === 'none' ? 0 : parseInt(innerShadow[1], 10),
           isBlur = self._innerShadow === 'none' ? 0 : parseInt(innerShadow[2], 10),
           isColor = self._innerShadow === 'none' ? '' : innerShadow[3];
-
-        // draw the inner-shadow (damn you canvas, this should be easier than this...)
-        if (isBlur > 0) {
-          var shadowCtx = self._shadowCtx,
-            scw = shadowCtx.canvas.width,
-            sch = shadowCtx.canvas.height;
-
-          shadowCtx.clearRect(0, 0, scw, sch);
-          shadowCtx.shadowBlur = isBlur;
-          shadowCtx.shadowColor = isColor;
-
-          // top shadow
-          shadowCtx.shadowOffsetX = 0;
-          shadowCtx.shadowOffsetY = isOffsetY;
-          shadowCtx.fillRect(-1 * w, -100, 3 * w, 100);
-
-          // right shadow
-          shadowCtx.shadowOffsetX = isOffsetX;
-          shadowCtx.shadowOffsetY = 0;
-          shadowCtx.fillRect(scw, -1 * h, 100, 3 * h);
-
-          // bottom shadow
-          shadowCtx.shadowOffsetX = 0;
-          shadowCtx.shadowOffsetY = isOffsetY;
-          shadowCtx.fillRect(-1 * w, sch, 3 * w, 100);
-
-          // left shadow
-          shadowCtx.shadowOffsetX = isOffsetX;
-          shadowCtx.shadowOffsetY = 0;
-          shadowCtx.fillRect(-100, -1 * h, 100, 3 * h);
-
-          // create a clipping mask on the main canvas
-          self._roundedRect(ctx, bw + self.shadowL, bw + self.shadowT, w - bw * 2 - sw, h - bw * 2 - sh, br);
-          ctx.clip();
-
-          // // draw the inner-shadow from the off-DOM canvas
-          // ctx.drawImage(self._shadowCanvas, 0, 0, scw, sch, bw + self.shadowL, bw + self.shadowT, scw, sch);
-        }
 
         // draw to the visible canvas
         if (self._ctx) {

@@ -1,47 +1,36 @@
-var math = math || {};
-math.frac = math.frac || {};
-math.frac.fracFactory = function(num, denom) {
-
-    var that = {};
-
-    var LINE_WIDTH = 1;
-    var LINE_Y_PADDING = 3;
-
-    var num = that.num || math.empty.emptyFactory();
-    var denom = that.denom || math.empty.emptyFactory();
-
-    var getWidth = that.getWidth = function() {
-        return Math.max( num.getWidth(), denom.getWidth() );
+/// <reference path="Interfaces.ts" />
+var Frac = (function () {
+    function Frac(context, num, denom) {
+        this.context = context;
+        this.num = num;
+        this.denom = denom;
+    }
+    Frac.prototype.getBB = function () {
+        return { width: 10, height: 10 };
     };
-
-    var getHeight = that.getHeight = function() {
-        return num.getHeight() + denom.getHeight() + LINE_WIDTH;
+    Frac.prototype.getWidth = function () {
+        return Math.max(this.num.getWidth(), this.denom.getWidth());
     };
-    
-    var draw = that.draw = function(context) {
-        var numBB = num.getBB();
-        var denomBB = num.getBB();
-
-        var width = getWidth();
-        var height = getHeight();
-
+    Frac.prototype.getHeight = function () {
+        return this.num.getHeight() + this.denom.getHeight() + Frac.LINE_WIDTH;
+    };
+    Frac.prototype.draw = function (context) {
+        var numBB = this.num.getBB();
+        var denomBB = this.num.getBB();
+        var width = this.getWidth();
+        var height = this.getHeight();
         console.log("Frac height is: ", height);
-
-        var lineY = num.getHeight() + LINE_Y_PADDING;
+        var lineY = this.num.getHeight() + Frac.LINE_Y_PADDING;
         var lineX = 0;
-
-        context.beginPath();
-        context.moveTo(lineX, lineY);
-        context.lineTo(lineX + width, lineY);
-        context.stroke();
-
-        num.draw( util.getTranslatedContext(context, context.getCanvas(), 0, 0) );
-        denom.draw( util.getTranslatedContext(context, context.getCanvas(), 0, lineY + LINE_Y_PADDING) );            
+        this.context.beginPath();
+        this.context.moveTo(lineX, lineY);
+        this.context.lineTo(lineX + width, lineY);
+        this.context.stroke();
+        this.num.draw(Util.getTranslatedContext(context, context.getCanvas(), 0, 0));
+        this.denom.draw(Util.getTranslatedContext(context, context.getCanvas(), 0, lineY + Frac.LINE_Y_PADDING));
     };
-    
-    var init = function() {
-        return that;
-    };
-
-    return init();
-};
+    Frac.LINE_WIDTH = 1;
+    Frac.LINE_Y_PADDING = 3;
+    return Frac;
+})();
+;

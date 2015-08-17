@@ -2,7 +2,7 @@
   <body>
 	<canvas id="myCanvas" width="500" height="500" style="border:1px solid #000000;"></canvas>
 
-	<script type="text/javascript" src="libs/Canvas-Input/src/canvasinput.js"></script>
+	<!-- <script type="text/javascript" src="libs/Canvas-Input/src/canvasinput.js"></script> -->
 
 	<script type="text/javascript" src="libs/CanvasInput/CanvasInput.js"></script>
 
@@ -16,11 +16,15 @@
 
 	    var context = fe.c.getContext("2d");
 
-	    var f = math.frac.fracFactory();
-	    f.draw( util.getTranslatedContext(context, fe.c, 10, 10) );
+	    <!-- var f = math.frac.fracFactory(); -->
+	    <!-- f.draw( util.getTranslatedContext(context, fe.c, 10, 10) ); -->
 
 	    var f2 = math.frac.fracFactory();
 	    f2.draw( util.getTranslatedContext(context, fe.c, 50, 10) );
+
+	    var empty = math.empty.emptyFactory();
+	    empty.draw( util.getTranslatedContext(context, fe.c, 100, 100) );
+
 
 	  <!-- var test = new CanvasText( c, { -->
 	  <!-- x: 0, -->
