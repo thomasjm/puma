@@ -1,8 +1,8 @@
 /*!
- *  CanvasInput v1.1.2
+ *  CanvasInput v1.2.0
  *  http://goldfirestudios.com/blog/108/CanvasInput-HTML5-Canvas-Text-Input
  *
- *  (c) 2013, James Simpson of GoldFire Studios
+ *  (c) 2013-2015, James Simpson of GoldFire Studios
  *  goldfirestudios.com
  *
  *  MIT License
@@ -121,9 +121,11 @@
     self._hiddenInput.type = 'text';
     self._hiddenInput.style.position = 'absolute';
     self._hiddenInput.style.opacity = 0;
+    self._hiddenInput.style.pointerEvents = 'none';
     self._hiddenInput.style.left = (self._x + self._extraX + (self._canvas ? self._canvas.offsetLeft : 0)) + 'px';
     self._hiddenInput.style.top = (self._y + self._extraY + (self._canvas ? self._canvas.offsetTop : 0)) + 'px';
-    self._hiddenInput.style.width = self._width;
+    self._hiddenInput.style.width = self._width + 'px';
+    self._hiddenInput.style.height = self._height + 'px';
     self._hiddenInput.style.zIndex = 0;
     if (self._maxlength) {
       self._hiddenInput.maxLength = self._maxlength;
@@ -623,7 +625,7 @@
 
         return self;
       } else {
-        return self._value;
+        return (self._value === self._placeHolder) ? '' : self._value;
       }
     },
 
@@ -682,13 +684,7 @@
      * @return {CanvasInput}
      */
     focus: function(pos) {
-      var self = this,
-        input;
-
-      // if this is readonly, don't allow it to get focus
-      if (self._readonly) {
-        return;
-      }
+      var self = this;
 
       // only fire the focus event when going from unfocussed
       if (!self._hasFocus) {
@@ -709,6 +705,15 @@
         delete self._selectionUpdated;
       }
 
+      // if this is readonly, don't allow it to get focus
+      self._hasFocus = true;
+      if (self._readonly) {
+        self._hiddenInput.readOnly = true;
+        return;
+      } else {
+        self._hiddenInput.readOnly = false;
+      }
+
       // update the cursor position
       self._cursorPos = (typeof pos === 'number') ? pos : self._clipText().length;
 
@@ -718,7 +723,6 @@
         self._hiddenInput.value = '';
       }
 
-      self._hasFocus = true;
       self._cursor = true;
 
       // setup cursor interval
@@ -729,29 +733,6 @@
         self._cursor = !self._cursor;
         self.render();
       }, 500);
-
-      // check if this is Chrome for Android (there is a bug with returning incorrect character key codes)
-      var nav = navigator.userAgent.toLowerCase(),
-        isChromeMobile = (nav.indexOf('chrome') >= 0 && nav.indexOf('mobile') >= 0 && nav.indexOf('android') >= 0);
-
-      // add support for mobile
-      var isMobile = (typeof window.orientation !== 'undefined');
-      if (isMobile && !isChromeMobile && document && document.createElement && (input = document.createElement('input'))) {
-        input.type = 'text';
-        input.style.opacity = 0;
-        input.style.position = 'absolute';
-        input.style.left = (self._x + self._extraX + (self._canvas ? self._canvas.offsetLeft : 0)) + 'px';
-        input.style.top = (self._y + self._extraY + (self._canvas ? self._canvas.offsetTop : 0)) + 'px';
-        input.style.width = self._width;
-        input.style.height = 0;
-        document.body.appendChild(input);
-        input.focus();
-        input.addEventListener('blur', function() {
-          self.blur(self);
-        }, false);
-      } else if (isMobile) {
-        self.value(prompt(self._placeHolder) || '');
-      }
 
       // move the real focus to the hidden input
       var hasSelection = (self._selection[0] > 0 || self._selection[1] > 0);
@@ -778,6 +759,7 @@
       self._hasFocus = false;
       self._cursor = false;
       self._selection = [0, 0];
+      self._hiddenInput.blur();
 
       // fill the place holder
       if (self._value === '') {
@@ -800,7 +782,7 @@
         startText, endText;
 
       // make sure the correct text field is being updated
-      if (!self._hasFocus) {
+      if (self._readonly || !self._hasFocus) {
         return;
       }
 
@@ -809,9 +791,7 @@
 
       // add support for Ctrl/Cmd+A selection
       if (keyCode === 65 && (e.ctrlKey || e.metaKey)) {
-        self._selection = [0, self._value.length];
-        self._hiddenInput.selectionStart = 0;
-        self._hiddenInput.selectionEnd = self._value.length;
+        self.selectText();
         e.preventDefault();
         return self.render();
       }
@@ -956,6 +936,26 @@
     },
 
     /**
+     * Select a range of text in the input.
+     * @param  {Array} range (optional) Leave blank to select all. Format: [start, end]
+     * @return {CanvasInput}
+     */
+    selectText: function(range) {
+      var self = this,
+        range = range || [0, self._value.length];
+
+      // select the range of text specified (or all if none specified)
+      setTimeout(function() {
+        self._selection = [range[0], range[1]];
+        self._hiddenInput.selectionStart = range[0];
+        self._hiddenInput.selectionEnd = range[1];
+        self.render();
+      }, 1);
+
+      return self;
+    },
+
+    /**
      * Helper method to get the off-DOM canvas.
      * @return {Object} Reference to the canvas.
      */
@@ -977,6 +977,10 @@
         bw = self._borderWidth,
         sw = self.shadowW,
         sh = self.shadowH;
+
+      if (!ctx) {
+        return;
+      }
 
       // clear the canvas
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -1019,10 +1023,9 @@
         }
 
         // draw the cursor
-        ctx.fillStyle = (self._placeHolder === self._value && self._value !== '') ? self._placeHolderColor : self._fontColor;
         if (self._cursor) {
           var cursorOffset = self._textWidth(text.substring(0, self._cursorPos));
-
+          ctx.fillStyle = self._fontColor;
           ctx.fillRect(paddingBorder + cursorOffset, paddingBorder, 1, self._height);
         }
 
@@ -1030,6 +1033,10 @@
         var textX = self._padding + self._borderWidth + self.shadowL,
           textY = Math.round(paddingBorder + self._height / 2);
 
+        // only remove the placeholder text if they have typed something
+        text = (text === '' && self._placeHolder) ? self._placeHolder : text;
+
+        ctx.fillStyle = (self._value !== '' && self._value !== self._placeHolder) ? self._fontColor : self._placeHolderColor;
         ctx.font = self._fontStyle + ' ' + self._fontWeight + ' ' + self._fontSize + 'px ' + self._fontFamily;
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
@@ -1051,6 +1058,32 @@
         return self;
 
       });
+    },
+
+    /**
+     * Destroy this input and stop rendering it.
+     */
+    destroy: function() {
+      var self = this;
+
+      // pull from the inputs array
+      var index = inputs.indexOf(self);
+      if (index) {
+        inputs.splice(index, 1);
+      }
+
+      // remove focus
+      if (self._hasFocus) {
+        self.blur();
+      }
+
+      // remove the hidden input box
+      document.body.removeChild(self._hiddenInput);
+
+      // remove off-DOM canvas
+      self._renderCanvas = null;
+      self._shadowCanvas = null;
+      self._renderCtx = null;
     },
 
     /**
@@ -1269,7 +1302,7 @@
         x, y;
 
       // calculate the total offset
-      if (typeof elm.offsetParent !== 'unefined') {
+      if (typeof elm.offsetParent !== 'undefined') {
         do {
           offsetX += elm.offsetLeft;
           offsetY += elm.offsetTop;

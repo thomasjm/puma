@@ -10,10 +10,10 @@ class Frac implements Drawable {
     denom: Drawable;
     context: any;
 
-    constructor(context: any, num: Drawable, denom: Drawable) {
-        this.context = context;
-        this.num = num;
-        this.denom = denom;
+    constructor(num: Drawable, denom: Drawable);
+    constructor(num: any, denom: any) {
+        this.num = num || new Basic();
+        this.denom = denom || new Basic();
     }
 
     getBB(): BoundingBox {
@@ -40,10 +40,10 @@ class Frac implements Drawable {
         var lineY = this.num.getHeight() + Frac.LINE_Y_PADDING;
         var lineX = 0;
 
-        this.context.beginPath();
-        this.context.moveTo(lineX, lineY);
-        this.context.lineTo(lineX + width, lineY);
-        this.context.stroke();
+        context.beginPath();
+        context.moveTo(lineX, lineY);
+        context.lineTo(lineX + width, lineY);
+        context.stroke();
 
         this.num.draw( new Context(context, context.getCanvas(), 0, 0) );
         this.denom.draw( new Context(context, context.getCanvas(), 0, lineY + Frac.LINE_Y_PADDING) );
