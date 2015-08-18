@@ -709,7 +709,7 @@ class CanvasInput {
         this._cursorInterval = setInterval(() => {
             this._cursor = !this._cursor;
             this.render();
-        }, 500);
+        }, 100);
 
         // move the real focus to the hidden input
         var hasSelection = (this._selection[0] > 0 || this._selection[1] > 0);

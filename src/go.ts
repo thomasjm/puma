@@ -4,11 +4,21 @@
 function go(canvas, context) {
     var ctx = new Context(context, 0, 0);
 
-    (new Basic(null)).draw(ctx.getTransformedContext(200, 200));
+    var glyph1 = (new Glyph(null, 'a'));
+    var glyph2 = (new Glyph(null, '+'));
+    var glyph3 = (new Glyph(null, 'X'));
 
-    (new Frac(null, null)).draw(ctx.getTransformedContext(100, 100));
+    glyph1.draw(ctx.getTransformedContext(50, 10));
+    glyph2.draw(ctx.getTransformedContext(50, 30));
+    glyph3.draw(ctx.getTransformedContext(50, 50));
 
-    // (new Frac(null, null)).draw(Context.getTranslatedContext(canvas, 200, 200));
+    var h = new HorizontalComposite(null, [glyph1, glyph2, glyph3]);
 
-    // (new Basic()).draw( Context.getTranslatedContext(canvas, 300, 300) );
+    h.draw(ctx.getTransformedContext(50, 80));
+
+    (new Frac(glyph1, glyph3)).draw(ctx.getTransformedContext(200, 200));
+
+    // (new CanvasText(null)).draw(ctx.getTransformedContext(canvas, 300, 300));
+
+    return [glyph1, glyph2, glyph3, h];
 }

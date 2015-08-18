@@ -2,25 +2,18 @@
 /// <reference path="../CanvasInput.ts"/>
 /// <reference path="context.ts"/>
 
-class Basic implements Drawable {
+class CanvasText implements Drawable {
     width: number;
     height: number;
     canvasInput: CanvasInput;
     parent: Drawable;
+    context: Context;
+    bb: Dimensions;
 
-    getWidth() {
-        return this.width;
-    }
+    static EMPTY_RECT_LINE_WIDTH = 1;
 
-    getHeight() {
-        return this.height;
-    }
-
-    getBB() {
-        return {
-            width: this.width,
-            height: this.height
-        };
+    getBB(): Dimensions {
+        return this.bb;
     }
 
     constructor(parent: Drawable) {
@@ -30,12 +23,28 @@ class Basic implements Drawable {
     }
 
     render(context: Context) {
+        this.context.lineWidth = CanvasText.EMPTY_RECT_LINE_WIDTH;
         context.strokeRect(0, 0, this.width, this.height);
         this.canvasInput.render();
     }
 
-    draw(context: Context) {
+    getHorizontalLine() {
+        return 42;
+    }
+
+    erase(context: Context) {
+        var bb = this.getBB();
+        context.clearRect(0, 0, bb.width, bb.height);
+    }
+
+    draw(context: Context, depth = 0) {
         // TODO: if there's a current canvasInput, destroy it
+
+        // If we've been drawn before, erase before proceeding
+        if (this.bb) {
+            this.erase(context);
+            this.canvasInput.destroy();
+        }
 
         this.canvasInput = new CanvasInput({
             x: context.getX(),
@@ -72,5 +81,10 @@ class Basic implements Drawable {
 
         // Draw the box
         this.render(context);
+
+        this.bb = {
+            width: this.width,
+            height: this.height
+        }
     };
 }
