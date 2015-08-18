@@ -6,6 +6,7 @@
         </script>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
     </head>
     <body>
 	    <script>
@@ -20,43 +21,25 @@
              }
          });
 
-         highlight = function(gelem) {
-
-         };
-
          MathJax.Hub.Register.StartupHook("End", function() {
-             /* $(".MathJax_SVG svg").mouseover(function(e) {
-                console.log('mouseover', e);
-                console.log(e.offsetX, e.offsetY);
-                }); */
-             /* $(".MathJax_SVG svg").mouseenter(function(e) {
-                console.log('mouseenter', e);
-                console.log(e.offsetX, e.offsetY);
-                }); */
+             var rect = undefined;
 
              $(".MathJax_SVG svg g").mouseenter(function(e) {
-                 console.log('mouseenter', e);
+                 if (rect) {
+                     rect.remove();
+                 }
+
                  var bb = e.target.getBBox();
-                 console.log(bb.x, bb.y, bb.width, bb.height);
 
-                 svg = $(e.target).closest('svg');
-                 child = $(svg).children().first();
+                 svg = d3.selectAll($(e.target).parent());
 
-                 g = $('<g></g>').prependTo(child);
-                 rect = $('<rect></rect>').appendTo(g);
-                 rect.attr('fill', 'red');
-                 rect.attr('x', 0);
-                 rect.attr('y', 0);
-                 rect.attr('width', 1000);
-                 rect.attr('height', 1000);
-
-
-
-                 /* rect.setAttributeNS(null, 'x', x);
-                    rect.setAttributeNS(null, 'y', y);
-                    rect.setAttributeNS(null, 'height', '50');
-                    rect.setAttributeNS(null, 'width', '50');
-                    rect.setAttributeNS(null, 'fill', '#'+Math.round(0xffffff * Math.random()).toString(16)); */
+                 rect = svg.append("rect")
+                           .attr("x", bb.x)
+                           .attr("y", bb.y)
+                           .attr("width", bb.width)
+                           .attr("height", bb.height)
+                           .attr("fill", "red")
+                           .attr('fill-opacity', 0.1);
              });
          });
 
