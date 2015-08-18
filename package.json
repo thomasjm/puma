@@ -1,0 +1,23 @@
+{
+  "name": "puma",
+  "version": "0.0.1",
+  "description": "LyX-esque editor in the browser",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thomasjm/puma.git"
+  },
+  "author": "Tom McLaughlin",
+  "bugs": {
+    "url": "https://github.com/thomasjm/puma/issues"
+  },
+  "homepage": "https://github.com/thomasjm/puma#readme",
+  "devDependencies": {
+    "gulp-concat": "^2.6.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-typescript": "^2.8.1",
+    "merge2": "^0.3.6"
+  }
+}
