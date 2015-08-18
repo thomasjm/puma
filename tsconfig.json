@@ -1,13 +1,13 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "noImplicitAny": true,
-        "removeComments": true,
-        "preserveConstEnums": true,
-        "out": "ts_build.js",
-        "sourceMap": true
-    },
-    "files": [
-        "js/math/frac.ts",
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "out": "ts_build.js",
+    "sourceMap": true,
+    "target": "es5"
+  },
+  "files": [
+    "src/**/*.ts"
+  ]
 }

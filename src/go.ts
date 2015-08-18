@@ -2,9 +2,13 @@
 /// <reference path="math/frac.ts" />
 
 function go(canvas, context) {
-	var f = new Frac(null, null);
-	f.draw( new Context(context, canvas, 50, 10) );
+    var ctx = new Context(context, 0, 0);
 
-	var basic = new Basic();
-	basic.draw( new Context(context, canvas, 100, 100) );
+    (new Basic(null)).draw(ctx.getTransformedContext(200, 200));
+
+    (new Frac(null, null)).draw(ctx.getTransformedContext(100, 100));
+
+    // (new Frac(null, null)).draw(Context.getTranslatedContext(canvas, 200, 200));
+
+    // (new Basic()).draw( Context.getTranslatedContext(canvas, 300, 300) );
 }

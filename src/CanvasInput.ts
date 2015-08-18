@@ -18,8 +18,8 @@ class CanvasInput {
 
     _canvas: HTMLCanvasElement;
     _renderCanvas: HTMLCanvasElement;
-    _ctx: any; // TODO: find RenderingContext interface definition
-    _renderCtx: any;
+    _ctx: CanvasRenderingContext2D; // TODO: find RenderingContext interface definition
+    _renderCtx: CanvasRenderingContext2D;
     _x: number;
     _y: number;
     _extraX: number;
@@ -128,7 +128,10 @@ class CanvasInput {
         this._calcWH();
 
         // setup the off-DOM canvas
-        this._renderCanvas = document.createElement('canvas');
+        // TODO: put this back to not see the rendering canvas
+        // this._renderCanvas = document.createElement('canvas');
+        this._renderCanvas = <HTMLCanvasElement>document.getElementById("renderCanvas");
+
         this._renderCanvas.setAttribute('width', this.outerW.toString());
         this._renderCanvas.setAttribute('height', this.outerH.toString());
         this._renderCtx = this._renderCanvas.getContext('2d');
@@ -141,12 +144,7 @@ class CanvasInput {
 
         // setup the background color
         if (typeof o.backgroundGradient !== 'undefined') {
-            this._backgroundColor = this._renderCtx.createLinearGradient(
-                0,
-                0,
-                0,
-                this.outerH
-            );
+            this._backgroundColor = this._renderCtx.createLinearGradient(0, 0, 0, this.outerH);
             this._backgroundColor.addColorStop(0, o.backgroundGradient[0]);
             this._backgroundColor.addColorStop(1, o.backgroundGradient[1]);
         } else {
@@ -215,7 +213,7 @@ class CanvasInput {
             this.render();
 
             if (this._hasFocus) {
-                this._onkeyup(e2, self);
+                this._onkeyup(e2, this);
             }
         });
 
@@ -236,11 +234,10 @@ class CanvasInput {
         if (typeof data !== 'undefined') {
             this._canvas = data;
             this._ctx = this._canvas.getContext('2d');
-
-            return this.render();
-        } else {
-            return this._canvas;
+            this.render();
         }
+
+        return this._canvas;
     }
 
     /**
@@ -251,11 +248,10 @@ class CanvasInput {
     x(data) {
         if (typeof data !== 'undefined') {
             this._x = data;
-
-            return this.render();
-        } else {
-            return this._x;
+            this.render();
         }
+
+        return this._x;
     }
 
     /**
@@ -266,11 +262,10 @@ class CanvasInput {
     y(data) {
         if (typeof data !== 'undefined') {
             this._y = data;
-
-            return this.render();
-        } else {
-            return this._y;
+            this.render();
         }
+
+        return this._y;
     }
 
     /**
@@ -281,11 +276,10 @@ class CanvasInput {
     extraX(data) {
         if (typeof data !== 'undefined') {
             this._extraX = data;
-
-            return this.render();
-        } else {
-            return this._extraX;
+            this.render();
         }
+
+        return this._extraX;
     }
 
     /**
@@ -296,11 +290,10 @@ class CanvasInput {
     extraY(data) {
         if (typeof data !== 'undefined') {
             this._extraY = data;
-
-            return this.render();
-        } else {
-            return this._extraY;
+            this.render();
         }
+
+        return this._extraY;
     }
 
     /**
@@ -311,11 +304,10 @@ class CanvasInput {
     fontSize(data) {
         if (typeof data !== 'undefined') {
             this._fontSize = data;
-
-            return this.render();
-        } else {
-            return this._fontSize;
+            this.render();
         }
+
+        return this._fontSize;
     }
 
     /**
@@ -326,11 +318,10 @@ class CanvasInput {
     fontFamily(data) {
         if (typeof data !== 'undefined') {
             this._fontFamily = data;
-
-            return this.render();
-        } else {
-            return this._fontFamily;
+            this.render();
         }
+
+        return this._fontFamily;
     }
 
     /**
@@ -341,11 +332,10 @@ class CanvasInput {
     fontColor(data) {
         if (typeof data !== 'undefined') {
             this._fontColor = data;
-
-            return this.render();
-        } else {
-            return this._fontColor;
+            this.render();
         }
+
+        return this._fontColor;
     }
 
     /**
@@ -356,11 +346,10 @@ class CanvasInput {
     placeHolderColor(data) {
         if (typeof data !== 'undefined') {
             this._placeHolderColor = data;
-
-            return this.render();
-        } else {
-            return this._placeHolderColor;
+            this.render();
         }
+
+        return this._placeHolderColor;
     }
 
     /**
@@ -371,11 +360,10 @@ class CanvasInput {
     fontWeight(data) {
         if (typeof data !== 'undefined') {
             this._fontWeight = data;
-
-            return this.render();
-        } else {
-            return this._fontWeight;
+            this.render();
         }
+
+        return this._fontWeight;
     }
 
     /**
@@ -386,11 +374,10 @@ class CanvasInput {
     fontStyle(data) {
         if (typeof data !== 'undefined') {
             this._fontStyle = data;
-
-            return this.render();
-        } else {
-            return this._fontStyle;
+            this.render();
         }
+
+        return this._fontStyle;
     }
 
     /**
@@ -404,10 +391,10 @@ class CanvasInput {
             this._calcWH();
             this._updateCanvasWH();
 
-            return this.render();
-        } else {
-            return this._width;
+            this.render();
         }
+
+        return this._width;
     }
 
     /**
@@ -421,10 +408,10 @@ class CanvasInput {
             this._calcWH();
             this._updateCanvasWH();
 
-            return this.render();
-        } else {
-            return this._height;
+            this.render();
         }
+
+        return this._height;
     }
 
     /**
@@ -438,10 +425,10 @@ class CanvasInput {
             this._calcWH();
             this._updateCanvasWH();
 
-            return this.render();
-        } else {
-            return this._padding;
+            this.render();
         }
+
+        return this._padding;
     }
 
     /**
@@ -454,11 +441,10 @@ class CanvasInput {
             this._borderWidth = data;
             this._calcWH();
             this._updateCanvasWH();
-
-            return this.render();
-        } else {
-            return this._borderWidth;
+            this.render();
         }
+
+        return this._borderWidth;
     }
 
     /**
@@ -469,11 +455,10 @@ class CanvasInput {
     borderColor(data) {
         if (typeof data !== 'undefined') {
             this._borderColor = data;
-
-            return this.render();
-        } else {
-            return this._borderColor;
+            this.render();
         }
+
+        return this._borderColor;
     }
 
     /**
@@ -484,11 +469,10 @@ class CanvasInput {
     borderRadius(data) {
         if (typeof data !== 'undefined') {
             this._borderRadius = data;
-
-            return this.render();
-        } else {
-            return this._borderRadius;
+            this.render();
         }
+
+        return this._borderRadius;
     }
 
     /**
@@ -499,11 +483,10 @@ class CanvasInput {
     backgroundColor(data) {
         if (typeof data !== 'undefined') {
             this._backgroundColor = data;
-
-            return this.render();
-        } else {
-            return this._backgroundColor;
+            this.render();
         }
+
+        return this._backgroundColor;
     }
 
     /**
@@ -513,12 +496,7 @@ class CanvasInput {
      */
     backgroundGradient(data) {
         if (typeof data !== 'undefined') {
-            this._backgroundColor = this._renderCtx.createLinearGradient(
-                0,
-                0,
-                0,
-                this.outerH
-            );
+            this._backgroundColor = this._renderCtx.createLinearGradient(0, 0, 0, this.outerH);
             this._backgroundColor.addColorStop(0, data[0]);
             this._backgroundColor.addColorStop(1, data[1]);
 
@@ -584,11 +562,10 @@ class CanvasInput {
     innerShadow(data) {
         if (typeof data !== 'undefined') {
             this._innerShadow = data;
-
-            return this.render();
-        } else {
-            return this._innerShadow;
+            this.render();
         }
+
+        return this._innerShadow;
     }
 
     /**
@@ -599,11 +576,10 @@ class CanvasInput {
     selectionColor(data) {
         if (typeof data !== 'undefined') {
             this._selectionColor = data;
-
-            return this.render();
-        } else {
-            return this._selectionColor;
+            this.render();
         }
+
+        return this._selectionColor;
     }
 
     /**
@@ -614,11 +590,10 @@ class CanvasInput {
     placeHolder(data) {
         if (typeof data !== 'undefined') {
             this._placeHolder = data;
-
-            return this.render();
-        } else {
-            return this._placeHolder;
+            this.render();
         }
+
+        return this._placeHolder;
     }
 
     /**
@@ -633,11 +608,10 @@ class CanvasInput {
 
             // update the cursor position
             this._cursorPos = this._clipText(undefined).length;
-
-            return this.render();
-        } else {
-            return (this._value === this._placeHolder) ? '' : this._value;
+            this.render();
         }
+
+        return (this._value === this._placeHolder) ? '' : this._value;
     }
 
     /**
@@ -776,13 +750,12 @@ class CanvasInput {
      * Fired with the keydown event to draw the typed characters.
      * @param  {Event}       e    The keydown event.
      * @param  {CanvasInput} self
-     * @return {CanvasInput}
      */
     keydown(e, self) {
-        var keyCode = e.which,
-        isShift = e.shiftKey,
-        key = null,
-        startText, endText;
+        var keyCode = e.which;
+        var isShift = e.shiftKey;
+        var key = null;
+        var startText, endText;
 
         // make sure the correct text field is being updated
         if (this._readonly || !this._hasFocus) {
@@ -812,7 +785,7 @@ class CanvasInput {
             if (this.inputs.length > 1) {
                 var next = (this.inputs[this._inputsIndex + 1]) ? this._inputsIndex + 1 : 0;
                 this.blur(undefined);
-                setTimeout(function() {
+                setTimeout(() => {
                     this.inputs[next].focus();
                 }, 10);
             }
@@ -823,7 +796,7 @@ class CanvasInput {
         this._cursorPos = this._hiddenInput.selectionStart;
         this._selection = [0, 0];
 
-        return this.render();
+        this.render();
     }
 
     /**
@@ -958,26 +931,18 @@ class CanvasInput {
     }
 
     /**
-     * Helper method to get the off-DOM canvas.
-     * @return {Object} Reference to the canvas.
-     */
-    renderCanvas() {
-        return this._renderCanvas;
-    }
-
-    /**
      * Clears and redraws the CanvasInput on an off-DOM canvas,
      * and if a main canvas is provided, draws it all onto that.
      * @return {CanvasInput}
      */
-    render(): any {
-        var ctx = this._renderCtx,
-        w = this.outerW,
-        h = this.outerH,
-        br = this._borderRadius,
-        bw = this._borderWidth,
-        sw = this.shadowW,
-        sh = this.shadowH;
+    render() {
+        var ctx = this._renderCtx;
+        var w = this.outerW;
+        var h = this.outerH;
+        var br = this._borderRadius;
+        var bw = this._borderWidth;
+        var sw = this.shadowW;
+        var sh = this.shadowH;
 
         if (!ctx) {
             return;
@@ -1052,8 +1017,8 @@ class CanvasInput {
 
             // draw to the visible canvas
             if (this._ctx) {
-                this._ctx.clearRect(this._x, this._y, ctx.canvas.width, ctx.canvas.height);
-                this._ctx.drawImage(this._renderCanvas, this._x, this._y);
+                this._ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                this._ctx.drawImage(this._renderCanvas, 0, 0);
             }
 
             return self;
@@ -1089,7 +1054,7 @@ class CanvasInput {
      * Draw the text box area with either an image or background color.
      * @param  {Function} fn Callback.
      */
-    _drawTextBox(fn) {
+    _drawTextBox(onDrawTextBox) {
         var ctx = this._renderCtx,
         w = this.outerW,
         h = this.outerH,
@@ -1104,14 +1069,14 @@ class CanvasInput {
             this._roundedRect(ctx, bw + this.shadowL, bw + this.shadowT, w - bw * 2 - sw, h - bw * 2 - sh, br);
             ctx.fill();
 
-            fn();
+            onDrawTextBox();
         } else {
             var img = new Image();
             img.src = this._backgroundImage;
             img.onload = function() {
                 ctx.drawImage(img, 0, 0, img.width, img.height, bw + this.shadowL, bw + this.shadowT, w, h);
 
-                fn();
+                onDrawTextBox();
             };
         }
     }
@@ -1145,9 +1110,9 @@ class CanvasInput {
     _clipText(value) {
         var value = (typeof value === 'undefined') ? this._value : value;
 
-        var textWidth = this._textWidth(value),
-        fillPer = textWidth / (this._width - this._padding),
-        text = fillPer > 1 ? value.substr(-1 * Math.floor(value.length / fillPer)) : value;
+        var textWidth = this._textWidth(value);
+        var fillPer = textWidth / (this._width - this._padding);
+        var text = fillPer > 1 ? value.substr(-1 * Math.floor(value.length / fillPer)) : value;
 
         return text + '';
     }
@@ -1182,15 +1147,19 @@ class CanvasInput {
         var oldW = this._renderCanvas.width;
         var oldH = this._renderCanvas.height;
 
-        // // update off-DOM canvas
-        // this._renderCanvas.setAttribute('width', this.outerW);
-        // this._renderCanvas.setAttribute('height', this.outerH);
+        // update off-DOM canvas
+        this._renderCanvas.setAttribute('width', this.outerW.toString());
+        this._renderCanvas.setAttribute('height', this.outerH.toString());
+        // TODO: add this?
+        // this._hiddenInput.style.width = this._width + 'px';
+        // this._hiddenInput.style.height = this._height + 'px';
+
         // this._shadowCanvas.setAttribute('width', this._width + this._padding * 2);
         // this._shadowCanvas.setAttribute('height', this._height + this._padding * 2);
 
         // clear the main canvas
         if (this._ctx) {
-            this._ctx.clearRect(this._x, this._y, oldW, oldH);
+            this._ctx.clearRect(0, 0, oldW, oldH);
         }
     }
 
@@ -1247,6 +1216,8 @@ class CanvasInput {
      */
     _clickPos(x, y) {
         var value = this._value;
+
+        console.log('DETERMINING CLICK POS');
 
         // don't count placeholder text in this
         if (this._value === this._placeHolder) {
@@ -1307,4 +1278,5 @@ class CanvasInput {
             x: e.pageX - offsetX,
             y: e.pageY - offsetY
         };
-    }};
+    }
+}

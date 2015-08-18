@@ -12,8 +12,8 @@ class Frac implements Drawable {
 
     constructor(num: Drawable, denom: Drawable);
     constructor(num: any, denom: any) {
-        this.num = num || new Basic();
-        this.denom = denom || new Basic();
+        this.num = num || new Basic(this);
+        this.denom = denom || new Basic(this);
     }
 
     getBB(): BoundingBox {
@@ -28,7 +28,7 @@ class Frac implements Drawable {
         return this.num.getHeight() + this.denom.getHeight() + Frac.LINE_WIDTH;
     }
 
-    draw(context: any): void {
+    draw(context: Context): void {
         var numBB = this.num.getBB();
         var denomBB = this.num.getBB();
 
@@ -45,7 +45,12 @@ class Frac implements Drawable {
         context.lineTo(lineX + width, lineY);
         context.stroke();
 
-        this.num.draw( new Context(context, context.getCanvas(), 0, 0) );
-        this.denom.draw( new Context(context, context.getCanvas(), 0, lineY + Frac.LINE_Y_PADDING) );
+        context.withTransformedContext(0, 0, (context) => {
+            this.num.draw(context);
+        });
+
+        context.withTransformedContext(0, lineY + Frac.LINE_Y_PADDING, (context) => {
+            this.denom.draw(context);
+        });
     }
 };

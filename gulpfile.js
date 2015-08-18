@@ -4,10 +4,7 @@ var merge = require('merge2');
 var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 
-var tsProject = ts.createProject({
-    declarationFiles: true,
-    noExternalResolve: true
-});
+var tsProject = ts.createProject('tsconfig.json');
 
 gulp.task('build', function() {
     var tsResult = gulp.src('src/**/*.ts')
@@ -23,6 +20,6 @@ gulp.task('build', function() {
     ]);
 });
 
-gulp.task('watch', ['scripts'], function() {
-    gulp.watch('src/**/*.ts', ['scripts']);
+gulp.task('watch', ['build'], function() {
+    gulp.watch('src/**/*.ts', ['build']);
 });
