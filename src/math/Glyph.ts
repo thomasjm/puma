@@ -18,36 +18,6 @@ class Glyph implements Drawable {
         };
     }
 
-    // getTextHeight(font) {
-
-    //     var text = $('<span>Hg</span>').css({ fontFamily: font });
-    //     var block = $('<div style="display: inline-block; width: 1px; height: 0px;"></div>');
-
-    //     var div = $('<div></div>');
-    //     div.append(text, block);
-
-    //     var body = $('body');
-    //     body.append(div);
-
-    //     try {
-
-    //         var result = {};
-
-    //         block.css({ verticalAlign: 'baseline' });
-    //         result.ascent = block.offset().top - text.offset().top;
-
-    //         block.css({ verticalAlign: 'bottom' });
-    //         result.height = block.offset().top - text.offset().top;
-
-    //         result.descent = result.height - result.ascent;
-
-    //     } finally {
-    //         div.remove();
-    //     }
-
-    //     return result;
-    // }
-
     constructor(parent: Drawable, symbol: string) {
         // TODO Assert symbol is 1 character
         if (!(symbol && symbol.length === 1)) {
@@ -69,10 +39,6 @@ class Glyph implements Drawable {
     }
 
     draw(context: Context, depth = 0) {
-        context.fillStyle = '#000';
-        context.font = 'normal normal 14px Arial';
-        context.textAlign = 'left';
-        context.textBaseline = 'middle';
-        context.fillText(this.symbol, 0, 0);
+
     };
 }

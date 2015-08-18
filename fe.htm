@@ -1,25 +1,30 @@
 <html>
+    <head>
+        <script type="text/javascript" src="http://localhost:9000/Mathjax/unpacked/Mathjax.js"></script>
+
+        <!-- <script type="text/javascript"
+                src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG"> -->
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    </head>
     <body>
-	    <canvas id="myCanvas"
-                width="500"
-                height="500"
-                style="border:1px solid #000000;"></canvas>
-
-        <p>Rendering canvas:</p>
-	    <canvas id="renderCanvas"
-                width="500"
-                height="500"
-                style="border:1px solid #000000;"></canvas>
-
-	    <script src="dist/js/all.js"></script>
+        <div id="all"><p>When $a \ne 0$, there are two solutions to \(ax^2 + bx^O + c = 0\) and they are $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</p></div>
 
 	    <script>
-         var canvas = document.getElementById("myCanvas");
-	     var context = canvas.getContext("2d");
+         MathJax.Hub.Config({
+             tex2jax: {
+                 inlineMath: [['$','$'], ['\\(','\\)']],
+                 preview: "TeX"
+             },
 
-         drawables = go(canvas, context);
+             SVG: {
+                 addMMLclasses: true
+             }
+         });
 
+         highlight = function(gelem) {
+
+         };
         </script>
-
     </body>
 </html>

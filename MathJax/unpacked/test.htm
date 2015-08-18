@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript"
+                src="MathJax.js?config=TeX-AMS-MML_SVG">
+        </script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    </head>
+    <body>
+	    <script>
+         MathJax.Hub.Config({
+             tex2jax: {
+                 inlineMath: [['$','$'], ['\\(','\\)']],
+                 preview: "TeX"
+             },
+
+             SVG: {
+                 addMMLclasses: true
+             }
+         });
+
+         highlight = function(gelem) {
+
+         };
+
+         MathJax.Hub.Register.StartupHook("End", function() {
+             /* $(".MathJax_SVG svg").mouseover(function(e) {
+                console.log('mouseover', e);
+                console.log(e.offsetX, e.offsetY);
+                }); */
+             /* $(".MathJax_SVG svg").mouseenter(function(e) {
+                console.log('mouseenter', e);
+                console.log(e.offsetX, e.offsetY);
+                }); */
+
+             $(".MathJax_SVG svg g").mouseenter(function(e) {
+                 console.log('mouseenter', e);
+                 var bb = e.target.getBBox();
+                 console.log(bb.x, bb.y, bb.width, bb.height);
+
+                 svg = $(e.target).closest('svg');
+                 child = $(svg).children().first();
+
+                 g = $('<g></g>').appendTo(child);
+                 rect = $('<rect></rect>').appendTo(g);
+                 rect.attr('style', 'fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)');
+                 rect.attr('width', 100);
+                 rect.attr('height', 100);
+
+
+
+                 /* rect.setAttributeNS(null, 'x', x);
+                    rect.setAttributeNS(null, 'y', y);
+                    rect.setAttributeNS(null, 'height', '50');
+                    rect.setAttributeNS(null, 'width', '50');
+                    rect.setAttributeNS(null, 'fill', '#'+Math.round(0xffffff * Math.random()).toString(16)); */
+             });
+         });
+
+
+        </script>
+
+        <div id="all"><p>When $a \ne 0$, there are two solutions to \(ax^2 + bx^O + c = 0\) and they are $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</p></div>
+        <p>TeX: \(\frac a b\)</p>
+    </body>
+</html>
