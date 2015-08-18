@@ -42,11 +42,13 @@
                  svg = $(e.target).closest('svg');
                  child = $(svg).children().first();
 
-                 g = $('<g></g>').appendTo(child);
+                 g = $('<g></g>').prependTo(child);
                  rect = $('<rect></rect>').appendTo(g);
-                 rect.attr('style', 'fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)');
-                 rect.attr('width', 100);
-                 rect.attr('height', 100);
+                 rect.attr('fill', 'red');
+                 rect.attr('x', 0);
+                 rect.attr('y', 0);
+                 rect.attr('width', 1000);
+                 rect.attr('height', 1000);
 
 
 
