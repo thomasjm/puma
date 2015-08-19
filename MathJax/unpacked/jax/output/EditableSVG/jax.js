@@ -1820,6 +1820,22 @@
         return elem.getBBox();
       },
 
+      moveCursor: function(cursor, direction) {
+        this.parent.moveCursorFromChild(cursor, direction, this)
+      },
+
+      moveCursorFromChild: function(cursor, direction, child) {
+        throw new Error('Unimplemented as cursor container')
+      },
+
+      moveCursorFromParent: function(cursor, direction) {
+        return false
+      },
+
+      drawCursor: function(cursor) {
+        throw new Error('Unable to draw cursor')
+      },
+
       toSVG: function() {
         this.SVGgetStyles();
         var variant = this.SVGgetVariant();
@@ -2728,6 +2744,77 @@
         console.log('focus!')
       },
 
+      cursorable: true,
+
+      moveCursorFromParent: function(cursor, direction) {
+        direction = getCursorValue(direction)
+        if (direction === LEFT) {
+          cursor.moveTo(this, this.data.length)
+        } else if (direction === RIGHT) {
+          cursor.moveTo(this, 0)
+        } else {
+          throw new Error('TODO find place for when moving vertically')
+        }
+        return true
+      },
+
+      moveCursorFromChild: function(cursor, direction, child) {
+        if (direction === UP || direction === DOWN) {
+          return this.parent.moveCursorFromChild(cursor, direction, this)
+        }
+        direction = getCursorValue(direction)
+        var childIdx
+        for (childIdx = 0; childIdx < this.data.length; ++childIdx) {
+          if (child === this.data[childIdx]) break
+        }
+        if (childIdx === this.data.length) throw new Error('Unable to find specified child in children')
+        if (direction === LEFT) {
+          cursor.moveTo(this, childIdx)
+        } else if (direction === RIGHT) {
+          cursor.moveTo(this, childIdx + 1)
+        }
+        return true
+      },
+
+      moveCursor: function(cursor, direction) {
+        direction = getCursorValue(direction)
+
+        var vertical = direction === UP || direction === DOWN
+        if (vertical) return this.parent.moveCursorFromChild(cursor, direction, this)
+
+        var newPosition = cursor.position + (direction === LEFT ? -1 : 1)
+        if (newPosition < 0 || newPosition > this.data.length) {
+          this.parent.moveCursorFromChild(cursor, direction, this)
+          return
+        }
+        var childPosition = direction === LEFT ? cursor.position - 1 : cursor.position
+        if (this.data[childPosition].moveCursorFromParent(cursor, direction)) return
+
+        cursor.moveTo(this, newPosition)
+      },
+
+      drawCursor: function(cursor) {
+        var bbox = this.getSVGBBox()
+        var height = bbox.height
+        var y = bbox.y
+        var preedge, postedge
+        if (cursor.position === 0) {
+          preedge = bbox.x
+        } else {
+          var prebox = this.data[cursor.position-1].getSVGBBox()
+          preedge = prebox.x+prebox.width
+        }
+        if (cursor.position === this.data.length) {
+          postedge = bbox.x+bbox.width
+        } else {
+          var postbox = this.data[cursor.position].getSVGBBox()
+          postedge = postbox.x
+        }
+        var x = (postedge + preedge) / 2
+        var svgelem = this.EditableSVGelem.ownerSVGElement
+        cursor.drawAt(svgelem, x, y, height)
+      },
+
       toSVG: function(h, d) {
         this.SVGgetStyles();
         var svg = this.SVG();
@@ -2876,6 +2963,87 @@
         this.EditableSVGelem = svg.element;
         return svg;
       },
+      cursorable: true,
+      moveCursor: function(cursor, direction) {
+        if (cursor.position.half === undefined) throw new Error('Invalid cursor')
+        if (cursor.position.position === 0 && direction === RIGHT) {
+          cursor.position.position = 1
+        } else if (cursor.position.position === 1 && direction === LEFT) {
+          cursor.position.position = 0
+        } else if (cursor.position.half === 0 && direction === DOWN) {
+          return this.moveCursorIntoDenominator(cursor, direction)
+        } else if (cursor.position.half === 1 && direction === UP) {
+          return this.moveCursorIntoNumerator(cursor, direction)
+        } else {
+          return this.parent.moveCursorFromChild(cursor, direction, this)
+        }
+        cursor.moveTo(this, cursor.position)
+      },
+      moveCursorFromChild: function(cursor, direction, child, keep) {
+        var isNumerator = this.data[0] === child
+        var isDenominator = this.data[1] === child
+        if (!isNumerator && !isDenominator) throw new Error('Specified child not found in children')
+
+        if (isNumerator && direction === DOWN) {
+          return this.moveCursorIntoDenominator(cursor, direction)
+        } else if (isDenominator && direction === UP) {
+          return this.moveCursorIntoNumerator(cursor, direction)
+        } else if (keep) {
+          if (isNumerator) return this.moveCursorIntoNumerator(cursor, direction)
+          else return this.moveCursorIntoDenominator(cursor, direction)
+        } else {
+          return this.parent.moveCursorFromChild(cursor, direction, this)
+        }
+      },
+      moveCursorIntoNumerator: function(cursor, direction) {
+        if (this.data[0].cursorable) {
+          return this.data[0].moveCursorFromParent(cursor, direction)
+        }
+        cursor.moveTo(this, {
+          half: 0,
+          position: 0,
+        })
+        return true
+      },
+      moveCursorIntoDenominator: function(cursor, direction) {
+        if (this.data[1].cursorable) {
+          return this.data[1].moveCursorFromParent(cursor, direction)
+        }
+        cursor.moveTo(this, {
+          half: 1,
+          position: 0,
+        })
+        return true
+      },
+      moveCursorFromParent: function(cursor, direction) {
+        direction = getCursorValue(direction)
+        switch (direction) {
+          case LEFT:
+          case RIGHT:
+            if (this.data[0].cursorable) {
+              return this.data[0].moveCursorFromParent(cursor, direction)
+            }
+            cursor.moveTo(this, {
+              half: 0,
+              position: direction === RIGHT ? 0 : 1,
+            })
+            return true
+          case UP:
+            return this.moveCursorIntoDenominator(cursor, direction)
+          case DOWN:
+            return this.moveCursorIntoNumerator(cursor, direction)
+        }
+        return false
+      },
+      drawCursor: function(cursor) {
+        if (cursor.position.half === undefined) throw new Error('Invalid cursor')
+        var bbox = this.data[cursor.position.half].getSVGBBox()
+        var height = bbox.height
+        var x = bbox.x + (cursor.position.position ? bbox.width + 100 : -100)
+        var y = bbox.y
+        var svgelem = this.EditableSVGelem.ownerSVGElement
+        return cursor.drawAt(svgelem, x, y, height)
+      },
       SVGcanStretch: function(direction) {
         return false
       },
@@ -2925,6 +3093,13 @@
         this.SVGsaveData(svg);
         return svg;
       },
+      cursorable: true,
+      moveCursorFromChild: function(c, d) {
+        this.parent.moveCursorFromChild(c, d, this)
+      },
+      moveCursorFromParent: function(c, d) {
+        return this.data[0].moveCursorFromParent(c, d)
+      },
       SVGaddRoot: function(svg, surd, x, d, scale) {
         return x
       }
@@ -2945,6 +3120,13 @@
           dx = x
         }
         return x - dx;
+      },
+      cursorable: true,
+      moveCursorFromChild: function(c, d) {
+        this.parent.moveCursorFromChild(c, d, this)
+      },
+      moveCursorFromParent: function(c, d) {
+        return this.data[0].moveCursorFromParent(c, d)
       },
       SVGrootHeight: function(d, scale, root) {
         return .45 * (d - 900 * scale) + 600 * scale + Math.max(0, root.d - 75);
@@ -3252,6 +3434,11 @@
         type: "svg",
         removeable: false
       }),
+      // TODO actually implement cursor
+      cursorable: false,
+      moveCursorFromChild: function(cursor, direction, child) {
+        return false
+      },
       toSVG: function(span, div) {
         var CONFIG = SVG.config;
 
@@ -3398,6 +3585,48 @@
       setTimeout(MathJax.Callback(["loadComplete", SVG, "jax.js"]), 0);
     });
   });
+
+  MathJax.Object.Cursor = MathJax.Object.Subclass({
+    Init: function() {
+      this.id = Math.random().toString(36).substring(2)
+      this.width = 50
+    },
+    moveTo: function(node, position) {
+      this.node = node
+      this.position = position
+    },
+    renderedAt: function(x, y) {
+      this.renderedPosition = {x: x, y: y}
+    },
+    move: function(direction) {
+      this.node.moveCursor(this, direction)
+    },
+    draw: function() {
+      this.node.drawCursor(this)
+    },
+    drawAt: function(svgelem, x, y, height) {
+      this.renderedPosition = {x: x, y: y, height: height}
+      var celem = svgelem.getElementById('cursor-'+this.id)
+      if (!celem) {
+        celem = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+        celem.setAttribute('fill', '#777777')
+        celem.setAttribute('class', 'math-cursor')
+        celem.id = 'cursor-'+this.id
+        svgelem.appendChild(celem)
+      } else {
+        var oldclass = celem.getAttribute('class')
+        celem.setAttribute('class', oldclass.split('blink').join(''))
+      }
+      celem.setAttribute('x', x)
+      celem.setAttribute('y', y)
+      celem.setAttribute('width', this.width)
+      celem.setAttribute('height', height)
+      clearTimeout(this.startBlink)
+      this.startBlink = setTimeout(function() {
+        celem.setAttribute('class', celem.getAttribute('class') + ' blink')
+      }.bind(this), 500)
+    }
+  })
 
   HUB.Browser.Select({
     Opera: function(browser) {
