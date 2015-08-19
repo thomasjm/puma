@@ -201,4 +201,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyreTermesMathJax_Size1'] = {
   0x2B31: [830,330,1170,80,1090,'1090 -176h-919l154 -154h-65l-180 180l180 180h65l-154 -154h919v-52zM1090 224h-919l154 -154h-65l-180 180l180 180h65l-154 -154h919v-52zM1090 624h-919l154 -154h-65l-180 180l180 180h65l-154 -154h919v-52']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Size1/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Size1/Regular/Main.js");

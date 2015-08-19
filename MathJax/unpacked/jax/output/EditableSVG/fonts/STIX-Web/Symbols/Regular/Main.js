@@ -260,4 +260,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Symbols'] = {
   0xE0D6: [386,-120,750,50,700,'700 120h-166v66h166v-66zM700 320h-650v66h650v-66zM458 120h-166v66h166v-66zM216 120h-166v66h166v-66']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Symbols/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Symbols/Regular/Main.js");

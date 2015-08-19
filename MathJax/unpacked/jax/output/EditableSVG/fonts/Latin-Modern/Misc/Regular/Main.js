@@ -29,4 +29,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['LatinModernMathJax_Misc'] = {
   0x27A1: [468,-31,977,56,921,'915 258c8 -2 8 -14 0 -16c-110 -29 -203 -104 -255 -205c-4 -9 -16 -6 -16 3v113h-568c-11 0 -20 9 -20 20v154c0 11 9 20 20 20h568v113c0 9 12 12 16 3c52 -101 145 -176 255 -205']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Misc/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Misc/Regular/Main.js");

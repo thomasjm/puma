@@ -2058,4 +2058,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['LatinModernMathJax_NonUnicode'] = {
   0xE7F0: [705,19,1142,96,1082,'1082 420c0 -194 -184 -439 -582 -439c-251 0 -404 99 -404 280c0 184 179 444 584 444c278 0 402 -123 402 -285zM935 437c0 163 -130 212 -269 212c-229 0 -338 -124 -387 -239h655c1 11 1 20 1 27zM903 280h-658c-1 -13 -2 -24 -2 -34c0 -153 120 -206 271 -206 c239 0 344 127 389 240']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/NonUnicode/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/NonUnicode/Regular/Main.js");

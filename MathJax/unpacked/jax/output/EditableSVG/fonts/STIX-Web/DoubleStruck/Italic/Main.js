@@ -40,4 +40,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_DoubleStruck-italic'] = {
   0x2149: [653,217,341,-104,394,'394 653l-36 -135h-142l37 135h141zM347 616h-67l-17 -61h68zM329 428l-125 -469c-28 -105 -120 -176 -229 -176c-27 0 -54 5 -79 16l25 33c26 -10 41 -13 69 -13c14 0 29 1 42 7l160 602h137zM280 391h-60l-152 -568c38 18 77 63 88 104']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/DoubleStruck/Italic/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/DoubleStruck/Italic/Main.js");

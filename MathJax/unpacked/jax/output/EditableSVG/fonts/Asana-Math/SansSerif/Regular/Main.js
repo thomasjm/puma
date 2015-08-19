@@ -370,4 +370,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['AsanaMathJax_SansSerif'] = {
   0x1D7F5: [689,21,549,46,503,'127 109c13 0 30 -40 100 -40c152 0 132 190 136 225c-13 -30 -48 -87 -122 -87c-64 0 -110 14 -150 64c-43 55 -45 110 -45 171c0 74 7 122 49 175c52 61 118 72 180 72c227 0 228 -243 228 -346c0 -87 0 -364 -274 -364c-98 0 -150 51 -150 59c0 5 14 27 33 58 c5 8 7 13 15 13zM266 276c96 0 96 139 96 152c0 101 -16 175 -85 175c-91 0 -91 -69 -91 -162c0 -96 0 -165 80 -165']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/SansSerif/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/SansSerif/Regular/Main.js");

@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_AMS'],
   {
     // COMBINING CIRCUMFLEX ACCENT
     0x302: [845,-561,0,-2347,13,'-2332 561Q-2336 563 -2340 577T-2346 604L-2347 618Q-2347 625 -2340 628T-2310 635Q-2302 636 -2297 637Q-2270 641 -1712 745Q-1185 845 -1168 845Q-1166 845 -581 739L5 630Q13 630 13 618Q7 565 -1 561Q-4 561 -584 654Q-716 675 -867 699T-1092 736T-1166 748Q-1168 748 -1240 737T-1466 700T-1750 654Q-2330 561 -2332 561'],
@@ -29,4 +29,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/CombDiacritMarks.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/AMS/Regular/CombDiacritMarks.js");

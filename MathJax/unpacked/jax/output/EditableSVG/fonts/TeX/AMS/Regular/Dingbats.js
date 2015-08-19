@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_AMS'],
   {
     // CHECK MARK
     0x2713: [706,34,833,84,749,'84 231Q84 244 114 264T170 285Q176 285 183 274T224 205Q267 129 268 129Q271 141 279 163T318 250T389 378T502 523T662 673Q702 706 732 706H734Q749 706 749 695Q749 682 730 666T660 607T559 505Q387 299 328 29Q324 0 295 -17T245 -34H241Q234 -34 225 -21T185 46Q166 79 154 101Q84 223 84 231'],
@@ -29,4 +29,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/Dingbats.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/AMS/Regular/Dingbats.js");

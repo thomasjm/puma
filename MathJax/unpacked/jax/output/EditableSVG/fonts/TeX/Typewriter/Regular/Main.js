@@ -18,7 +18,7 @@
  *
  */
 
-MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Typewriter'] = {
+MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Typewriter'] = {
   directory: 'Typewriter/Regular',
   family: 'MathJax_Typewriter',
   id: 'MJTT',
@@ -31,4 +31,4 @@ MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Typewriter'] = {
     
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Typewriter/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Typewriter/Regular/Main.js");

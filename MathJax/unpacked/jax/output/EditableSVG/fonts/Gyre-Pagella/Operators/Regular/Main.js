@@ -108,4 +108,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyrePagellaMathJax_Operators'] = {
   0x2A2F: [490,-10,641,80,561,'561 80c-13 -10 -26 -21 -38 -33c-11 -12 -23 -24 -33 -37l-170 169l-169 -169c-11 13 -22 25 -34 37c-11 12 -24 23 -37 33l170 170l-170 170c13 10 26 21 37 33c12 12 23 24 34 37l169 -169l170 169c10 -13 22 -25 33 -37c12 -12 25 -23 38 -33l-170 -170']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Operators/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Operators/Regular/Main.js");

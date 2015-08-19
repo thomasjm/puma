@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main-italic'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Main-italic'],
   {
     // EN DASH
     0x2013: [285,-248,511,91,554,'98 248Q91 252 91 259Q91 279 100 284Q102 285 324 285H442H500Q536 285 545 283T554 274Q554 260 548 254Q546 250 538 249Q520 248 319 248H98'],
@@ -41,4 +41,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Italic/GeneralPunctuation.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Main/Italic/GeneralPunctuation.js");

@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main-bold'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Main-bold'],
   {
     // LEFT CEILING
     0x2308: [751,248,511,194,494,'194 728Q199 743 216 749H220Q223 749 229 749T245 749T265 750T289 750T316 750T345 750H471Q472 749 477 746T484 741T490 732T493 719Q493 701 471 690L362 689H254V-224Q244 -248 223 -248T194 -226V728'],
@@ -41,4 +41,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Bold/MiscTechnical.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Main/Bold/MiscTechnical.js");

@@ -127,4 +127,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyreTermesMathJax_Fraktur'] = {
   0x1D59F: [461,170,403,80,323,'323 -19c0 -89 -64 -151 -134 -151c-60 0 -109 40 -109 138c0 44 38 99 92 145c-28 43 -54 78 -54 78c55 24 79 56 82 94c2 20 -7 54 -33 54c-13 0 -23 -15 -45 -36l-39 28l108 130c21 -8 33 -18 37 -33c44 -16 68 -45 68 -88c0 -52 -24 -98 -81 -131c6 -7 17 -23 30 -43 c19 11 39 21 58 28l15 -34c-18 -9 -35 -18 -53 -30c29 -50 58 -113 58 -149zM240 -37c0 27 -21 71 -46 114c-34 -33 -58 -70 -58 -109c0 -59 22 -85 56 -85c32 0 47 31 48 80']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Fraktur/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Fraktur/Regular/Main.js");

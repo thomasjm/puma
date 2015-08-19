@@ -39,4 +39,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Shapes-bold'] = {
   0xE290: [175,0,633,-1,634,'634 0h-635v175h635v-175']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Shapes/Bold/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Shapes/Bold/Main.js");

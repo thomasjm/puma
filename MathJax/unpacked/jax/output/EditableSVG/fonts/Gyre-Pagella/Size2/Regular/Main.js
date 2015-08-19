@@ -72,4 +72,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyrePagellaMathJax_Size2'] = {
   0x27EF: [840,340,365,85,238,'238 154c0 -252 -53 -423 -125 -494c-3 6 -7 11 -12 16s-10 9 -16 12c66 67 87 232 87 466v192c0 234 -21 399 -87 466c6 3 11 7 16 12s9 10 12 16c72 -71 125 -242 125 -494v-192']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Size2/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Size2/Regular/Main.js");

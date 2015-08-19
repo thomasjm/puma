@@ -344,4 +344,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['AsanaMathJax_Operators'] = {
   0x2AFF: [654,112,383,64,320,'320 -112h-256v766h256v-766zM271 -63v668h-158v-668h158']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Operators/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Operators/Regular/Main.js");

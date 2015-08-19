@@ -75,4 +75,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Fraktur'] = {
   0x1D537: [468,209,457,43,407,'198 209l198 -110c8 -24 11 -47 11 -68c0 -110 -95 -185 -220 -240h-21c-60 29 -105 77 -123 160v18c89 64 148 114 196 178l-95 53v15c62 22 105 64 105 115c0 27 -16 53 -57 53c-9 0 -64 -25 -86 -38l-10 23c59 24 115 62 156 100h14c57 -17 82 -56 82 -97 c0 -53 -45 -95 -150 -162zM294 106l-29 26c-39 -56 -73 -102 -122 -145c10 -58 52 -117 93 -127c23 9 71 56 71 174c0 23 -5 47 -13 72']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Fraktur/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Fraktur/Regular/Main.js");

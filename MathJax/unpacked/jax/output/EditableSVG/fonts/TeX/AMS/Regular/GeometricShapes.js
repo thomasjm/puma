@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_AMS'],
   {
     // BLACK SQUARE
     0x25A0: [689,0,778,55,722,'71 0Q59 4 55 16V346L56 676Q64 686 70 689H709Q719 681 722 674V15Q719 10 709 1L390 0H71'],
@@ -50,4 +50,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/GeometricShapes.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/AMS/Regular/GeometricShapes.js");

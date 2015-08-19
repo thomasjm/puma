@@ -18,7 +18,7 @@
  *
  */
 
-MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Fraktur'] = {
+MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Fraktur'] = {
   directory: 'Fraktur/Regular',
   family: 'MathJax_Fraktur',
   id: 'MJFRAK',
@@ -31,4 +31,4 @@ MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Fraktur'] = {
     
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Fraktur/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Fraktur/Regular/Main.js");

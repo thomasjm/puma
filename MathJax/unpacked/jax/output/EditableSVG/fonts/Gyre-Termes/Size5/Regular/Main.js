@@ -72,4 +72,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyreTermesMathJax_Size5'] = {
   0x27EF: [1252,752,399,93,260,'260 -40c0 -329 -85 -645 -153 -712l-14 14c65 65 87 380 87 698v580c0 318 -22 633 -87 698l14 14c68 -67 153 -383 153 -712v-580']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Size5/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Size5/Regular/Main.js");

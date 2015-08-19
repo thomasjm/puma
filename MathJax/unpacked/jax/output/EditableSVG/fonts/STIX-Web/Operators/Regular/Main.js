@@ -433,4 +433,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Operators'] = {
   0xE3C4: [627,135,685,48,637,'637 -45h-391l-39 -90h-59l39 90h-139v66h168l78 181c-33 21 -64 38 -90 38c-70 0 -107 -67 -123 -138h-33c5 100 65 204 163 204c36 0 74 -18 110 -41l52 121c-62 37 -123 90 -169 90c-70 0 -107 -67 -123 -138h-33c5 100 65 204 163 204c63 0 130 -55 190 -93l77 178 h59l-88 -204c13 -6 26 -9 38 -9c69 0 102 67 117 138h33c-6 -85 -60 -204 -158 -204c-19 0 -38 5 -57 13l-55 -126c45 -29 86 -57 120 -57c69 0 102 67 117 138h33c-6 -85 -60 -204 -158 -204c-46 0 -94 29 -139 59l-65 -150h362v-66']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Operators/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Operators/Regular/Main.js");

@@ -18,7 +18,7 @@
  *
  */
 
-MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_SansSerif-italic'] = {
+MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_SansSerif-italic'] = {
   directory: 'SansSerif/Italic',
   family: 'MathJax_SansSerif',
   id: 'MJSSI',
@@ -32,4 +32,4 @@ MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_SansSerif-italic'] = {
     
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/SansSerif/Italic/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/SansSerif/Italic/Main.js");

@@ -127,4 +127,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['NeoEulerMathJax_Fraktur'] = {
   0x1D59F: [472,215,461,-8,377,'346 -103l-156 -112c-55 0 -113 6 -153 40c-20 17 -35 38 -45 60c68 98 151 188 250 264c-33 23 -89 32 -133 35l-1 10l92 65c17 12 35 27 35 47c0 17 -17 40 -33 50c-18 11 -29 15 -51 15c-13 0 -25 -5 -37 -10c-18 -8 -34 -19 -49 -30l-16 15c53 47 112 88 173 126 c28 -10 54 -22 75 -40c22 -19 41 -40 41 -67c0 -12 -18 -29 -32 -42l-64 -59c42 -13 81 -30 119 -50c11 -46 16 -93 16 -140c0 -60 -12 -117 -31 -177zM252 120c-61 -50 -150 -123 -150 -166c0 -20 12 -36 29 -49c51 -38 99 -39 108 -39c6 13 20 44 20 130 c0 33 -2 74 -7 124']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Fraktur/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Fraktur/Regular/Main.js");

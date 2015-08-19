@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main-bold'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Main-bold'],
   {
     // FOR ALL
     0x2200: [694,16,639,0,640,'1 664Q-2 685 23 693H27Q46 693 54 680T102 578L148 475H492L533 570Q541 586 548 603T560 630T569 650T576 667T582 678T588 686T594 691T600 693T609 694Q622 694 631 684T639 662Q637 653 492 325T341 -8Q333 -16 320 -16Q306 -16 298 -8Q294 -4 147 326L1 656V664ZM464 414H319Q175 414 175 413L319 88L464 414'],
@@ -227,4 +227,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Bold/MathOperators.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Main/Bold/MathOperators.js");

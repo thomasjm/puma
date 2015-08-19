@@ -87,4 +87,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Monospace'] = {
   0x1D7FF: [681,11,525,58,464,'464 335c0 -182 -103 -346 -246 -346c-68 0 -149 20 -149 104c0 25 20 38 37 38c18 0 38 -13 38 -38c0 -9 -3 -16 -8 -22c12 -12 37 -18 82 -18c91 0 178 105 187 256c-38 -47 -98 -77 -164 -77c-106 0 -183 106 -183 225c0 122 92 224 209 224c134 0 197 -143 197 -346z M399 430l-2 24c-20 112 -70 163 -130 163c-82 0 -150 -71 -150 -160c0 -92 64 -161 138 -161c81 0 144 62 144 134']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Monospace/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Monospace/Regular/Main.js");

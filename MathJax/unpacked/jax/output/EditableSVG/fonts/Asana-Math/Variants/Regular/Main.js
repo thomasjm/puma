@@ -86,4 +86,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['AsanaMathJax_Variants'] = {
   0xE23D: [747,112,962,9,948,'712 -112c-272 0 -461 143 -646 143c-21 0 -40 -5 -57 -19c16 43 67 81 113 81c24 0 45 -14 70 -14c52 0 410 444 455 516c-100 4 -199 22 -299 22c-55 0 -155 -12 -179 -73c-5 8 -8 16 -8 25c0 87 142 133 213 133c115 0 230 -13 346 -13c69 0 165 15 222 58l6 -6 c-7 -62 -82 -137 -144 -143c-186 -134 -336 -357 -472 -539c135 -33 273 -56 413 -56c52 0 100 36 130 76l9 -11c-26 -74 -80 -180 -172 -180']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Variants/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Variants/Regular/Main.js");

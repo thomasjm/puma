@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_AMS'],
   {
     // ??
     0xE006: [430,23,222,-20,240,'91 417Q104 430 111 430T131 417V301L171 341Q201 373 207 378T220 384Q227 384 233 377T240 366Q240 357 187 299L131 244V-10Q116 -23 111 -23T91 -10V201L49 157Q20 127 14 121T0 115Q-8 115 -14 121T-20 132Q-20 139 17 178Q29 191 36 199L91 257V417'],
@@ -71,4 +71,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/PUA.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/AMS/Regular/PUA.js");

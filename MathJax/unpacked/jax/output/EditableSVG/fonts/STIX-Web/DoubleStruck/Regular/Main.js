@@ -92,4 +92,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_DoubleStruck'] = {
   0x1D7E1: [676,12,540,28,512,'364 270h-2c-32 -32 -78 -44 -123 -44c-128 0 -211 94 -211 219c0 139 104 231 240 231c40 0 79 -11 113 -32c98 -59 131 -178 131 -286c0 -99 -39 -199 -112 -266c-78 -72 -216 -104 -320 -104v41c65 0 155 9 213 41c25 13 48 31 71 49v151zM408 559v-393 c44 46 60 136 60 198c0 68 -14 142 -60 195zM364 321v275c-20 25 -63 36 -94 36c-30 0 -74 -9 -94 -33v-304c14 -19 52 -25 74 -25c44 0 81 26 114 51zM132 308v277c-44 -34 -60 -88 -60 -142c0 -55 15 -101 60 -135']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/DoubleStruck/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/DoubleStruck/Regular/Main.js");

@@ -18,7 +18,7 @@
  *
  */
 
-MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Script'] = {
+MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Script'] = {
   directory: 'Script/Regular',
   family: 'MathJax_Script',
   id: 'MJSCR',
@@ -57,4 +57,4 @@ MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Script'] = {
     
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Script/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Script/Regular/Main.js");

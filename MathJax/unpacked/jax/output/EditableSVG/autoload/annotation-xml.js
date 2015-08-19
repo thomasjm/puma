@@ -27,7 +27,7 @@
 MathJax.Hub.Register.StartupHook("SVG Jax Ready",function () {
   var VERSION = "2.5.0";
   var MML = MathJax.ElementJax.mml,
-      SVG = MathJax.OutputJax.SVG;
+      SVG = MathJax.OutputJax.EditableSVG;
   var BBOX = SVG.BBOX;
   
   BBOX.FOREIGN = BBOX.Subclass({type: "foreignObject", removeable: false});

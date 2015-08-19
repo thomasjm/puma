@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main-bold'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Main-bold'],
   {
     // EN DASH
     0x2013: [300,-249,575,0,574,'0 249V300H574V249H0'],
@@ -53,4 +53,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Bold/GeneralPunctuation.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Main/Bold/GeneralPunctuation.js");

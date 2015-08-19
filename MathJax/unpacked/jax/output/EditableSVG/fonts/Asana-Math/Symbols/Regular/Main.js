@@ -226,4 +226,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['AsanaMathJax_Symbols'] = {
   0x29FF: [367,-197,678,60,619,'359 264l260 -62v165l-260 -64h-39l-260 58v-164l260 67h39']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Symbols/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Symbols/Regular/Main.js");

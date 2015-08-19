@@ -277,4 +277,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Latin-bold'] = {
   0xFB04: [691,0,833,15,812,'812 0h-233v24l8 1c28 3 38 22 38 58v334h-138v-333c0 -39 10 -55 46 -60v-24h-231v24c38 8 46 23 46 66v327h-138v-333c0 -39 10 -55 46 -60v-24h-241v24c47 6 56 23 56 66v327h-56v44h56c0 103 17 149 70 192c32 26 78 38 130 38s105 -10 147 -36c33 24 78 36 130 36 c55 0 96 -9 151 -31l46 30h19v-607c0 -36 11 -56 36 -58l12 -1v-24zM625 461v98c-12 4 -24 21 -24 37c0 26 16 23 16 42c0 12 -16 22 -41 22c-54 0 -89 -40 -89 -143v-56h138zM348 461v98c-12 4 -24 21 -24 37c0 26 16 23 16 42c0 12 -16 22 -41 22c-54 0 -89 -40 -89 -143 v-56h138']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Latin/Bold/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Latin/Bold/Main.js");

@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main-bold'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Main-bold'],
   {
     // GREEK CAPITAL LETTER GAMMA
     0x393: [680,0,692,39,643,'425 0L228 3Q63 3 51 0H39V62H147V618H39V680H612V676Q614 670 627 552T643 428V424H581V428Q580 430 576 461T562 524T532 576Q512 596 481 605T426 616T357 618H304V62H439V0H425'],
@@ -56,4 +56,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Bold/GreekAndCoptic.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Main/Bold/GreekAndCoptic.js");

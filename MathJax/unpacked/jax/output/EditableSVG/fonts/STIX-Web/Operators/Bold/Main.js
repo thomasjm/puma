@@ -172,4 +172,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Operators-bold'] = {
   0xE3C4: [747,243,750,68,683,'629 328h54c-6 -96 -61 -224 -174 -224c-48 0 -89 22 -129 47l-39 -123h341v-88h-369l-57 -183h-72l57 183h-173v88h201l50 160c-22 14 -56 34 -83 34c-71 0 -100 -79 -114 -136h-54c5 102 61 224 179 224c36 0 70 -14 101 -32l35 111c-32 20 -108 73 -147 73 c-71 0 -100 -79 -114 -136h-54c5 102 61 224 179 224c55 0 103 -33 149 -59c5 -3 10 -7 15 -10l84 266h72l-95 -302c13 -7 28 -13 43 -13c71 0 100 79 114 136h54c-6 -96 -61 -224 -174 -224c-22 0 -44 5 -64 13l-36 -114c26 -17 74 -51 106 -51c71 0 100 79 114 136']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Operators/Bold/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Operators/Bold/Main.js");

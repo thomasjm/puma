@@ -101,4 +101,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyrePagellaMathJax_Marks'] = {
   0x3017: [670,170,474,80,394,'354 630h-213c100 -112 153 -233 153 -347v-66c0 -114 -53 -235 -153 -347h213v760zM394 -170h-300c0 7 -2 13 -4 18c-3 6 -6 11 -10 16c113 113 174 236 174 353v66c0 117 -61 240 -174 353c4 5 7 10 10 16c2 5 4 11 4 18h300v-840']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Marks/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Marks/Regular/Main.js");

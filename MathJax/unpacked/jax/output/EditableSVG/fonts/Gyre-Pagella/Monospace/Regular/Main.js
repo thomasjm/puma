@@ -87,4 +87,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyrePagellaMathJax_Monospace'] = {
   0x1D7FF: [623,12,350,32,317,'317 311c0 -195 -83 -323 -174 -323c-71 0 -100 44 -100 93c0 20 13 34 29 34c15 0 27 -15 27 -32c0 -6 -3 -11 -11 -26c19 -26 38 -29 55 -29c67 0 122 104 130 261c-29 -48 -69 -69 -107 -69c-71 0 -134 84 -134 202c0 119 71 201 145 201c59 0 140 -60 140 -312z M267 392c0 121 -49 191 -90 191c-54 0 -100 -66 -100 -161c0 -86 36 -161 94 -161s96 64 96 131']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Monospace/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Monospace/Regular/Main.js");

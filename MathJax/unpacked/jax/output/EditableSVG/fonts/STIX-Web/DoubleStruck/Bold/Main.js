@@ -83,4 +83,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_DoubleStruck-bold'] = {
   0x1D56B: [461,0,513,40,473,'473 0h-433v70l200 321h-182v70h415v-70l-200 -321h200v-70zM391 391h-70l-199 -321h71']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/DoubleStruck/Bold/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/DoubleStruck/Bold/Main.js");

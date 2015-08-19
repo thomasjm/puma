@@ -52,4 +52,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['NeoEulerMathJax_Size4'] = {
   0x27E9: [2134,232,818,100,625,'150 2134l475 -1183l-475 -1183l-50 20l467 1163l-467 1163']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Size4/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Size4/Regular/Main.js");

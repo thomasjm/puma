@@ -77,4 +77,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyreTermesMathJax_Symbols'] = {
   0x27EB: [656,156,543,80,463,'463 250l-163 -406l-33 12l141 394l-141 394l33 12zM277 250l-163 -406l-34 12l141 394l-141 394l34 12']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Symbols/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Symbols/Regular/Main.js");

@@ -97,4 +97,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyreTermesMathJax_DoubleStruck'] = {
   0x1D7E1: [716,21,672,80,592,'592 404c0 -141 -84 -261 -198 -343c-75 -51 -163 -82 -252 -82c-10 0 -24 0 -24 17c0 15 12 23 20 23c30 0 99 27 141 55c67 45 117 111 142 202c-55 -30 -77 -35 -116 -35c-127 0 -225 92 -225 230c0 148 113 245 248 245c67 0 132 -27 173 -74c47 -53 91 -145 91 -238 zM278 283c-66 28 -105 102 -105 218c0 48 6 99 29 138c-51 -43 -82 -104 -82 -168c0 -102 71 -176 158 -188zM552 404c0 83 -40 165 -81 212c-9 11 -24 20 -35 28c36 -49 58 -124 58 -223c0 -130 -54 -246 -144 -341c111 63 202 188 202 324zM454 421 c0 151 -51 245 -138 245c-67 0 -103 -60 -103 -165c0 -121 46 -191 131 -191c34 0 64 8 84 23c19 14 26 40 26 88']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/DoubleStruck/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/DoubleStruck/Regular/Main.js");

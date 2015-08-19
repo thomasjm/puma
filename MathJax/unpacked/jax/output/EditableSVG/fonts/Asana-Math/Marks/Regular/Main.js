@@ -85,4 +85,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['AsanaMathJax_Marks'] = {
   0x3019: [730,212,384,77,308,'239 10l-152 -126v-75l211 167v566l-210 167v-75l151 -125v-499zM229 504l-151 125v101l230 -183v-576l-231 -183v101l152 126v489']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Marks/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Marks/Regular/Main.js");

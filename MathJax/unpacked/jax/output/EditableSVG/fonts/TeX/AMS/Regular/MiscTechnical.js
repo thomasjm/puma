@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_AMS'],
   {
     // stix-small down curve
     0x2322: [378,-122,778,55,722,'77 122Q68 122 63 126T57 135T55 142Q55 151 68 176T111 235T177 302T271 356T388 378Q451 378 508 355T602 300T668 233T709 174T722 142Q722 124 704 122Q692 122 685 134T658 179T606 243Q511 338 390 338Q354 338 320 329Q251 312 193 263T97 141Q87 123 77 122'],
@@ -29,4 +29,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/MiscTechnical.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/AMS/Regular/MiscTechnical.js");

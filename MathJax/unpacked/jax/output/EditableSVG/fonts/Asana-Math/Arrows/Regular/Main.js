@@ -214,4 +214,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['AsanaMathJax_Arrows'] = {
   0x297F: [608,66,743,66,678,'342 608v-400c0 -80 -30 -214 -132 -214c-46 0 -84 38 -84 84c0 52 32 92 78 112l-26 44c-64 -30 -112 -82 -112 -156c0 -78 66 -144 144 -144c80 0 134 56 162 126c28 -70 82 -126 162 -126c78 0 144 66 144 144c0 74 -48 126 -112 156l-26 -44c46 -20 78 -60 78 -112 c0 -46 -38 -84 -84 -84c-102 0 -132 134 -132 214v400h-60']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Arrows/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Arrows/Regular/Main.js");

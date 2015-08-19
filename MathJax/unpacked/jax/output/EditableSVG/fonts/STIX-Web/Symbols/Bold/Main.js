@@ -47,4 +47,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Symbols-bold'] = {
   0x29C7: [661,158,910,45,865,'662 253c0 -114 -93 -207 -207 -207s-207 93 -207 207s93 207 207 207s207 -93 207 -207zM592 253c0 83 -54 137 -137 137s-137 -54 -137 -137s54 -137 137 -137s137 54 137 137zM865 -158h-820v819h820v-819zM777 -70v643h-644v-643h644']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Symbols/Bold/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Symbols/Bold/Main.js");

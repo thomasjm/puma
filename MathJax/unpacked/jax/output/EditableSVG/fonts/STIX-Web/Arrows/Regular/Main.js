@@ -243,4 +243,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Arrows'] = {
   0xE137: [405,-101,1033,229,805,'805 101h-66v304h66v-304zM635 101h-66v304h66v-304zM465 101h-66v304h66v-304zM295 101h-66v304h66v-304']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Arrows/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Arrows/Regular/Main.js");

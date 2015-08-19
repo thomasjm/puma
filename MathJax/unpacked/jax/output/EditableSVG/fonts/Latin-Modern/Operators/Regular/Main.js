@@ -108,4 +108,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['LatinModernMathJax_Operators'] = {
   0x2A2F: [496,-3,778,142,636,'625 68c15 -15 15 -39 0 -53c-15 -15 -38 -15 -53 0l-183 182l-182 -182c-15 -15 -38 -15 -53 0c-15 14 -15 38 0 53l182 182l-182 182c-15 15 -15 39 0 53c15 15 38 15 53 0l183 -182l182 182c15 15 38 15 53 0c15 -14 15 -38 0 -53l-182 -182']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Operators/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Operators/Regular/Main.js");

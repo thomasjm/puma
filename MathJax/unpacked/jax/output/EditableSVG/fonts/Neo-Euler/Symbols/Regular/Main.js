@@ -49,4 +49,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['NeoEulerMathJax_Symbols'] = {
   0x23AE: [381,0,444,181,265,'182 0l-1 381h83l1 -381h-83']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Symbols/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Symbols/Regular/Main.js");

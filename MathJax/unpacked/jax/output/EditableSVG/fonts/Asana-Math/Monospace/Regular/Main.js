@@ -87,4 +87,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['AsanaMathJax_Monospace'] = {
   0x1D7FF: [691,12,499,50,449,'381 303c-43 -45 -92 -64 -142 -64c-105 0 -189 99 -189 226c0 134 97 226 202 226c91 0 197 -76 197 -344c0 -220 -118 -359 -243 -359c-122 0 -139 79 -139 114c0 34 19 52 43 52s41 -22 41 -48c0 -19 -4 -26 -8 -32c20 -17 54 -18 63 -18c91 0 165 110 175 247z M252 623c-68 0 -136 -62 -136 -158c0 -83 51 -157 128 -157c79 0 130 63 130 124c8 14 -21 191 -122 191']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Monospace/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Monospace/Regular/Main.js");
