@@ -8,6 +8,6 @@
     "target": "es5"
   },
   "files": [
-    "src/**/*.ts"
+    "Mathjax/unpacked/jax/output/EditableSVG/**/*.ts"
   ]
 }
