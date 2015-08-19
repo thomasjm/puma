@@ -4,21 +4,21 @@
 /*************************************************************
  *
  *  MathJax/extensions/MathMenu.js
- *  
+ *
  *  Implements a right-mouse (or CTRL-click) menu over mathematics
  *  elements that gives the user the ability to copy the source,
  *  change the math size, and zoom settings.
  *
  *  ---------------------------------------------------------------------
- *  
+ *
  *  Copyright (c) 2010-2015 The MathJax Consortium
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,7 @@
   var VERSION = "2.5.0";
 
   var SIGNAL = MathJax.Callback.Signal("menu")  // signal for menu events
-  
+
   MathJax.Extension.MathMenu = {
     version: VERSION,
     signal: SIGNAL
@@ -45,7 +45,7 @@
 
   var isPC = HUB.Browser.isPC, isMSIE = HUB.Browser.isMSIE, isIE9 = ((document.documentMode||0) > 8);
   var ROUND = (isPC ? null : "5px");
-  
+
   var CONFIG = HUB.CombineConfig("MathMenu",{
     delay: 150,                                    // the delay for submenus
     closeImg: AJAX.urlRev(OUTPUT.imageDir+"/CloseX-31.png"), // image for close "X" for mobiles
@@ -73,7 +73,7 @@
       left: Math.round((screen.width - 400)/2),
       top:  Math.round((screen.height - 300)/3)
     },
-    
+
     styles: {
       "#MathJax_About": {
         position:"fixed", left:"50%", width:"auto", "text-align":"center",
@@ -144,21 +144,21 @@
         padding: (isPC ? "2px 2em 4px 1.33em" : "1px 2em 3px 1.33em"),
         "font-style":"italic"
       },
-    
+
       ".MathJax_MenuRule": {
         "border-top": (isPC ? "1px solid #CCCCCC" : "1px solid #DDDDDD"),
         margin: (isPC ? "4px 1px 0px" : "4px 3px")
       },
-     
+
       ".MathJax_MenuDisabled": {
         color:"GrayText"
       },
-     
+
       ".MathJax_MenuActive": {
         "background-color": (isPC ? "Highlight" : "#606872"),
         color: (isPC ? "HighlightText" : "white")
       },
-      
+
       ".MathJax_Menu_Close": {
           position:"absolute",
           width: "31px", height: "31px",
@@ -166,13 +166,13 @@
       }
     }
   });
-  
+
   var FALSE, HOVER;
   HUB.Register.StartupHook("MathEvents Ready",function () {
     FALSE = MathJax.Extension.MathEvents.Event.False;
     HOVER = MathJax.Extension.MathEvents.Hover;
   });
-  
+
   /*************************************************************/
   /*
    *  The main menu class
@@ -183,7 +183,7 @@
     posted: false,
     title: null,
     margin: 5,
-    
+
     Init: function (def) {this.items = [].slice.call(arguments,0)},
     With: function (def) {if (def) {HUB.Insert(this,def)}; return this},
 
@@ -214,10 +214,10 @@
           ontouchstart: MENU.Close, ontouchend: FALSE, onmousedown: MENU.Close, onmouseup: FALSE
         },[["img",{src: CONFIG.closeImg, style:{width:"100%",height:"100%"}}]]);
       }
-      
+
       div.appendChild(menu);
       this.posted = true;
-      
+
       menu.style.width = (menu.offsetWidth+2) + "px";
       var x = event.pageX, y = event.pageY;
       if (!x && !y) {
@@ -249,9 +249,9 @@
           menu.style["KhtmlBorderRadiusTop"+side] = 0;  // Konqueror
         }
       }
-      
+
       menu.style.left = x+"px"; menu.style.top = y+"px";
-      
+
       if (document.selection && document.selection.empty) {document.selection.empty()}
       return FALSE(event);
     },
@@ -291,7 +291,7 @@
       }
       return null;
     },
-    
+
     /*
      *  Find the index of a menu item (so we can insert before or after it)
      */
@@ -302,9 +302,9 @@
         {if (this.items[i].name[n] === name) {return i}}
       return null;
     }
-    
+
   },{
-    
+
     config: CONFIG,
 
     div: null,     // the DOM elements for the menu and submenus
@@ -369,10 +369,10 @@
         bg.style.height = document.body.scrollHeight + "px";
       }
     },
-    
+
     saveCookie: function () {HTML.Cookie.Set("menu",this.cookie)},
     getCookie: function () {this.cookie = HTML.Cookie.Get("menu")},
-    
+
     //
     //  Preload images so they show up with the menu
     //
@@ -427,7 +427,7 @@
       if (this.timer) {clearTimeout(this.timer); delete this.timer}
     },
     Mouseup: function (event,menu) {return this.Remove(event,menu)},
-    
+
     Touchstart: function (event,menu) {return this.TouchEvent(event,menu,"Mousedown")},
     Touchend: function (event,menu)   {return this.TouchEvent(event,menu,"Mouseup")},
     TouchEvent: function (event,menu,type) {
@@ -440,7 +440,7 @@
       MENU.Event(event,menu,type);
       return false;
     },
-    
+
     Remove: function (event,menu) {
       menu = menu.parentNode.menuItem;
       return menu.Remove(event,menu);
@@ -450,7 +450,7 @@
     Deactivate: function (menu) {menu.className = menu.className.replace(/ MathJax_MenuActive/,"")},
 
     With: function (def) {if (def) {HUB.Insert(this,def)}; return this},
-    
+
     isRTL: function () {return MENU.isRTL},
     rtlClass: function () {return (this.isRTL() ? " RTL" : "")}
   });
@@ -467,7 +467,7 @@
       this.name = name; this.action = action;
       this.With(def);
     },
-    
+
     Label: function (def,menu) {return [this.Name()]},
     Mouseup: function (event,menu) {
       if (!this.disabled) {
@@ -558,7 +558,7 @@
           if (item && item.variable === this.variable)
             {child[i].firstChild.style.display = "none"}
         }
-        menu.firstChild.display = ""; 
+        menu.firstChild.display = "";
         CONFIG.settings[this.variable] = this.value;
         MENU.cookie[this.variable] = CONFIG.settings[this.variable]; MENU.saveCookie();
         SIGNAL.Post(["radio button",this]);
@@ -626,7 +626,7 @@
       return null;
     }
   });
-  
+
   /*************************************************************/
   /*************************************************************/
 
@@ -635,7 +635,7 @@
    */
   MENU.About = function () {
     var HTMLCSS = OUTPUT["HTML-CSS"] || {};
-    var font = 
+    var font =
        (HTMLCSS.imgFonts ? "image" :
        (HTMLCSS.fontInUse ?
          (HTMLCSS.webFonts ? "web" : "local")+" "+HTMLCSS.fontInUse :
@@ -650,7 +650,7 @@
     jax.push(["div",{style:{"border-top":"groove 2px",margin:".25em 0"}}]);
     MENU.About.GetJax(jax,MathJax.Extension,["Extension","%1 Extension v%2"],true);
     jax.push(["div",{style:{"border-top":"groove 2px",margin:".25em 0"}}],["center",{},[
-      HUB.Browser + " v"+HUB.Browser.version + (format ? 
+      HUB.Browser + " v"+HUB.Browser.version + (format ?
         " \u2014 " + _(format.replace(/ /g,""),format) : "")
     ]]);
     MENU.About.div = MENU.Background(MENU.About);
@@ -661,7 +661,7 @@
       _(font.replace(/ /g,""),"using "+font),["br"],["br"],
       ["span",{style:{
         display:"inline-block", "text-align":"left", "font-size":"80%",
-        "max-height":"20em", overflow:"auto", 
+        "max-height":"20em", overflow:"auto",
         "background-color":"#E4E4E4", padding:".4em .6em", border:"1px inset"
       }},jax],["br"],["br"],
       ["a",{href:"http://www.mathjax.org/"},["www.mathjax.org"]],
@@ -697,7 +697,7 @@
     return jax;
   };
 
-  
+
   /*
    *  Handle the MathJax HELP menu
    */
@@ -705,7 +705,7 @@
     AJAX.Require("[MathJax]/extensions/HelpDialog.js",
                  function () {MathJax.Extension.Help.Dialog()});
   };
-  
+
   /*
    *  Handle showing of element's source
    */
@@ -789,7 +789,7 @@
       },50);
     }
   };
-  
+
   /*
    *  Handle rescaling all the math
    */
@@ -813,14 +813,14 @@
                       "The scale should be a percentage (e.g., 120%%)"))}
     }
   };
-  
+
   /*
    *  Handle loading the zoom code
    */
   MENU.Zoom = function () {
     if (!MathJax.Extension.MathZoom) {AJAX.Require("[MathJax]/extensions/MathZoom.js")}
   };
-  
+
   /*
    *  Handle changing the renderer
    */
@@ -834,7 +834,7 @@
       switch (CONFIG.settings.renderer) {
         case "NativeMML":
           if (!CONFIG.settings.warnedMML) {
-            if (BROWSER.isChrome && BROWSER.version.substr(0,3) !== "24.") {message = MESSAGE.MML.WebKit} 
+            if (BROWSER.isChrome && BROWSER.version.substr(0,3) !== "24.") {message = MESSAGE.MML.WebKit}
             else if (BROWSER.isSafari && !BROWSER.versionAtLeast("5.0")) {message = MESSAGE.MML.WebKit}
             else if (BROWSER.isMSIE) {if (!BROWSER.hasMathPlayer) {message = MESSAGE.MML.MSIE}}
             else {message = MESSAGE.MML[BROWSER]}
@@ -846,7 +846,7 @@
           if (!CONFIG.settings.warnedSVG) {
             if (BROWSER.isMSIE && !isIE9) {message = MESSAGE.SVG.MSIE}
           }
-          break;  
+          break;
       }
       if (message) {
         message = _(message[0],message[1]);
@@ -879,7 +879,7 @@
       MSIE:    ["MSIENativeMMLWarning",
                  "Internet Explorer requires the MathPlayer plugin " +
                  "in order to process MathML output."],
-      
+
       Opera:   ["OperaNativeMMLWarning",
                  "Opera's support for MathML is limited, so switching to " +
                  "MathML output may cause some expressions to render poorly."],
@@ -892,7 +892,7 @@
                  "Your browser's native MathML does not implement all the features " +
                  "used by MathJax, so some expressions may not render properly."]
     },
-    
+
     SVG: {
       MSIE:    ["MSIESVGWarning",
                  "SVG is not implemented in Internet Explorer prior to " +
@@ -901,7 +901,7 @@
                  "not display properly."]
     }
   };
-  
+
   /*
    *  Handle setting the HTMLCSS fonts
    */
@@ -909,7 +909,7 @@
     var HTMLCSS = OUTPUT["HTML-CSS"]; if (!HTMLCSS) return;
     document.location.reload();
   };
-  
+
   /*
    *  Handle selection of locale and rerender the page
    */
@@ -931,7 +931,7 @@
       });
     }
   };
-  
+
   /*
    *  Handle setting MathPlayer events
    */
@@ -964,7 +964,7 @@
       "The MathJax contextual menu will be disabled, but you can " +
       "Alt-Click on an expression to obtain the MathJax menu instead."]
   };
-  
+
   /*************************************************************/
   /*************************************************************/
 
@@ -1089,10 +1089,11 @@
         ),
         ITEM.RULE(),
         ITEM.SUBMENU(["Renderer","Math Renderer"],    {hidden:!CONFIG.showRenderer},
-          ITEM.RADIO("HTML-CSS",  "renderer", {action: MENU.Renderer}),
-          ITEM.RADIO("Fast HTML", "renderer", {action: MENU.Renderer, value:"CommonHTML"}),
-          ITEM.RADIO("MathML",    "renderer", {action: MENU.Renderer, value:"NativeMML"}),
-          ITEM.RADIO("SVG",       "renderer", {action: MENU.Renderer}),
+          ITEM.RADIO("HTML-CSS",     "renderer", {action: MENU.Renderer}),
+          ITEM.RADIO("Fast HTML",    "renderer", {action: MENU.Renderer, value:"CommonHTML"}),
+          ITEM.RADIO("MathML",       "renderer", {action: MENU.Renderer, value:"NativeMML"}),
+          ITEM.RADIO("SVG",          "renderer", {action: MENU.Renderer}),
+          ITEM.RADIO("Editable SVG", "renderer", {action: MENU.Renderer, value:"EditableSVG"}),
           ITEM.RULE(),
           ITEM.CHECKBOX("Fast Preview", "CHTMLpreview")
         ),
@@ -1145,7 +1146,7 @@
         trigger.items[0].disabled = trigger.items[1].disabled = true;
         if (settings.zoom === "Hover" || settings.zoom == "Click") {settings.zoom = "None"}
         trigger.items = trigger.items.slice(0,4);
-    
+
         if (navigator.appVersion.match(/[ (]Android[) ]/)) {
           MENU.ITEM.SUBMENU.Augment({marker: "\u00BB"});
         }
@@ -1155,7 +1156,7 @@
     MENU.CreateLocaleMenu();
     MENU.CreateAnnotationMenu();
   });
-  
+
   MENU.showRenderer = function (show) {
     MENU.cookie.showRenderer = CONFIG.showRenderer = show; MENU.saveCookie();
     MENU.menu.Find("Math Settings","Math Renderer").hidden = !show;
@@ -1181,12 +1182,12 @@
     MENU.cookie.showLocale = CONFIG.showLocale = show; MENU.saveCookie();
     MENU.menu.Find("Language").hidden = !show;
   };
-  
+
   MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
     if (!MathJax.OutputJax["HTML-CSS"].config.imageFont)
       {MENU.menu.Find("Math Settings","Font Preference","TeX (image)").disabled = true}
   });
-  
+
   /*************************************************************/
 
   CALLBACK.Queue(
