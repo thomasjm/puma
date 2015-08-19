@@ -1580,7 +1580,7 @@
     0xEEE8: [0,0,25,0,0,{space:1}]
   });
 
-  HUB.Register.StartupHook("SVG Jax Require",function () {
+  HUB.Register.StartupHook("EditableSVG Jax Require",function () {
     HUB.Register.LoadHook(SVG.fontDir+"/Size4/Regular/Main.js",function () {
       SVG.FONTDATA.FONTS['MathJax_Size4'][0xE154][0] += 200;  // adjust height for brace extender
       SVG.FONTDATA.FONTS['MathJax_Size4'][0xE154][1] += 200;  // adjust depth for brace extender
