@@ -1756,8 +1756,60 @@
 
     MML = MathJax.ElementJax.mml;
 
+    var UP = 1
+    var RIGHT = 2
+    var DOWN = 3
+    var LEFT = 4
+
+    function getCursorValue(direction) {
+      if (isNaN(direction)) {
+        switch(direction[0].toLowerCase()) {
+          case 'u': return UP
+          case 'd': return DOWN
+          case 'l': return LEFT
+          case 'r': return RIGHT
+        }
+        throw new Error('Invalid cursor value')
+      } else {
+        return direction
+      }
+    }
+
     MML.mbase.Augment({
       SVG: BBOX,
+
+      getSVGBBox: function() {
+        var elem = this.EditableSVGelem
+        if (!elem || !elem.ownerSVGElement) return
+
+        var bb = elem.getBBox()
+        var transform = elem.getTransformToElement(elem.ownerSVGElement)
+        var ptmp = elem.ownerSVGElement.createSVGPoint()
+        var lx = 1/0, ly = 1/0, hx = -1/0, hy = -1/0
+
+        check(bb.x, bb.y)
+        check(bb.x+bb.width, bb.y)
+        check(bb.x, bb.y+bb.height)
+        check(bb.x+bb.width, bb.y+bb.height)
+
+        return {
+          x: lx,
+          y: ly,
+          width: hx-lx,
+          height: hy-ly,
+        }
+
+        function check(x, y) {
+          ptmp.x = x
+          ptmp.y = y
+          var p = ptmp.matrixTransform(transform)
+          lx = Math.min(lx, p.x)
+          ly = Math.min(ly, p.y)
+          hx = Math.max(hx, p.x)
+          hy = Math.max(hy, p.y)
+        }
+      },
+
       getBB: function(relativeTo) {
         var elem = this.EditableSVGelem;
         if (!elem) {
