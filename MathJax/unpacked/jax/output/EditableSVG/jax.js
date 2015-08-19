@@ -2176,4 +2176,4 @@
     });
   }
 
-})(MathJax.Ajax, MathJax.Hub, MathJax.HTML, MathJax.OutputJax.SVG);
+})(MathJax.Ajax, MathJax.Hub, MathJax.HTML, MathJax.OutputJax.EditableSVG);
