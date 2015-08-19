@@ -330,7 +330,7 @@
 
         // TODO: this should be correct
         console.log('matching nodes: ', matchingNodes);
-        var cursor = globalCursor = new MathJax.Object.Cursor()
+        var cursor = globalCursor = globalCursor || new MathJax.Object.Cursor()
         matchingNodes.forEach(function(node) {
           console.log(node.type, node)
           if (node.parent && node.parent.cursorable) {
