@@ -1,5 +1,5 @@
 /// <reference path="Interfaces.ts" />
-
+/// <reference path="CanvasText.ts" />
 
 class Frac implements Drawable {
 

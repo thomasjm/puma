@@ -1,30 +1,54 @@
 <html>
     <head>
-        <script type="text/javascript" src="http://localhost:9000/Mathjax/unpacked/Mathjax.js"></script>
+        <script type="text/javascript" src="/Mathjax/unpacked/Mathjax.js"></script>
 
-        <!-- <script type="text/javascript"
-                src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG"> -->
+       <script>
+           MathJax.Hub.Config({
+                extensions: ["tex2jax.js","MathEvents.js","MathZoom.js","MathMenu.js","toMathML.js","TeX/noErrors.js","TeX/noUndefined.js","TeX/AMSmath.js","TeX/AMSsymbols.js"],
+                jax: ["input/TeX", "output/SVG"],
+                tex2jax: {
+                    inlineMath: [['$','$'], ['\\(','\\)']],
+                    preview: "TeX"
+                },
+                SVG: {
+                    addMMLclasses: true,
+                },
+                skipStartupTypeset: false,
+            });
+       </script>
+       <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+   </head>
+   <body>
+        <p>When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</p>
+
+        <script>
+
+            MathJax.Hub.Register.StartupHook('End', function() {
+                var svg = d3.select('.MathJax_SVG svg')
+                var myrect = svg.select('g').insert('svg:rect', ':first-child')
+                myrect.attr('fill', 'red')
+
+                svg.on('mousemove', function() {
+                    var parentBox = findParentBox(d3.event.target)
+                    if (!parentBox) {
+                        myrect.width = 0
+                        return
+                    }
+                    var bbox = parentBox.getBBox()
+                    parentBox.insertBefore(myrect[0][0], parentBox.firstChild)
+                    myrect.attr('x', bbox.x)
+                        .attr('y', bbox.y)
+                        .attr('width', bbox.width)
+                        .attr('height', bbox.height)
+                })
+            })
+
+            function findParentBox(el) {
+                while (el && el.nodeName !== 'g') {
+                    el = el.parentNode
+                }
+                return el
+            }
         </script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    </head>
-    <body>
-        <div id="all"><p>When $a \ne 0$, there are two solutions to \(ax^2 + bx^O + c = 0\) and they are $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</p></div>
-
-	    <script>
-         MathJax.Hub.Config({
-             tex2jax: {
-                 inlineMath: [['$','$'], ['\\(','\\)']],
-                 preview: "TeX"
-             },
-
-             SVG: {
-                 addMMLclasses: true
-             }
-         });
-
-         highlight = function(gelem) {
-
-         };
-        </script>
-    </body>
+   </body>
 </html>
