@@ -7,7 +7,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var tsProject = ts.createProject('tsconfig.json');
 
 gulp.task('build', function() {
-    var tsResult = gulp.src('src/**/*.ts')
+    var tsResult = gulp.src('Mathjax/unpacked/jax/output/EditableSVG/**/*.ts')
             .pipe(ts(tsProject));
 
     return merge([ // Merge the two output streams, so this task is finished when the IO of both operations are done.
@@ -16,7 +16,7 @@ gulp.task('build', function() {
             .pipe(sourcemaps.init())
             .pipe(concat('all.js'))
             .pipe(sourcemaps.write())
-            .pipe(gulp.dest('dist/js'))
+            .pipe(gulp.dest('Mathjax/unpacked/jax/output/EditableSVG/dist/'))
     ]);
 });
 

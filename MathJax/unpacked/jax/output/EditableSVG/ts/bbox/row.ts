@@ -2,8 +2,8 @@
 
 class BBOX_ROW extends BBOX {
 
-    Init() {
-        this.SUPER(arguments).Init.call(this);
+    constructor() {
+        super.apply(arguments); // TODO: typescript apply super
         this.svg = [];
         this.sh = this.sd = 0;
     }
@@ -15,10 +15,10 @@ class BBOX_ROW extends BBOX {
             svg.mml = data
         }
         if (svg.h > this.sh) {
-            this.sh = svg.h
+            this.sh = svg.h;
         }
         if (svg.d > this.sd) {
-            this.sd = svg.d
+            this.sd = svg.d;
         }
         return svg;
     }

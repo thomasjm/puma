@@ -1,27 +1,53 @@
+/// <reference path="../util.ts" />
 
 
 class BBOX {
     type = "g";
     removeable = true;
 
-    Init(def) {
-        this.h = this.d = -SVG.BIGDIMEN;
+    // Stuff needed for the GLYPH element
+    glyphs = {}; // which glpyhs have been used
+    defs = null; // the SVG <defs> element where glyphs are stored
+    n = 0; // the ID for local <defs> for self-contained SVG elements
+
+    h: number;
+    w: number;
+    d: number;
+    l: number;
+    D: number;
+    H: number;
+    r: number;
+    x: number;
+    y: number;
+    scale: number;
+    element: any;
+
+    tw: number;
+
+    childX: number;
+    childY: number;
+    childScale: number;
+
+    hasIndent: boolean;
+
+    constructor(def) {
+        this.h = this.d = -Util.BIGDIMEN;
         this.H = this.D = 0;
         this.w = this.r = 0;
-        this.l = SVG.BIGDIMEN;
+        this.l = Util.BIGDIMEN;
         this.x = this.y = 0;
         this.scale = 1;
         this.n = 0;
         if (this.type) {
-            this.element = SVG.Element(this.type, def)
+            this.element = EditableSVG.Element(this.type, def);
         }
     }
 
     With(def) {
-        return HUB.Insert(this, def)
+        return HUB.Insert(this, def);
     }
 
-    Add(svg, dx, dy, forcew, infront) {
+    Add(svg, dx, dy, forcew?, infront?) {
         if (dx) {
             svg.x += dx
         };
@@ -88,10 +114,10 @@ class BBOX {
             delete svg.element;
         }
         if (svg.hasIndent) {
-            this.hasIndent = svg.hasIndent
+            this.hasIndent = svg.hasIndent;
         }
         if (svg.tw != null) {
-            this.tw = svg.tw
+            this.tw = svg.tw;
         }
         if (svg.d - svg.y > this.d) {
             this.d = svg.d - svg.y;
@@ -125,7 +151,8 @@ class BBOX {
         this.childY = svg.y;
         this.n++;
         return svg;
-    },
+    }
+
     Align(svg, align, dx, dy, shift) {
         dx = ({
             left: dx,
@@ -135,9 +162,10 @@ class BBOX {
         var w = this.w;
         this.Add(svg, dx + (shift || 0), dy);
         this.w = w;
-    },
+    }
+
     Clean() {
-        if (this.h === -SVG.BIGDIMEN) {
+        if (this.h === -Util.BIGDIMEN) {
             this.h = this.d = this.l = 0
         }
         return this;
