@@ -3064,6 +3064,7 @@
         this.SVGgetStyles();
         var svg = this.SVG(),
             scale = this.SVGgetScale(svg);
+        this.EditableSVGelem = svg.element
         this.SVGhandleSpace(svg);
         var base = this.SVGchildSVG(0),
             rule, surd;
@@ -3340,6 +3341,7 @@
         this.SVGgetStyles();
         var svg = this.SVG(),
             scale = this.SVGgetScale(svg);
+        this.EditableSVGelem = svg.element
         this.SVGhandleSpace(svg);
         var mu = this.SVGgetMu(svg);
         var base = svg.Add(this.EditableSVGdataStretched(this.base, HW, D));
