@@ -160,41 +160,68 @@
     visualizeJax: function(jax, selector) {
       selector.empty();
       var f = function(j, spacer) {
-        var s = spacer + (j ? j.type : "null") + "\n";
-        var item = $('<li><pre>' + s + '</pre></li>');
+        var s;
+        var end;
+        if (_.isString(j)) {
+          s = spacer + j + "\n";
+          end = true;
+        } else {
+          s = spacer + (j ? j.type : "null") + "\n";
+        }
+        var item = $('<li><pre style="margin: 0;">' + s + '</pre></li>');
         item.appendTo(selector);
+        if (end) return
         item.on('click', function() {
           console.log('clicked this: ', j);
           var bb = j.getBB();
 
           // The bounding box x and y is in the transformed coordinates; convert to viewport coords
           var svg = $(j.EditableSVGelem).closest('svg').get()[0];
+          var viewTransform = svg.getCTM().inverse().multiply(j.EditableSVGelem.getCTM())
           var pt = svg.createSVGPoint();
+          var pt2 = svg.createSVGPoint();
           pt.x = bb.x;
           pt.y = bb.y;
-          var vpCoords = pt.matrixTransform(j.EditableSVGelem.getCTM());
+          pt2.x = bb.x + bb.width
+          pt2.y = bb.y + bb.height
+          var vp1 = pt.matrixTransform(viewTransform);
+          var vp2 = pt2.matrixTransform(viewTransform);
+          var rectMove = document.createElement('rect')
+
+          console.log(j.EditableSVGelem.getCTM(), j.EditableSVGelem.getScreenCTM())
+
+          d3.select(svg)
+            .insert('svg:rect')
+            .attr('fill', 'red')
+            .attr('x', Math.min(vp1.x, vp2.x))
+            .attr('y', Math.min(vp1.y, vp2.y))
+            .attr('width', Math.abs(vp1.x - vp2.x))
+            .attr('height', Math.abs(vp1.y - vp2.y))
+
+          console.log(j.EditableSVGelem.getCTM(), vp1, vp2)
 
           // Something wrong here...
-          console.log('bb: ', vpCoords.x, vpCoords.y, bb.width, bb.height);
+          console.log('bb: ', vp1.x, vp1.y, bb.width, bb.height);
         });
 
         if (!j) return;
 
-        if (_.isString(j)) {
-          s = spacer + j + "\n";
-          selector.append('<li><pre>' + s + '</pre></li>');
-        } else {
-          for (var i = 0; i < j.data.length; i++) {
-            f(j.data[i], spacer + " ");
-          }
+        for (var i = 0; i < j.data.length; i++) {
+          f(j.data[i], spacer + " ");
         }
       };
       f(jax.root, "");
     },
 
     getNodesAsFlatList: function(jax) {
-      var rest = jax.data ? _.flatten(_.map(jax.data, this.getNodesAsFlatList)) : [];
-      return [jax].concat(rest);
+      var found = []
+      var use = function(jax) {
+        if (!jax) return
+        found.push(jax)
+        if (jax.data) jax.data.map(use)
+      }
+      use(jax)
+      return found
     },
 
     // Convert coordinates in some arbitrary element's coordinate system to the viewport coordinate system
@@ -207,6 +234,15 @@
       return pt.matrixTransform(elem.getCTM());
     },
 
+    screenCoordsToElemCoords: function(elem, x, y) {
+      if (!elem.ownerSVGElement) return
+      var pt = elem.ownerSVGElement.createSVGPoint()
+      pt.x = x
+      pt.y = y
+
+      return pt.matrixTransform(elem.getScreenCTM().inverse())
+    },
+
     nodeContainsPoint: function(svg, node, point) {
       if (!node.getBB) {
         console.error("Node doesn't have getBB");
@@ -215,7 +251,7 @@
 
       var bb = node.getBB();
       if (!bb) {
-        console.error("Didn't get a bb", node.EditableSVGelem);
+        // console.error("Didn't get a bb", node.EditableSVGelem);
         return false;
       }
 
@@ -226,6 +262,19 @@
       if (point.y > bb.y || point.y < bb.y - bb.height) return false;
       console.log('MATCHED');
       return true;
+    },
+
+    nodeContainsScreenPoint: function(node, x, y) {
+      var bb = node.getBB && node.getBB()
+      if (!bb) {
+        return false;
+      }
+
+      var p = this.screenCoordsToElemCoords(node.EditableSVGelem, x, y)
+
+      console.log(node.EditableSVGelem, p.x, p.y, bb.x, bb.y, bb.width, bb.height)
+
+      return bb.x <= p.x && p.x <= bb.x+bb.width && bb.y <= p.y && p.y <= bb.y+bb.height
     },
 
     Startup: function() {
@@ -277,9 +326,9 @@
         var nodes = this.getNodesAsFlatList(jax.root);
 
         // Filter the nodes to find the ones we want
-        var ncp = this.nodeContainsPoint.bind(this);
+        var ncp = this.nodeContainsScreenPoint.bind(this);
         var matchingNodes = _.filter(nodes, function(node) {
-          return ncp(svg, node, cp);
+          return ncp(node, event.clientX, event.clientY)
         });
 
         // TODO: this should be correct
@@ -1717,7 +1766,7 @@
       getBB: function(relativeTo) {
         var elem = this.EditableSVGelem;
         if (!elem) {
-          console.log('Oh no! Couldn\'t find elem for this');
+          // console.log('Oh no! Couldn\'t find elem for ', this.type);
           return;
         }
 
@@ -2254,7 +2303,7 @@
           text = remap(text, chars)
         }
         var charsThing = this.SVGhandleVariant(variant, scale, text);
-        this.EditableSVGelem = charsThing.element;
+        // this.EditableSVGelem = charsThing.element; we don't want this one
         return charsThing;
       }
     });
