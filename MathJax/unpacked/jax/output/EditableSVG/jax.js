@@ -172,7 +172,7 @@
         item.appendTo(selector);
         if (end) return
         item.on('click', function() {
-          console.log('clicked this: ', j);
+          // console.log('clicked this: ', j);
           var bb = j.getBB();
 
           // The bounding box x and y is in the transformed coordinates; convert to viewport coords
@@ -188,7 +188,7 @@
           var vp2 = pt2.matrixTransform(viewTransform);
           var rectMove = document.createElement('rect')
 
-          console.log(j.EditableSVGelem.getCTM(), j.EditableSVGelem.getScreenCTM())
+          // console.log(j.EditableSVGelem.getCTM(), j.EditableSVGelem.getScreenCTM())
 
           d3.select(svg)
             .insert('svg:rect')
@@ -198,10 +198,9 @@
             .attr('width', Math.abs(vp1.x - vp2.x))
             .attr('height', Math.abs(vp1.y - vp2.y))
 
-          console.log(j.EditableSVGelem.getCTM(), vp1, vp2)
+          // console.log(j.EditableSVGelem.getCTM(), vp1, vp2)
 
-          // Something wrong here...
-          console.log('bb: ', vp1.x, vp1.y, bb.width, bb.height);
+          // console.log('bb: ', vp1.x, vp1.y, bb.width, bb.height);
         });
 
         if (!j) return;
@@ -271,8 +270,6 @@
       }
 
       var p = this.screenCoordsToElemCoords(node.EditableSVGelem, x, y)
-
-      console.log(node.EditableSVGelem, p.x, p.y, bb.x, bb.y, bb.width, bb.height)
 
       return bb.x <= p.x && p.x <= bb.x+bb.width && bb.y <= p.y && p.y <= bb.y+bb.height
     },
