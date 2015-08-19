@@ -2333,7 +2333,7 @@
         if (D != null) {
           return this.SVGstretchV(HW, D)
         } else if (HW != null) {
-          return this.SVG.strechH(HW)
+          return this.SVGstretchH(HW)
         }
 
         //  Get the variant, and check for operator size
