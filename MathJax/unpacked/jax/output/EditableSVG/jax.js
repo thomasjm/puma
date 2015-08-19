@@ -29,6 +29,7 @@
 
   var SVGNS = "http://www.w3.org/2000/svg";
   var XLINKNS = "http://www.w3.org/1999/xlink";
+  var globalCursor
 
   SVG.Augment({
     config: {
@@ -323,16 +324,21 @@
         var nodes = this.getNodesAsFlatList(jax.root);
 
         // Filter the nodes to find the ones we want
-        var ncp = this.nodeContainsScreenPoint.bind(this);
-        var matchingNodes = _.filter(nodes, function(node) {
-          return ncp(node, event.clientX, event.clientY)
-        });
+        var matchingNodes = nodes.filter(function(node) {
+          return this.nodeContainsScreenPoint(node, event.clientX, event.clientY)
+        }, this);
 
         // TODO: this should be correct
         console.log('matching nodes: ', matchingNodes);
-        _.each(matchingNodes, function(node) {
-          console.log(node.type, node);
-        });
+        var cursor = globalCursor = new MathJax.Object.Cursor()
+        matchingNodes.forEach(function(node) {
+          console.log(node.type, node)
+          if (node.parent && node.parent.cursorable) {
+            node.parent.moveCursorFromChild(cursor, 'left', node, true)
+            cursor.draw()
+          }
+          prev = node
+        })
       };
 
       this.Mouseover = HOVER.Mouseover;
@@ -3466,6 +3472,21 @@
           });
           box.removeable = false;
           var svg = this.SVG();
+          svg.element.setAttribute('tabindex', '0')
+          svg.element.addEventListener('keydown', function(e) {
+            var direction
+            switch (e.which) {
+                case 38: direction = UP; break
+                case 40: direction = DOWN; break
+                case 37: direction = LEFT; break
+                case 39: direction = RIGHT; break
+            }
+            if (globalCursor && direction) {
+              globalCursor.move(direction)
+              globalCursor.draw()
+              e.preventDefault()
+            }
+          })
           svg.element.setAttribute("xmlns:xlink", XLINKNS);
           if (CONFIG.useFontCache && !CONFIG.useGlobalCache) {
             svg.element.appendChild(BBOX.GLYPH.defs)
