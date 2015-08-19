@@ -204,4 +204,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Marks'] = {
   0xE28D: [734,-484,0,94,460,'460 615h-34l-149 69l-149 -69h-34l155 119h56zM460 484h-34l-149 69l-149 -69h-34l155 119h56']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Marks/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Marks/Regular/Main.js");

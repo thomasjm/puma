@@ -1108,4 +1108,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['NeoEulerMathJax_NonUnicode'] = {
   0xE43A: [588,-1,1123,70,1053,'871 275c73 0 132 59 132 132s-58 131 -131 131v50c100 0 181 -81 181 -181s-82 -181 -182 -181h-710c27 -34 85 -109 118 -225h-49c-30 96 -81 186 -160 249c112 95 149 214 160 250h49c-33 -116 -91 -191 -118 -225h710']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/NonUnicode/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/NonUnicode/Regular/Main.js");

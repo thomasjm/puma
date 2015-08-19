@@ -45,4 +45,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['NeoEulerMathJax_Marks'] = {
   0x20EF: [50,221,287,0,418,'346 -105h-346v40h346l-79 94l21 21l130 -136l-130 -135l-21 21']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Marks/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Marks/Regular/Main.js");

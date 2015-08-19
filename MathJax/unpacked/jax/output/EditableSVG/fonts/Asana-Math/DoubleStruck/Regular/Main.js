@@ -96,4 +96,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['AsanaMathJax_DoubleStruck'] = {
   0x1D7E1: [679,17,600,38,562,'325 646c94 -39 124 -129 124 -247c0 -144 -30 -256 -122 -336c256 93 252 559 -2 583zM128 -17l-46 29l11 19c17 -2 30 -3 38 -3c33 0 88 12 123 29c56 25 99 76 122 141c13 36 19 64 25 126l-76 -57c-24 -17 -48 -24 -88 -24c-127 0 -199 71 -199 196 c0 148 101 240 263 240c170 0 261 -98 261 -278c0 -181 -101 -328 -266 -390c-54 -20 -88 -25 -168 -28zM292 625c-69 0 -111 -50 -111 -136c0 -97 46 -157 122 -157c72 0 105 39 105 125c0 108 -41 168 -116 168']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/DoubleStruck/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/DoubleStruck/Regular/Main.js");

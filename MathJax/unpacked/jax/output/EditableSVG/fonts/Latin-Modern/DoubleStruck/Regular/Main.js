@@ -97,4 +97,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['LatinModernMathJax_DoubleStruck'] = {
   0x1D7E1: [666,22,556,55,499,'499 197c0 -133 -109 -219 -222 -219c-158 0 -222 147 -222 178c0 13 11 21 20 21c10 0 17 -6 19 -14c42 -140 159 -145 183 -145c78 0 182 54 182 184v71c-28 -42 -89 -100 -182 -100c-122 0 -222 104 -222 237c0 131 90 256 222 256c129 0 222 -120 222 -258v-211z M183 241v354c-86 -62 -88 -168 -88 -185c0 -72 34 -134 88 -169zM459 410c0 107 -70 216 -182 216c-29 0 -54 -9 -54 -9v-396c17 -6 36 -8 54 -8c101 0 182 87 182 197']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/DoubleStruck/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/DoubleStruck/Regular/Main.js");

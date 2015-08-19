@@ -101,4 +101,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['LatinModernMathJax_Marks'] = {
   0x3017: [770,270,458,57,402,'362 730h-240c98 -118 174 -305 174 -438v-84c0 -133 -76 -320 -174 -438h240v960zM402 770v-1040h-325c-12 0 -20 9 -20 20c0 6 2 11 5 14c107 107 194 306 194 444v84c0 138 -87 337 -194 444c-3 3 -5 8 -5 14c0 11 8 20 20 20h325']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Marks/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Marks/Regular/Main.js");

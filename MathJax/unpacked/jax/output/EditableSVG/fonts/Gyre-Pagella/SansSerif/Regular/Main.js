@@ -369,4 +369,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyrePagellaMathJax_SansSerif'] = {
   0x1D7F5: [682,13,637,52,574,'574 343c0 -111 -27 -198 -82 -261c-56 -63 -130 -95 -226 -95c-30 0 -60 2 -88 7s-56 12 -83 21v124c27 -13 53 -23 78 -30c24 -6 48 -9 72 -9c51 0 90 15 118 43c28 29 45 71 50 127c-20 -14 -42 -25 -64 -34c-23 -7 -47 -11 -73 -11c-67 0 -121 21 -163 61 c-40 40 -61 92 -61 157c0 73 22 130 68 173c46 45 108 66 185 66c85 0 151 -30 199 -89c47 -58 70 -142 70 -250zM393 455c0 40 -7 68 -22 89c-15 19 -37 29 -67 29s-52 -10 -67 -29c-15 -21 -22 -49 -22 -89c0 -38 7 -69 22 -88s37 -29 67 -29s52 10 67 29s22 50 22 88']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/SansSerif/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/SansSerif/Regular/Main.js");

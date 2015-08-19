@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main-bold'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Main-bold'],
   {
     // MODIFIER LETTER CIRCUMFLEX ACCENT
     0x2C6: [694,-520,575,126,449,'207 632L287 694Q289 693 368 632T448 570T431 545T413 520Q410 520 350 559L287 597L224 559Q164 520 161 520Q160 520 143 544T126 570T207 632'],
@@ -50,4 +50,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Bold/SpacingModLetters.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Main/Bold/SpacingModLetters.js");

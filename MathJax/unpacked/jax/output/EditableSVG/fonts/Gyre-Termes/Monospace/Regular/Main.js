@@ -87,4 +87,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyreTermesMathJax_Monospace'] = {
   0x1D7FF: [618,15,600,136,510,'510 321c0 -195 -129 -336 -292 -336c-43 0 -79 16 -79 35c0 11 8 20 19 20c8 0 28 -14 64 -14c123 0 249 114 249 292c0 9 -1 24 -2 43c-41 -82 -95 -122 -166 -122c-91 0 -167 84 -167 186c0 108 76 193 173 193c118 0 201 -122 201 -297zM463 415 c-28 105 -76 162 -155 162c-74 0 -131 -66 -131 -152c0 -79 57 -145 127 -145c60 0 104 34 159 135']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Monospace/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Monospace/Regular/Main.js");

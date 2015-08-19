@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_AMS'],
   {
     // BOX DRAWINGS LIGHT DOWN AND RIGHT
     0x250C: [694,-306,500,55,444,'76 306Q62 306 59 319T55 386V500V596Q55 664 57 676T68 692Q71 694 250 694Q428 694 432 692Q444 685 444 674Q444 665 432 656Q428 654 261 654H95V487Q95 355 95 336T90 312Q84 306 76 306'],
@@ -41,4 +41,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/BoxDrawing.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/AMS/Regular/BoxDrawing.js");

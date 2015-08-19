@@ -213,4 +213,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Alphabets'] = {
   0xE400: [683,218,541,32,457,'452 461l5 -4c-1 -33 -2 -66 -2 -99v-358c0 -114 -39 -218 -170 -218c-33 0 -93 12 -93 55c0 23 19 39 41 39c42 0 51 -60 90 -60c14 0 26 7 34 18c16 24 14 94 14 121v405c0 12 0 28 -6 38c-12 17 -51 19 -78 19h-19h-84v-327c0 -55 12 -71 68 -75v-15h-220v15 c61 2 68 24 68 81v321h-67v33h68c9 75 12 133 72 186c40 35 95 47 147 47c43 0 125 -9 125 -68c0 -24 -9 -41 -35 -41c-42 0 -60 84 -121 84c-28 0 -56 -12 -75 -32c-27 -28 -30 -67 -30 -105v-26v-45h154c39 0 76 5 114 11']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Alphabets/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Alphabets/Regular/Main.js");

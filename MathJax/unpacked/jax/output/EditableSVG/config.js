@@ -40,7 +40,7 @@ MathJax.OutputJax.EditableSVG = MathJax.OutputJax({
     mtextFontInherit: false,        // to make <mtext> be in page font rather than MathJax font
     undefinedFamily: "STIXGeneral,'Arial Unicode MS',serif",  // fonts to use for missing characters
 
-    addMMLclasses: false,           // keep MathML structure and use CSS classes to mark elements
+    addMMLclasses: true,           // keep MathML structure and use CSS classes to mark elements
     useFontCache: true,             // use <use> elements to re-use font paths rather than repeat paths every time
     useGlobalCache: true,           // store fonts in a global <defs> for use in all equations, or one in each equation
 

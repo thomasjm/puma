@@ -18,7 +18,7 @@
  *
  */
 
-MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Size3'] = {
+MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Size3'] = {
   directory: 'Size3/Regular',
   family: 'MathJax_Size3',
   id: 'MJSZ3',
@@ -84,4 +84,4 @@ MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Size3'] = {
     0x27E9: [1450,949,750,94,623,'94 1424Q94 1426 97 1432T107 1444T124 1450Q141 1450 152 1435Q154 1431 388 845L623 259V242L388 -345Q153 -933 152 -934Q142 -949 127 -949H125Q95 -949 95 -919V-910L327 -331Q559 247 559 250T327 831Q94 1411 94 1424']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Size3/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Size3/Regular/Main.js");

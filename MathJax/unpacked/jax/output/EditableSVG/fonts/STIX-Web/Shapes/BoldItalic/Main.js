@@ -28,4 +28,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Shapes-bold-italic'] = {
   0x2423: [31,120,500,40,460,'460 -120h-420v151h42v-76h336v76h42v-151']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Shapes/BoldItalic/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Shapes/BoldItalic/Main.js");

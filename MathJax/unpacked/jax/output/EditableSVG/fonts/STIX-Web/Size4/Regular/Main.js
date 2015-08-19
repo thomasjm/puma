@@ -77,4 +77,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Size4'] = {
   0x2986: [2566,509,1175,194,1049,'194 2497v69c487 -267 855 -726 855 -1535c0 -794 -368 -1273 -855 -1540v68c48 29 90 65 135 106c140 163 234 554 234 1366c0 827 -89 1202 -232 1361c-43 38 -93 79 -137 105zM919 1028c0 633 -214 997 -438 1228c144 -238 158 -590 158 -1225 c0 -630 -14 -983 -158 -1225c224 233 438 600 438 1222']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Size4/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Size4/Regular/Main.js");

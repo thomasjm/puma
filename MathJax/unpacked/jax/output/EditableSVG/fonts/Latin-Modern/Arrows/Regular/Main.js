@@ -54,4 +54,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['LatinModernMathJax_Arrows'] = {
   0x2907: [520,20,991,56,935,'935 250c0 -6 -4 -11 -9 -13c-72 -19 -134 -60 -188 -107c-44 -39 -81 -86 -108 -139c-3 -7 -10 -11 -18 -11c-11 0 -20 9 -20 20c0 3 1 6 2 9c24 46 54 88 89 124h-587v-133c0 -27 -40 -27 -40 0v500c0 27 40 27 40 0v-133h587c-35 36 -65 78 -89 124c-1 3 -2 6 -2 9 c0 11 9 20 20 20c8 0 15 -4 18 -11c27 -53 64 -100 108 -139c54 -47 116 -88 188 -107c5 -2 9 -7 9 -13zM859 250c-48 19 -92 45 -132 77h-631v-154h631c40 32 84 58 132 77']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Arrows/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Arrows/Regular/Main.js");

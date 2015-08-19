@@ -29,4 +29,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['NeoEulerMathJax_Arrows'] = {
   0x27FE: [598,98,1700,75,1643,'1643 250c-146 -72 -258 -196 -313 -348h-40c31 85 78 163 138 230h-1313v-182h-40v600h40v-182h1313c-60 67 -107 145 -138 230h40c55 -152 167 -276 313 -348zM115 328v-156h1352c31 29 64 55 99 78c-35 23 -68 49 -99 78h-1352']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Arrows/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Arrows/Regular/Main.js");

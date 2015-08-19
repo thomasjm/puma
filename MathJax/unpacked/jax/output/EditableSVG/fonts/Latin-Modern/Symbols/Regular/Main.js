@@ -76,4 +76,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['LatinModernMathJax_Symbols'] = {
   0x27EB: [750,250,570,53,460,'460 250c0 -3 -1 -5 -2 -7l-186 -480c-2 -8 -10 -13 -18 -13c-11 0 -20 9 -20 20c0 3 0 5 1 7l183 473l-183 473c-1 2 -1 4 -1 7c0 11 9 20 20 20c8 0 16 -5 18 -13l186 -480c1 -2 2 -4 2 -7zM279 250c0 -3 0 -5 -1 -7l-186 -480c-3 -8 -11 -13 -19 -13 c-11 0 -20 9 -20 20c0 3 0 5 1 7l184 473l-184 473c-1 2 -1 4 -1 7c0 11 9 20 20 20c8 0 16 -5 19 -13l186 -480c1 -2 1 -4 1 -7']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Symbols/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Symbols/Regular/Main.js");

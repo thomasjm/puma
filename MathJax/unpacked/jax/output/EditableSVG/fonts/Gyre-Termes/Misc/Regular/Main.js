@@ -34,4 +34,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyreTermesMathJax_Misc'] = {
   0x27A1: [470,-30,1030,80,950,'950 250l-220 -220v144h-650v152h650v144']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Misc/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Misc/Regular/Main.js");

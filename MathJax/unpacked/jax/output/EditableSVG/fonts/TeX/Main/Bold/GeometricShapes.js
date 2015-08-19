@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main-bold'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Main-bold'],
   {
     // WHITE UP-POINTING TRIANGLE
     0x25B3: [711,-1,1022,69,953,'91 1Q69 10 69 31Q69 39 81 59T168 197Q327 447 485 697Q493 711 510 711Q523 711 532 702Q536 697 743 371T951 41Q953 35 953 31Q953 12 931 1H91ZM690 340Q651 401 604 476T534 586L512 621Q511 622 507 616Q498 604 332 342L154 62L333 61H689L867 62L690 340'],
@@ -38,4 +38,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Bold/GeometricShapes.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Main/Bold/GeometricShapes.js");

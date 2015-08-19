@@ -83,4 +83,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Size2'] = {
   0x2AFF: [1586,289,636,133,503,'503 -289h-370v1875h370v-1875zM403 -189v1675h-170v-1675h170']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Size2/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Size2/Regular/Main.js");

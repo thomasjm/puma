@@ -369,4 +369,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyreTermesMathJax_SansSerif'] = {
   0x1D7F5: [666,8,507,28,467,'467 354c0 -231 -75 -362 -235 -362c-110 0 -192 73 -195 174h121c3 -39 34 -64 78 -64c71 0 105 62 105 186c-44 -51 -66 -64 -122 -64c-114 0 -191 85 -191 219c0 137 87 223 215 223c131 0 224 -84 224 -312zM338 443c0 77 -37 118 -99 118c-55 0 -91 -40 -91 -116 c0 -74 36 -115 93 -115c58 0 97 42 97 113']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/SansSerif/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/SansSerif/Regular/Main.js");

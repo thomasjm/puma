@@ -604,4 +604,4 @@
   });
   AJAX.loadComplete(SVG.fontDir + "/fontdata.js");
 
-})(MathJax.OutputJax.SVG,MathJax.ElementJax.mml,MathJax.Ajax,MathJax.Hub);
+})(MathJax.OutputJax.EditableSVG,MathJax.ElementJax.mml,MathJax.Ajax,MathJax.Hub);

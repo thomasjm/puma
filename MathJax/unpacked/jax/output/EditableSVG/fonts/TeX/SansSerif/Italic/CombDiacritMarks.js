@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_SansSerif-italic'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_SansSerif-italic'],
   {
     // COMBINING GRAVE ACCENT
     0x300: [694,-527,0,-270,-87,'-262 681L-270 694H-177L-132 612Q-89 530 -87 528Q-87 527 -125 527H-163L-208 598Q-254 670 -262 681'],
@@ -56,4 +56,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/SansSerif/Italic/CombDiacritMarks.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/SansSerif/Italic/CombDiacritMarks.js");

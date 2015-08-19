@@ -380,4 +380,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['LatinModernMathJax_Size7'] = {
   0xE134: [620,0,1056,702,1076,'1076 580h-334v-580h-40v584c0 33 4 36 36 36h338v-40']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Size7/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Size7/Regular/Main.js");

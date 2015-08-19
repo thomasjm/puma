@@ -71,4 +71,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['LatinModernMathJax_Size5'] = {
   0x27EF: [1320,820,485,56,279,'279 -25c0 -345 -96 -696 -189 -789c-3 -4 -8 -6 -14 -6c-11 0 -20 9 -20 20c0 6 2 11 6 14c88 89 139 432 139 761v550c0 329 -51 672 -139 761c-4 3 -6 8 -6 14c0 11 9 20 20 20c6 0 11 -2 14 -6c93 -93 189 -444 189 -789v-550']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Size5/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Size5/Regular/Main.js");

@@ -304,4 +304,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['AsanaMathJax_NonUnicode'] = {
   0xE117: [469,283,233,-40,159,'-10 -248c68 0 85 106 85 241v334c0 66 -4 73 -44 73h-37v28c53 6 105 20 156 41l9 -4v-484c0 -79 -18 -143 -53 -189c-38 -50 -76 -71 -134 -75l-12 38c8 -1 24 -3 30 -3']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/NonUnicode/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/NonUnicode/Regular/Main.js");

@@ -54,4 +54,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyreTermesMathJax_Arrows'] = {
   0x2907: [470,-30,1030,80,950,'950 250l-220 -220h-65l118 118h-657v-118h-46v440h46v-118h657l-118 118h65zM885 250l-50 50h-709v-100h709']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Arrows/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Arrows/Regular/Main.js");

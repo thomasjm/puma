@@ -77,4 +77,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyrePagellaMathJax_Symbols'] = {
   0x27EB: [658,158,611,80,531,'531 250l-195 -408c-5 4 -11 8 -17 11s-13 4 -19 5l165 392l-165 392c6 1 13 2 19 5s12 7 17 11zM311 250l-195 -408c-5 4 -10 8 -17 11c-6 3 -12 4 -19 5l165 392l-165 392c7 1 13 2 19 5c7 3 12 7 17 11']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Symbols/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Symbols/Regular/Main.js");

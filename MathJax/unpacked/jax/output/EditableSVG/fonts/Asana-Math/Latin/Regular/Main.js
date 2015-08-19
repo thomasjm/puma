@@ -103,4 +103,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['AsanaMathJax_Latin'] = {
   0xFF: [637,283,555,12,544,'297 86l119 292c4 10 6 19 6 26c0 14 -14 23 -42 25l-26 2v28c79 -3 79 -3 95 -3s16 0 95 3v-28l-28 -2c-25 -3 -44 -30 -84 -121l-203 -468c-38 -87 -81 -123 -148 -123c-19 0 -35 5 -54 15l24 75h13c17 -15 35 -23 51 -23c38 0 77 47 109 131l23 61 c-18 50 -28 74 -56 142l-109 262c-15 35 -27 46 -52 49l-18 2v28c97 -3 97 -3 116 -3s19 0 116 3v-28l-38 -2c-23 -1 -34 -9 -34 -23c0 -10 4 -25 10 -42l64 -168c18 -49 29 -72 51 -110zM186 637c29 0 49 -21 49 -50c0 -30 -20 -50 -50 -50s-50 20 -50 50s20 50 51 50z M385 637c29 0 49 -21 49 -50c0 -30 -20 -50 -50 -50s-50 20 -50 50s20 50 51 50']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Latin/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Latin/Regular/Main.js");

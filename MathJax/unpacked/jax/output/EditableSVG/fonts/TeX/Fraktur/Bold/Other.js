@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Fraktur-bold'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Fraktur-bold'],
   {
     // LEFT SINGLE QUOTATION MARK
     0x2018: [708,-411,254,53,187,'187 456Q187 437 169 424T138 411Q114 411 84 454T53 538Q53 565 75 597Q109 648 155 697L166 708L181 694L173 681Q124 610 124 577Q124 549 155 511T187 456'],
@@ -29,4 +29,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Fraktur/Bold/Other.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Fraktur/Bold/Other.js");

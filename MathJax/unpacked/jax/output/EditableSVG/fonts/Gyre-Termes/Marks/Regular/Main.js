@@ -101,4 +101,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyreTermesMathJax_Marks'] = {
   0x3017: [668,168,430,80,350,'314 -132v764h-181c73 -92 129 -239 129 -349v-66c0 -110 -56 -257 -129 -349h181zM350 -168h-257l-13 31c81 80 146 239 146 354v66c0 115 -65 274 -146 354l13 31h257v-836']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Marks/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Marks/Regular/Main.js");

@@ -34,4 +34,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyrePagellaMathJax_Misc'] = {
   0x27A1: [450,-50,995,80,915,'915 250c-73 -59 -141 -127 -200 -200v110h-635v180h635v110c59 -73 127 -141 200 -200']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Misc/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Misc/Regular/Main.js");

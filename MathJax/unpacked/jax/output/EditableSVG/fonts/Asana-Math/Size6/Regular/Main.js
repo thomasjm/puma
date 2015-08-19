@@ -73,4 +73,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['AsanaMathJax_Size6'] = {
   0xE02F: [486,-55,271,65,272,'272 193h-150v154h150v59h-150v80h-57v-431h57v79h150v59']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Size6/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Size6/Regular/Main.js");

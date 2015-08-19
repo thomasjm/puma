@@ -79,4 +79,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Marks-italic'] = {
   0x20EF: [-40,252,0,-453,-17,'-167 -173h-286v54h286c33 0 49 3 49 15c0 7 -17 29 -49 56l18 8l132 -106l-133 -106l-18 8c29 29 50 47 50 56c0 13 -21 15 -49 15']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Marks/Italic/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Marks/Italic/Main.js");

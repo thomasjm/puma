@@ -18,7 +18,7 @@
  *
  */
 
-MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Math-bold-italic'] = {
+MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Math-bold-italic'] = {
   directory: 'Math/BoldItalic',
   family: 'MathJax_Math',
   id: 'MJMATHBI',
@@ -392,4 +392,4 @@ MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Math-bold-italic'] = {
     0x2206: [711,0,958,59,904,'']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Math/BoldItalic/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Math/BoldItalic/Main.js");

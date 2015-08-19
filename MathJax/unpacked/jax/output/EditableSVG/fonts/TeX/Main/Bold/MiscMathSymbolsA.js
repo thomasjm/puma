@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main-bold'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Main-bold'],
   {
     // MATHEMATICAL LEFT ANGLE BRACKET
     0x27E8: [750,249,447,127,382,'127 243V259L223 491Q251 557 286 642Q318 719 324 732T340 748H341Q347 750 351 750Q365 750 373 740T382 723Q382 713 286 482L190 251Q190 249 286 20T382 -219Q382 -232 373 -240T352 -249Q332 -249 323 -229Q320 -220 223 10L127 243'],
@@ -29,4 +29,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Bold/MiscMathSymbolsA.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Main/Bold/MiscMathSymbolsA.js");

@@ -164,4 +164,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['AsanaMathJax_Alphabets'] = {
   0x10147: [700,0,671,55,630,'442 368v172c-24 -44 -83 -171 -103 -222h-8l-104 222v-172c0 -29 1 -32 18 -34l17 -1v-11c-39 1 -39 1 -45 1s-6 0 -44 -1v11l17 1c17 2 19 5 19 34v169c0 29 -2 32 -19 33l-17 1v12c30 -1 30 -1 36 -1s6 0 36 1l98 -209l99 209c30 -1 30 -1 35 -1c7 0 7 0 36 1v-12 l-16 -1c-18 -1 -20 -4 -20 -33v-169c0 -29 2 -32 20 -34l18 -1v-11c-22 1 -36 1 -57 1c-19 0 -31 0 -48 -1v11l13 1c18 2 19 5 19 34zM55 0v700h575v-252h-95v157h-385v-605h-95']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Alphabets/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Alphabets/Regular/Main.js");

@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main-bold'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Main-bold'],
   {
     // DIAERESIS
     0xA8: [695,-535,575,96,478,'96 615Q96 650 120 672T178 695Q214 693 234 669T255 615Q255 583 232 559T176 535Q147 535 122 556T96 615ZM319 615Q319 651 343 673T399 695Q426 695 452 675T478 615Q478 578 454 557T395 535Q364 537 342 559T319 615'],
@@ -47,4 +47,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Bold/Latin1Supplement.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Main/Bold/Latin1Supplement.js");

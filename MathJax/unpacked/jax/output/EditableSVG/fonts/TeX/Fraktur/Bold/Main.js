@@ -18,7 +18,7 @@
  *
  */
 
-MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Fraktur-bold'] = {
+MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Fraktur-bold'] = {
   directory: 'Fraktur/Bold',
   family: 'MathJax_Fraktur',
   id: 'MJFRAKB',
@@ -32,4 +32,4 @@ MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Fraktur-bold'] = {
     
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Fraktur/Bold/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Fraktur/Bold/Main.js");

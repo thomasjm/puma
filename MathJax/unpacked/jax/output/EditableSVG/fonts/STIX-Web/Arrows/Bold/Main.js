@@ -56,4 +56,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Arrows-bold'] = {
   0xE0B6: [478,-56,0,15,142,'142 215h-27v-159h-100v422h100v-159h27v-104']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Arrows/Bold/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Arrows/Bold/Main.js");

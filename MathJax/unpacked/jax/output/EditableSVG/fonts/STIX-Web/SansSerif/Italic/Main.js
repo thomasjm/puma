@@ -144,4 +144,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_SansSerif-italic'] = {
   0x1D63B: [453,0,447,25,517,'517 453l-5 -20l-342 -362h264l-27 -71h-382l4 20l342 362h-227l29 71h344']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/SansSerif/Italic/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/SansSerif/Italic/Main.js");

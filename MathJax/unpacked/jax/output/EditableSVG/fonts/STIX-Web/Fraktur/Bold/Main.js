@@ -81,4 +81,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Fraktur-bold'] = {
   0x1D59F: [475,219,484,36,437,'205 221l211 -119c19 -27 21 -59 21 -91c0 -38 -18 -75 -60 -109c-57 -45 -144 -89 -207 -121h-24c-57 34 -97 114 -110 156v25c65 40 148 96 210 191l-95 54v21c48 25 94 64 94 114c0 35 -14 50 -38 50c-22 0 -65 -8 -94 -27l-11 26c49 26 108 51 160 84h25 c72 -12 97 -53 97 -102c0 -74 -109 -122 -179 -151v-1zM277 132h-3c-36 -69 -76 -111 -109 -144c16 -61 35 -109 80 -132c28 26 53 59 53 166c0 18 -11 93 -21 110']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Fraktur/Bold/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Fraktur/Bold/Main.js");

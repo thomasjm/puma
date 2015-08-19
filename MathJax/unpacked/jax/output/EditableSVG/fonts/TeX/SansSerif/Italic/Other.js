@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_SansSerif-italic'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_SansSerif-italic'],
   {
     // LATIN SMALL LETTER DOTLESS I
     0x131: [444,0,239,74,258,'168 442T168 443T213 444T258 443T212 225T164 2V0H74V2Q75 7 121 224'],
@@ -83,4 +83,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/SansSerif/Italic/Other.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/SansSerif/Italic/Other.js");

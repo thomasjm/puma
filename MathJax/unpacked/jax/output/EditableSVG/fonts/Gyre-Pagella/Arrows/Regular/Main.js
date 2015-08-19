@@ -54,4 +54,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['GyrePagellaMathJax_Arrows'] = {
   0x2907: [450,-50,995,80,915,'915 250c-73 -59 -141 -127 -200 -200c-14 2 -28 3 -42 3c-15 0 -29 -1 -43 -3c22 28 46 54 70 80h-560v-80c-10 2 -20 3 -30 3s-20 -1 -30 -3v400c10 -2 20 -3 30 -3s20 1 30 3v-80h560c-24 26 -48 52 -70 80c14 -2 28 -3 43 -3c14 0 28 1 42 3 c59 -73 127 -141 200 -200zM830 250c-24 19 -47 39 -69 60h-621v-120h621c22 21 45 41 69 60']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Arrows/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Arrows/Regular/Main.js");

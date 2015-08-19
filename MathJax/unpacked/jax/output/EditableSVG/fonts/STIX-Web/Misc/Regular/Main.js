@@ -268,4 +268,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Misc'] = {
   0xE13A: [943,11,735,67,1302,'1302 900h-552l-365 -911h-32l-143 361c-14 36 -35 54 -55 54c-24 0 -58 -17 -77 -31l-11 18l141 130h14l164 -411h2l333 833h581v-43']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Misc/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Misc/Regular/Main.js");

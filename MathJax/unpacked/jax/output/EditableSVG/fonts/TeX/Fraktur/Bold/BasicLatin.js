@@ -19,7 +19,7 @@
  */
 
 MathJax.Hub.Insert(
-  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Fraktur-bold'],
+  MathJax.OutputJax.EditableSVG.FONTDATA.FONTS['MathJax_Fraktur-bold'],
   {
     // SPACE
     0x20: [0,0,250,0,0,''],
@@ -269,4 +269,4 @@ MathJax.Hub.Insert(
   }
 );
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Fraktur/Bold/BasicLatin.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Fraktur/Bold/BasicLatin.js");

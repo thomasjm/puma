@@ -222,4 +222,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['STIXMathJax_Main-italic'] = {
   0x24C8: [676,14,684,0,684,'492 523l-22 -122h-18c-3 57 -13 90 -68 90c-37 0 -62 -17 -62 -47c0 -25 7 -32 62 -81c57 -51 72 -78 72 -118c0 -66 -56 -111 -124 -111c-19 0 -40 3 -68 13c-16 6 -22 7 -27 7c-11 0 -20 -6 -24 -20h-16l18 137h21c-3 -9 -3 -18 -3 -26c0 -46 34 -79 83 -79 c43 0 72 25 72 62c0 36 -64 91 -86 112c-39 36 -48 56 -48 89c0 62 55 94 111 94c20 0 43 -3 57 -8c10 -3 19 -5 26 -5c12 0 18 2 26 13h18zM684 330c0 -193 -150 -344 -341 -344c-192 0 -343 152 -343 344c0 195 152 346 348 346c185 0 336 -155 336 -346zM642 330 c0 168 -129 304 -297 304c-167 0 -303 -136 -303 -304c0 -167 136 -302 303 -302c168 0 297 135 297 302']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Italic/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Main/Italic/Main.js");

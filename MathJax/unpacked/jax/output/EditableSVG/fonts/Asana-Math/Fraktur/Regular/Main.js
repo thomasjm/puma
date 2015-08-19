@@ -126,4 +126,4 @@ MathJax.OutputJax['SVG'].FONTDATA.FONTS['AsanaMathJax_Fraktur'] = {
   0x1D59F: [541,168,374,36,345,'345 58c0 -101 -45 -226 -165 -226c-76 0 -133 68 -133 141c0 79 46 145 100 198l10 -8c-42 -54 -43 -129 -43 -195c0 -35 8 -117 57 -117c57 0 49 117 49 155c0 55 0 222 -82 222c-21 0 -53 -20 -70 -31l-11 21c45 26 127 81 127 139c0 34 -27 67 -62 67 c-30 0 -57 -22 -80 -40l-6 24c51 41 105 83 149 133c51 -35 124 -56 124 -129c0 -48 -41 -79 -77 -103c89 -36 113 -165 113 -251']
 };
 
-MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Fraktur/Regular/Main.js");
+MathJax.Ajax.loadComplete(MathJax.OutputJax.EditableSVG.fontDir+"/Fraktur/Regular/Main.js");
