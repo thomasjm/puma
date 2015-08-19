@@ -1079,8 +1079,6 @@
           svg.Add(c, svg.w, 0);
           HUB.signal.Post(["SVG Jax - unknown char", n, variant]);
         }
-
-        return svg;
       }
 
       if (text.length == 1 && font.skew && font.skew[n]) {
