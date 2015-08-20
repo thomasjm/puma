@@ -231,6 +231,10 @@
       return pt.matrixTransform(svg.getScreenCTM().inverse());
     },
 
+    boxContains: function(bb, x, y) {
+      return bb.x <= x && x <= bb.x+bb.width && bb.y - bb.height <= y && y <= bb.y;
+    },
+
     nodeContainsScreenPoint: function(node, x, y) {
       var bb = node.getBB && node.getBB()
       var p = this.screenCoordsToElemCoords(node.EditableSVGelem, x, y);
@@ -247,7 +251,10 @@
       this.Mousedown = function(event) {
         // TODO: if we're not rendered yet, ignore
 
-        var svg = $(event.target).closest('svg').get()[0];
+
+        var target = event.target;
+        var svg = target.nodeName === 'svg' ? target : target.ownerSVGElement;
+
         if (!svg) return;
 
         var cp = this.screenCoordsToViewportCoords(svg, event.target, event.clientX, event.clientY);
@@ -259,6 +266,7 @@
         var chain = [jax.root];
         while (true) {
           var matchedItems = chain[0].data.filter(function(node) {
+            if (node === null) return false;
             return this.nodeContainsScreenPoint(node, event.clientX, event.clientY);
           }, this);
           if (matchedItems.length > 1) {
@@ -2756,7 +2764,6 @@
         return true;
       },
 
-
       moveCursor: function(cursor, direction) {
         direction = getCursorValue(direction)
 
@@ -3012,6 +3019,7 @@
         })
         return true
       },
+
       moveCursorFromParent: function(cursor, direction) {
         direction = getCursorValue(direction)
         switch (direction) {
@@ -3032,6 +3040,7 @@
         }
         return false
       },
+
       drawCursor: function(cursor) {
         if (cursor.position.half === undefined) throw new Error('Invalid cursor')
         var bbox = this.data[cursor.position.half].getSVGBBox()
@@ -3041,9 +3050,11 @@
         var svgelem = this.EditableSVGelem.ownerSVGElement
         return cursor.drawAt(svgelem, x, y, height)
       },
+
       SVGcanStretch: function(direction) {
         return false
       },
+
       SVGhandleSpace: function(svg) {
         if (!this.texWithDelims && !this.useMMLspacing) {
           //
@@ -3411,6 +3422,124 @@
         this.SVGhandleColor(svg);
         this.SVGsaveData(svg);
         return svg;
+      },
+
+      cursorable: true,
+
+      moveCursorFromParent: function(cursor, direction) {
+
+      },
+
+      moveCursorFromChild: function(cursor, direction, child) {
+
+      },
+
+      moveCursorFromClick: function(cursor, x, y) {
+        var baseBB = this.data[0].getUserBB();
+        var sub = this.data[this.sub];
+        var subBB = sub ? sub.getUserBB() : null;
+        var sup = this.data[this.sup];
+        var supBB = sup ? sup.getUserBB() : null;
+
+        console.log('x, y', x, y)
+        console.log('baseBB', baseBB.x, baseBB.y, baseBB.width, baseBB.height);
+        if (subBB)
+          console.log('subBB', subBB.x, subBB.y, subBB.width, subBB.height);
+        if (supBB)
+          console.log('supBB', supBB.x, supBB.y, supBB.width, supBB.height);
+
+        var section;
+        var pos;
+
+        // If the click is somewhere within the sup or sup, go there
+        if (subBB && SVG.boxContains(subBB, x, y)) {
+          section = -1;
+          console.log('sub click!');
+          var midpoint = subBB.x + (subBB.width / 2.0);
+          pos = (x < midpoint) ? 0 : 1;
+
+        } else if (supBB && SVG.boxContains(supBB, x, y)) {
+          section = 1;
+          console.log('sup click!');
+          var midpoint = supBB.x + (supBB.width / 2.0);
+          pos = (x < midpoint) ? 0 : 1;
+
+        } else {
+          // Click somewhere else, go by the midpoint
+          section = 0;
+          pos = 0;
+          var midpoint = baseBB.x + (baseBB.width / 2.0);
+          pos = (x < midpoint) ? 0 : 1;
+        }
+
+        cursor.moveTo(this, {
+          section: section,
+          pos: pos
+        });
+      },
+
+      moveCursor: function(cursor, direction) {
+        direction = getCursorValue(direction);
+
+        // position.section can be
+        // -1 = subscript
+        // 0 = main thing
+        // 1 = superscript
+        // position.pos is the index of the thing
+
+        if (cursor.position.section === -1) {
+          if (direction === LEFT && (cursor.position.pos == 0)) {
+            cursor.position.section = 0;
+
+            // If the base is cursorable, go into it
+            // otherwise, do this
+            cursor.position.pos = 1;
+          }
+
+        } else if (cursor.position.section === 0) {
+          // base
+
+
+        } else if (cursor.position.section === 1) {
+          // sup
+          if (direction === LEFT && (cursor.position.pos == 0)) {
+            cursor.position.section = 0;
+
+            // If the base is cursorable, go into it
+            // otherwise, do this
+            cursor.position.pos = 1;
+          }
+        }
+      },
+
+      drawCursor: function(cursor) {
+        var bb;
+        var x, y, height;
+
+        if (cursor.position.section === -1) {
+          // sub
+          bb = this.data[this.sub].getUserBB();
+          height = bb.height;
+          y = bb.y - bb.height;
+
+        } else if (cursor.position.section === 0) {
+          // base
+          bb = this.data[0].getUserBB();
+          height = this.getUserBB().height;
+          y = this.getUserBB().y - height;
+
+        } else if (cursor.position.section === 1) {
+          // sup
+          bb = this.data[this.sup].getUserBB();
+          height = bb.height;
+          y = bb.y - bb.height;
+        }
+
+        x = (cursor.position.pos === 0) ? bb.x : bb.x + bb.width;
+
+
+        var svgelem = this.EditableSVGelem.ownerSVGElement
+        return cursor.drawAt(svgelem, x, y, height)
       }
     });
 
@@ -3583,6 +3712,28 @@
         this.SVGhandleColor(svg);
         this.SVGsaveData(svg);
         return svg;
+      },
+
+      cursorable: true,
+
+      moveCursorFromParent: function(cursor, direction) {
+
+      },
+
+      moveCursorFromChild: function(cursor, direction, child) {
+
+      },
+
+      moveCursorFromClick: function(cursor, x, y) {
+
+      },
+
+      moveCursor: function(cursor, direction) {
+
+      },
+
+      drawCursor: function(cursor) {
+
       }
     });
 
