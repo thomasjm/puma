@@ -3457,7 +3457,7 @@
         this.SVGhandleColor(svg);
         this.SVGsaveData(svg);
         return svg;
-      }
+      },
     });
 
     MML.msubsup.Augment({
@@ -3540,7 +3540,9 @@
         this.SVGsaveData(svg);
         return svg;
       },
+    });
 
+    var subsupcursor = {
       cursorable: true,
       // TODO: make cursoring less messy
 
@@ -3693,16 +3695,18 @@
           var vertical = direction === UP || direction === DOWN
           var movingInVertically = vertical && (direction === UP) === (cursor.position.section === this.sub)
           var movingInHorizontally = cursor.position.pos === 0 && direction === LEFT
-          var movingAway = vertical ? !movingInVertically : cursor.position.pos === 1 && direction === RIGHT
+          var moveRightHorizontally = cursor.position.pos === 1 && direction === RIGHT
+          var movingAway = vertical ? !movingInVertically : !this.rightMoveStay && moveRightHorizontally
+          var movingIn = movingInVertically || movingInHorizontally || moveRightHorizontally && this.rightMoveStay
           if (movingAway) {
             return this.parent.moveCursorFromChild(cursor, direction, this)
-          } else if (movingInVertically || movingInHorizontally) {
+          } else if (movingIn) {
             if (this.data[this.base].cursorable) {
               return this.data[this.base].moveCursorFromParent(cursor, direction)
             }
             cursor.position = {
               section: this.base,
-              pos: 1,
+              pos: moveRightHorizontally ? 1 : this.endingPos || 0,
             }
           } else {
             cursor.position.pos = cursor.position.pos ? 0 : 1
@@ -3732,8 +3736,13 @@
 
         var svgelem = this.EditableSVGelem.ownerSVGElement
         return cursor.drawAt(svgelem, x, y, height)
-      }
-    });
+      },
+    }
+
+    MML.munderover.Augment(subsupcursor)
+    MML.msubsup.Augment(subsupcursor)
+    MML.msubsup.Augment({endingPos: 1})
+    MML.munderover.Augment({endingPos: 0, rightMoveStay: true})
 
     MML.mmultiscripts.Augment({
       toSVG: MML.mbase.SVGautoload
