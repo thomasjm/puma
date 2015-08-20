@@ -2554,6 +2554,81 @@
       }
     });
 
+    MML.mn.Augment({
+      cursorable: true,
+
+      getCursorLength: function() {
+        return this.data[0].data[0].length
+      },
+
+      moveCursor: function(cursor, direction) {
+        direction = getCursorValue(direction)
+
+        var vertical = direction === UP || direction === DOWN
+        if (vertical) return this.parent.moveCursorFromChild(cursor, direction, this)
+
+        var newPosition = cursor.position + (direction === LEFT ? -1 : 1)
+        if (newPosition < 0 || newPosition > this.getCursorLength()) {
+          this.parent.moveCursorFromChild(cursor, direction, this)
+          return
+        }
+        cursor.moveTo(this, newPosition)
+      },
+
+      moveCursorFromChild: function(cursor, direction, child) {
+        throw new Error('Unimplemented as cursor container')
+      },
+
+      moveCursorFromParent: function(cursor, direction) {
+        direction = getCursorValue(direction)
+        if (direction === LEFT) {
+          cursor.moveTo(this, this.getCursorLength())
+        } else if (direction === RIGHT) {
+          cursor.moveTo(this, 0)
+        } else {
+          throw new Error('TODO find place for when moving vertically')
+        }
+        return true
+      },
+
+      moveCursorFromClick: function(cursor, x, y) {
+        for (childIdx = 0; childIdx < this.getCursorLength(); ++childIdx) {
+          var bb = this.getSVGBBox(this.EditableSVGelem.children[childIdx]);
+          var midpoint = bb.x + (bb.width / 2);
+
+          if (x < midpoint) {
+            cursor.moveTo(this, childIdx);
+            return true;
+          }
+        }
+
+        cursor.moveTo(this, this.data.length);
+        return true;
+      },
+
+      drawCursor: function(cursor) {
+        var bbox = this.getSVGBBox()
+        var height = bbox.height
+        var y = bbox.y
+        var preedge, postedge
+        if (cursor.position === 0) {
+          preedge = bbox.x
+        } else {
+          var prebox = this.getSVGBBox(this.EditableSVGelem.children[cursor.position-1])
+          preedge = prebox.x+prebox.width
+        }
+        if (cursor.position === this.getCursorLength()) {
+          postedge = bbox.x+bbox.width
+        } else {
+          var postbox = this.getSVGBBox(this.EditableSVGelem.children[cursor.position])
+          postedge = postbox.x
+        }
+        var x = (postedge + preedge) / 2
+        var svgelem = this.EditableSVGelem.ownerSVGElement
+        cursor.drawAt(svgelem, x, y, height)
+      },
+    })
+
     MML.mtext.Augment({
       toSVG: function() {
         if (SVG.config.mtextFontInherit || this.Parent().type === "merror") {
