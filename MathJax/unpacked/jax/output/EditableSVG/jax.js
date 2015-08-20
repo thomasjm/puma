@@ -3729,7 +3729,7 @@
             return this.parent.moveCursorFromChild(cursor, direction, this)
           } else if (movingIn) {
             if (this.data[this.base].cursorable) {
-              return this.data[this.base].moveCursorFromParent(cursor, direction)
+              return this.data[this.base].moveCursorFromParent(cursor, cursor.position.section === this.sub ? UP : DOWN)
             }
             cursor.position = {
               section: this.base,
