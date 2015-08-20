@@ -2421,6 +2421,11 @@
           margin: 0
         },
 
+        ".backslash-mode use": {
+          fill: "gray",
+          stroke: "gray"
+        },
+
         "#MathJax_SVG_Tooltip": {
           position: "absolute",
           left: 0,
@@ -6375,20 +6380,21 @@
         if (c === "\\") {
           if (this.mode !== this.BACKSLASH) {
             // Enter backslash mode
-            console.log('backslash mode!')
             this.mode = this.BACKSLASH;
-            toInsert = MML.mrow();
-            toInsert.Append(this.makeEntityMo('#x0005C'))
 
-            // Insert
+            // Insert mrow
+            var grayRow = MML.mrow();
+            grayRow.Append(this.makeEntityMo('#x0005C'))
             this.node.data.splice(this.position, 0, null)
-            this.node.SetData(this.position, toInsert)
+            this.node.SetData(this.position, grayRow)
+            var oldClass = grayRow.class ? grayRow.class + ' ' : '';
+            grayRow.class = oldClass + "backslash-mode";
             recall()
             this.move(RIGHT)
             this.refocus()
 
             // Move into the mrow
-            this.node = toInsert;
+            this.node = grayRow;
             this.position = 1;
             this.draw();
 
@@ -6401,7 +6407,6 @@
         } else if (c === " ") {
           if (this.mode === this.BACKSLASH) {
             // Exit backslash mode and enter the thing we had
-            console.log('Time to exit backslash mode!');
             var latex = "\\";
             for (var i = 1; i < this.node.data.length; i++) {
               var mi = this.node.data[i];
@@ -6413,14 +6418,10 @@
               latex += c;
             }
 
-            console.log('got latex: ', latex);
             var unicode = SVG.latexToUnicode[latex];
-            console.log('got unicode: ', unicode);
-
             var mrow = this.node;
             var parent = mrow.parent;
             var myIndex = parent.data.indexOf(mrow);
-            console.log('got index: ', myIndex);
 
             // TODO: make sure this is loaded
             var def = MathJax.InputJax.TeX.Definitions;
