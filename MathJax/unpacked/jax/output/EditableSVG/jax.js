@@ -3809,6 +3809,22 @@
               e.preventDefault()
             }
           })
+          var recall = this.toSVG.bind(this, span, div, true)
+          svg.element.addEventListener('keypress', function(e) {
+            var c = String.fromCharCode(e.charCode || e.keyCode || e.which)
+            var cursor = globalCursor
+            if (!cursor) return
+            if (cursor.node && cursor.node.type === 'mrow') {
+              var ident = new MML.mi()
+              ident.Append(c)
+              cursor.node.data.splice(cursor.position, 0, null)
+              cursor.node.SetData(cursor.position, ident)
+              recall()
+              cursor.move(RIGHT)
+              cursor.refocus()
+              e.preventDefault()
+            }
+          })
           svg.element.setAttribute("xmlns:xlink", XLINKNS);
           if (CONFIG.useFontCache && !CONFIG.useGlobalCache) {
             svg.element.appendChild(BBOX.GLYPH.defs)
