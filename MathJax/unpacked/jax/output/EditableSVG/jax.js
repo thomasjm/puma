@@ -159,6 +159,33 @@
       this.require.push(MathJax.OutputJax.extensionDir + "/MathEvents.js");
     },
 
+    preprocessElementJax: function preprocessElementJax(root) {
+      if (root.type === 'texatom') {
+        if (root.data.length !== 1) throw Error('Unexpected length in texatom')
+        preprocessElementJax(root.data[0])
+      } else if (root.type === 'mrow') {
+        var i
+        for (i=0; i<root.data.length; ++i) {
+          preprocessElementJax(root.data[i])
+        }
+      } else if (root.cursorable || root.type === 'math') {
+        var i
+        for (i=0; i<root.data.length; ++i) {
+          var cur = root.data[i]
+          if (!cur) continue
+          var type = cur.type
+          if (type[0] !== 'm' || type === 'mrow') {
+            preprocessElementJax(cur)
+          } else {
+            var row = new MML.mrow()
+            row.Append(preprocessElementJax(cur))
+            root.SetData(i, row)
+          }
+        }
+      }
+      return root
+    },
+
     highlightBox: function(svg, bb) {
       d = 100; // TODO: use proper units
 
@@ -568,7 +595,7 @@
 
       //  Get the data about the math
       var jax = script.MathJax.elementJax,
-          math = jax.root,
+          math = this.preprocessElementJax(jax.root),
           span = document.getElementById(jax.inputID + "-Frame"),
           div = (jax.SVG.display ? (span || {}).parentNode : span),
           localCache = (SVG.config.useFontCache && !SVG.config.useGlobalCache);
