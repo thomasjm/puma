@@ -3105,31 +3105,34 @@
         } else if (isDenominator && direction === UP) {
           return this.moveCursorIntoNumerator(cursor, direction)
         } else if (keep) {
-          if (isNumerator) return this.moveCursorIntoNumerator(cursor, direction)
-          else return this.moveCursorIntoDenominator(cursor, direction)
+          return this.moveCursorIntoHalf(isNumerator ? 0 : 1, cursor, direction)
         } else {
           return this.parent.moveCursorFromChild(cursor, direction, this)
         }
       },
-      moveCursorIntoNumerator: function(cursor, direction) {
-        if (this.data[0].cursorable && this.data[0].moveCursorFromParent(cursor, direction)) {
-          return true
+      moveCursorIntoHalf: function(half, cursor, direction) {
+        if (this.data[half].cursorable) {
+          // If the data is cursorable, it must take the cursor
+          return this.data[half].moveCursorFromParent(cursor, direction)
+        }
+        var position = 0
+        if (cursor.renderedPosition) {
+          var bb = this.data[half].getSVGBBox()
+          if (bb && cursor.renderedPosition.x > bb.x + bb.width/2) {
+            position = 1
+          }
         }
         cursor.moveTo(this, {
-          half: 0,
-          position: 0,
+          half: half,
+          position: position,
         })
         return true
       },
-      moveCursorIntoDenominator: function(cursor, direction) {
-        if (this.data[1].cursorable && this.data[1].moveCursorFromParent(cursor, direction)) {
-          return true
-        }
-        cursor.moveTo(this, {
-          half: 1,
-          position: 0,
-        })
-        return true
+      moveCursorIntoNumerator: function(c, d) {
+        return this.moveCursorIntoHalf(0, c, d)
+      },
+      moveCursorIntoDenominator: function(c, d) {
+        return this.moveCursorIntoHalf(1, c, d)
       },
 
       moveCursorFromParent: function(cursor, direction) {
