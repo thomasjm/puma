@@ -3768,7 +3768,7 @@
       moveCursorFromChild: function(cursor, direction, child) {
         return false
       },
-      toSVG: function(span, div) {
+      toSVG: function(span, div, replace) {
         var CONFIG = SVG.config;
 
         //  All the data should be in an inferred row
@@ -3853,7 +3853,17 @@
           if (alttext && !svg.element.getAttribute("aria-label")) span.setAttribute("aria-label", alttext);
           if (!svg.element.getAttribute("role")) span.setAttribute("role", "math");
           //        span.setAttribute("tabindex",0);  // causes focus outline, so disable for now
-          span.appendChild(svg.element);
+
+          // START DEBUG
+          // ORIGINAL: span.appendChild(svg.element);
+          svg.element.classList.add('rendered-svg-output')
+          var previous = span.querySelector('.rendered-svg-output')
+          if (replace && previous) {
+            span.replaceChild(svg.element, previous)
+          } else {
+            span.appendChild(svg.element)
+          }
+          // END DEBUG
           svg.element = null;
 
           //  Handle indentalign and indentshift for single-line displays
