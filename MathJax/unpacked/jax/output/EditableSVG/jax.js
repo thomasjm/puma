@@ -2585,8 +2585,11 @@
           cursor.moveTo(this, this.getCursorLength())
         } else if (direction === RIGHT) {
           cursor.moveTo(this, 0)
+        } else if (cursor.renderedPosition &&
+            this.moveCursorFromClick(cursor, cursor.renderedPosition.x, cursor.renderedPosition.y)) {
+          return true
         } else {
-          throw new Error('TODO find place for when moving vertically')
+          cursor.moveTo(this, 0)
         }
         return true
       },
@@ -2834,8 +2837,11 @@
           cursor.moveTo(this, this.data.length)
         } else if (direction === RIGHT) {
           cursor.moveTo(this, 0)
+        } else if (cursor.renderedPosition &&
+            this.moveCursorFromClick(cursor, cursor.renderedPosition.x, cursor.renderedPosition.y)) {
+          return true
         } else {
-          throw new Error('TODO find place for when moving vertically')
+          cursor.moveTo(this, 0)
         }
         return true
       },
