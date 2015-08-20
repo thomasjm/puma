@@ -235,7 +235,7 @@
     },
 
     screenCoordsToElemCoords: function(elem, x, y) {
-      if (!elem.ownerSVGElement) return
+      if (!elem || !elem.ownerSVGElement) return
       var pt = elem.ownerSVGElement.createSVGPoint()
       pt.x = x
       pt.y = y
@@ -266,11 +266,8 @@
 
     nodeContainsScreenPoint: function(node, x, y) {
       var bb = node.getBB && node.getBB()
-      if (!bb) {
-        return false;
-      }
-
       var p = this.screenCoordsToElemCoords(node.EditableSVGelem, x, y)
+      if (!bb || !p) return false
 
       return bb.x <= p.x && p.x <= bb.x+bb.width && bb.y <= p.y && p.y <= bb.y+bb.height
     },
@@ -335,10 +332,10 @@
           console.log(node.type, node)
           if (node.parent && node.parent.cursorable) {
             node.parent.moveCursorFromChild(cursor, 'left', node, true)
-            cursor.draw()
           }
           prev = node
         })
+        cursor.draw()
       };
 
       this.Mouseover = HOVER.Mouseover;
