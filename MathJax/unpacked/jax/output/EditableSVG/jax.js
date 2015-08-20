@@ -3554,28 +3554,72 @@
 
       moveCursorFromParent: function(cursor, direction) {
         direction = getCursorValue(direction)
-        if (direction === RIGHT) {
+        var dest
+        if (direction === RIGHT || direction === LEFT) {
+          dest = this.data[this.base]
+          if (dest.cursorable) {
+            return dest.moveCursorFromParent(cursor, direction)
+          }
           cursor.position = {
             section: 0,
-            pos: 0
+            pos: direction === LEFT ? 1 : 0,
           }
-        } else if (direction === LEFT) {
-          cursor.position = {
-            section: 0,
-            pos: 1
-          }
-        } if (direction === UP) {
-          cursor.position = {
-            section: this.data[this.sub] ? -1 : 0,
-            pos: 0
-          }
-        } if (direction === DOWN) {
-          cursor.position = {
-            section: this.data[this.sup] ? 1 : 0,
-            pos: 0
+        // } else if (direction === LEFT) {
+          // if (dest = this.data[this.sup]) {
+          //   if (dest.cursorable) {
+          //     return dest.moveCursorFromParent(cursor, direction)
+          //   }
+          //   cursor.position = {
+          //     section: 1,
+          //     pos: 1,
+          //   }
+          // } else if (dest = this.data[this.sub]) {
+          //   if (dest.cursorable) {
+          //     return dest.moveCursorFromParent(cursor, direction)
+          //   }
+          //   cursor.position = {
+          //     section: -1,
+          //     pos: 1,
+          //   }
+          // } else {
+          //   dest = this.data[this.base]
+          //   if (dest.cursorable) {
+          //     return dest.moveCursorFromParent(cursor, direction)
+          //   }
+          //   cursor.position = {
+          //     section: 0,
+          //     pos: 1,
+          //   }
+          // }
+        } else if (direction === UP || direction === DOWN) {
+          var small = direction === UP ? this.sub : this.sup
+          var baseBB = this.data[this.base].getSVGBBox()
+          if (!baseBB || !cursor.renderedPosition) {
+            cursor.position = {
+              // TODO: Fix by changing section to this.base, this.sup, this.sub
+              section: this.data[small] ? (small === this.sub ? -1 : 1) : 0,
+              pos: 0,
+            }
+          } else if (cursor.renderedPosition.x > baseBB.x+baseBB.width && this.data[small]) {
+            if (this.data[small].cursorable) {
+              return this.data[small].moveCursorFromParent(cursor, direction)
+            }
+            var bb = this.data[small].getSVGBBox()
+            cursor.position = {
+              section: small === this.sub ? -1 : 1,
+              pos: cursor.renderedPosition.x > bb.x + bb.width/2 ? 1 : 0,
+            }
+          } else {
+            if (this.data[this.base].cursorable) {
+              return this.data[this.base].moveCursorFromParent(cursor, direction)
+            }
+            cursor.position = {
+              section: 0,
+              pos: cursor.renderedPosition.x > baseBB.x+baseBB.width/2 ? 1 : 0,
+            }
           }
         }
-        cursor.node = this;
+        cursor.moveTo(this, cursor.position)
         return true;
       },
 
@@ -3583,67 +3627,58 @@
         direction = getCursorValue(direction)
         var section, pos;
 
-        var childName;
-        if (child === this.data[this.sub]) {
-          childName = 'sub';
-        } else if (child === this.data[this.sup]) {
-          childName = 'sup';
+        var childIdx
+        for (childIdx = 0; childIdx < this.data.length; ++childIdx) {
+          if (child === this.data[childIdx]) break
         }
+        if (childIdx === this.data.length) throw new Error('Unable to find specified child in children')
+        var currentSection = childIdx
+        var old = [cursor.node, cursor.position]
+        cursor.moveTo(this, {
+          // Fix when section in [this.base, this.sub, this.sup]
+          section: currentSection === this.sub ? -1 : currentSection == this.sup ? 1 : 0,
+          pos: direction === RIGHT ? 1 : 0,
+        })
 
-        if ((direction === LEFT && (childName === 'sub' || childName === 'sup'))
-            || (direction === UP && (childName === 'sub'))
-            || (direction === DOWN && (childName === 'sup'))) {
-          pos = 0;
-
-          section = childName === 'sub' ? -1 : 1;
-
-          cursor.position = {
-            section: section,
-            pos: pos
-          }
-        } else if (direction === DOWN && (childName === 'sub')) {
-          // Do nothing
-          return;
-        } else if (direction === UP && (childName === 'sup')) {
-          // Do nothing
-          return;
-        } else if (direction === RIGHT && (childName === 'sub' || childName === 'sup')) {
-          cursor.position = {
-            section: childName === 'sub' ? -1 : 1,
-            pos: pos
-          }
+        if (!this.moveCursor(cursor, direction)) {
+          cursor.moveTo.apply(cursor, old)
+          return false
         }
-
-        // If we got here, we were successful
-        cursor.node = this;
-        this.moveCursor(cursor, direction);
+        return true
       },
 
       moveCursorFromClick: function(cursor, x, y) {
-        var baseBB = this.data[0].getUserBB();
+        var base = this.data[0]
+        var baseBB = base.getSVGBBox();
         var sub = this.data[this.sub];
-        var subBB = sub ? sub.getUserBB() : null;
+        var subBB = sub && sub.getSVGBBox();
         var sup = this.data[this.sup];
-        var supBB = sup ? sup.getUserBB() : null;
+        var supBB = sup && sup.getSVGBBox();
 
         var section;
         var pos;
 
         // If the click is somewhere within the sup or sup, go there
         if (subBB && SVG.boxContains(subBB, x, y)) {
+          if (sub.cursorable) {
+            return sub.moveCursorFromClick(cursor, x, y)
+          }
           section = -1;
           var midpoint = subBB.x + (subBB.width / 2.0);
           pos = (x < midpoint) ? 0 : 1;
-
         } else if (supBB && SVG.boxContains(supBB, x, y)) {
+          if (sup.cursorable) {
+            return sup.moveCursorFromClick(cursor, x, y)
+          }
           section = 1;
           var midpoint = supBB.x + (supBB.width / 2.0);
           pos = (x < midpoint) ? 0 : 1;
-
         } else {
           // Click somewhere else, go by the midpoint
+          if (base.cursorable) {
+            return base.moveCursorFromClick(cursor, x, y)
+          }
           section = 0;
-          pos = 0;
           var midpoint = baseBB.x + (baseBB.width / 2.0);
           pos = (x < midpoint) ? 0 : 1;
         }
@@ -3654,88 +3689,63 @@
         });
       },
 
-      moveIntoSup: function(sup, cursor) {
-        if (sup.cursorable) {
-          sup.moveCursorFromParent(cursor, RIGHT)
-        } else {
-          cursor.position.section = 1;
-          cursor.position.pos = 0;
-        }
-      },
-
-      moveIntoSub: function(sub, cursor) {
-        if (sub.cursorable) {
-          sub.moveCursorFromParent(cursor, RIGHT)
-        } else {
-          cursor.position.section = -1;
-          cursor.position.pos = 0;
-        }
-      },
-
       moveCursor: function(cursor, direction) {
         direction = getCursorValue(direction);
-        var base = this.data[0];
-        var sub = this.data[this.sub];
-        var subBB = sub ? sub.getUserBB() : null;
-        var sup = this.data[this.sup];
-        var supBB = sup ? sup.getUserBB() : null;
+
+        var sup = this.data[this.sup]
+        var sub = this.data[this.sub]
 
         if (cursor.position.section === 0) {
-          // base
           if (direction === UP) {
-            if (sup) this.moveIntoSup(sup, cursor);
+            if (sup) {
+              if (sup.cursorable) {
+                return sup.moveCursorFromParent(cursor, direction)
+              }
+              cursor.position = {
+                section: 1,
+                pos: 0,
+              }
+            } else {
+              return this.parent.moveCursorFromChild(cursor, direction, this)
+            }
           } else if (direction === DOWN) {
-            if (sub) this.moveIntoSub(sub, cursor);
-          } else if (direction === LEFT) {
-            if (cursor.position.pos === 0) {
-              this.parent.moveCursorFromChild(cursor, LEFT, this);
-            } else if (cursor.position.pos === 1) {
-              if (base.cursorable) {
-                base.moveCursorFromParent(cursor, LEFT);
-              } else {
-                cursor.position.pos = 0;
+            if (sub) {
+              if (sub.cursorable) {
+                return sub.moveCursorFromParent(cursor, direction)
+              }
+              cursor.position = {
+                section: -1,
+                pos: 0,
               }
             }
-          } else if (direction === RIGHT) {
-            if (cursor.position.pos === 0) {
-              if (base.cursorable) {
-                base.moveCursorFromParent(cursor, RIGHT);
-              } else {
-                cursor.position.pos = 1;
-              }
-            } else if (cursor.position.pos === 1) {
-              if (sub) this.moveIntoSub(sub, cursor);
-              else if (sup) this.moveIntoSup(sup, cursor);
-              else this.parent.moveCursorFromChild(cursor, RIGHT, this);
+          } else {
+            if (direction === LEFT && cursor.position.pos === 0 || direction === RIGHT && cursor.position.pos === 1) {
+              return this.parent.moveCursorFromChild(cursor, direction, this)
             }
+            cursor.position.pos = cursor.position.pos ? 0 : 1
           }
-
-        } else if (cursor.position.section === 1 || cursor.position.section === -1) {
-          // sup or sub
-          if (
-            (cursor.position.section === 1 && (direction === DOWN) || (direction === LEFT && (cursor.position.pos == 0)))
-            || (cursor.position.section === -1 && (direction === UP) || (direction === LEFT && (cursor.position.pos == 0)))
-          ) {
-            if (base.cursorable) {
-              base.moveCursorFromParent(cursor, LEFT);
-            } else {
-              cursor.position.section = 0;
-              cursor.position.pos = 1;
+        } else {
+          var vertical = direction === UP || direction === DOWN
+          var movingInVertically = vertical && (direction === UP) === (cursor.position.section === -1)
+          var movingInHorizontally = cursor.position.pos === 0 && direction === LEFT
+          var movingAway = vertical ? !movingInVertically : cursor.position.pos === 1 && direction === RIGHT
+          if (movingAway) {
+            return this.parent.moveCursorFromChild(cursor, direction, this)
+          } else if (movingInVertically || movingInHorizontally) {
+            if (this.data[this.base].cursorable) {
+              return this.data[this.base].moveCursorFromParent(cursor, direction)
             }
-          } else if (direction === RIGHT) {
-            if (cursor.position.pos === 0) {
-              cursor.position.pos = 1;
-            } else {
-              this.parent.moveCursorFromChild(cursor, RIGHT, this);
+            cursor.position = {
+              section: 0,
+              pos: 1,
             }
-          } else if (direction === LEFT) {
-            if (cursor.position.pos === 1) {
-              cursor.position.pos = 0;
-            } else {
-              this.parent.moveCursorFromChild(cursor, LEFT, this);
-            }
+          } else {
+            cursor.position.pos = cursor.position.pos ? 0 : 1
           }
         }
+
+        cursor.moveTo(this, cursor.position)
+        return true
       },
 
       drawCursor: function(cursor) {
@@ -3744,28 +3754,23 @@
 
         if (cursor.position.section === -1) {
           // sub
-          bb = this.data[this.sub].getUserBB();
-          height = bb.height;
-          y = bb.y - bb.height;
-
+          bb = this.data[this.sub].getSVGBBox();
         } else if (cursor.position.section === 0) {
           // base
-          bb = this.data[0].getUserBB();
-          height = this.getUserBB().height;
-          y = this.getUserBB().y - height;
-
+          bb = this.data[this.base].getSVGBBox()
+          var mainBB = this.getSVGBBox()
+          height = mainBB.height
+          y = mainBB.y
         } else if (cursor.position.section === 1) {
           // sup
-          bb = this.data[this.sup].getUserBB();
-          height = bb.height;
-          y = bb.y - bb.height;
+          bb = this.data[this.sup].getSVGBBox();
         }
 
         x = (cursor.position.pos === 0) ? bb.x : bb.x + bb.width;
 
 
         var svgelem = this.EditableSVGelem.ownerSVGElement
-        return cursor.drawAt(svgelem, x, y, height)
+        return cursor.drawAt(svgelem, x, y || bb.y, height || bb.height)
       }
     });
 
