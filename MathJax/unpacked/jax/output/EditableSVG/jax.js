@@ -3802,6 +3802,7 @@
                 case 40: direction = DOWN; break
                 case 37: direction = LEFT; break
                 case 39: direction = RIGHT; break
+                case 8: e.preventDefault(); break
             }
             if (globalCursor && direction) {
               globalCursor.move(direction)
