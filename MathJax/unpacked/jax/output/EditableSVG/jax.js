@@ -173,7 +173,6 @@
         item.appendTo(selector);
         if (end) return
         item.on('click', function() {
-          // console.log('clicked this: ', j);
           var bbox = j.getSVGBBox()
           var svg = j.EditableSVGelem.ownerSVGElement
 
@@ -2759,7 +2758,6 @@
           }
         }
 
-        console.log('moving to last position!');
         cursor.moveTo(this, this.data.length);
         return true;
       },
@@ -2883,8 +2881,6 @@
     MML.mfrac.Augment({
       name: "mfrac",
       toSVG: function() {
-        console.log('mfrac toSVG called!');
-
         this.SVGgetStyles();
         var svg = this.SVG();
         var scale = this.SVGgetScale(svg);
@@ -3421,13 +3417,77 @@
       },
 
       cursorable: true,
+      // position.section can be
+      // -1 = subscript
+      // 0 = main thing
+      // 1 = superscript
+      // position.pos is the index of the thing
 
       moveCursorFromParent: function(cursor, direction) {
-
+        direction = getCursorValue(direction)
+        if (direction === RIGHT) {
+          cursor.position = {
+            section: 0,
+            pos: 0
+          }
+        } else if (direction === LEFT) {
+          cursor.position = {
+            section: 0,
+            pos: 1
+          }
+        } if (direction === UP) {
+          cursor.position = {
+            section: this.data[this.sub] ? -1 : 0,
+            pos: 0
+          }
+        } if (direction === DOWN) {
+          cursor.position = {
+            section: this.data[this.sup] ? 1 : 0,
+            pos: 0
+          }
+        }
+        cursor.node = this;
+        return true;
       },
 
       moveCursorFromChild: function(cursor, direction, child) {
+        direction = getCursorValue(direction)
+        var section, pos;
 
+        var childName;
+        if (child === this.data[this.sub]) {
+          childName = 'sub';
+        } else if (child === this.data[this.sup]) {
+          childName = 'sup';
+        }
+
+        if ((direction === LEFT && (childName === 'sub' || childName === 'sup'))
+            || (direction === UP && (childName === 'sub'))
+            || (direction === DOWN && (childName === 'sup'))) {
+          pos = 0;
+
+          section = childName === 'sub' ? -1 : 1;
+
+          cursor.position = {
+            section: section,
+            pos: pos
+          }
+        } else if (direction === DOWN && (childName === 'sub')) {
+          // Do nothing
+          return;
+        } else if (direction === UP && (childName === 'sup')) {
+          // Do nothing
+          return;
+        } else if (direction === RIGHT && (childName === 'sub' || childName === 'sup')) {
+          cursor.position = {
+            section: childName === 'sub' ? -1 : 1,
+            pos: pos
+          }
+        }
+
+        // If we got here, we were successful
+        cursor.node = this;
+        this.moveCursor(cursor, direction);
       },
 
       moveCursorFromClick: function(cursor, x, y) {
@@ -3437,26 +3497,17 @@
         var sup = this.data[this.sup];
         var supBB = sup ? sup.getUserBB() : null;
 
-        console.log('x, y', x, y)
-        console.log('baseBB', baseBB.x, baseBB.y, baseBB.width, baseBB.height);
-        if (subBB)
-          console.log('subBB', subBB.x, subBB.y, subBB.width, subBB.height);
-        if (supBB)
-          console.log('supBB', supBB.x, supBB.y, supBB.width, supBB.height);
-
         var section;
         var pos;
 
         // If the click is somewhere within the sup or sup, go there
         if (subBB && SVG.boxContains(subBB, x, y)) {
           section = -1;
-          console.log('sub click!');
           var midpoint = subBB.x + (subBB.width / 2.0);
           pos = (x < midpoint) ? 0 : 1;
 
         } else if (supBB && SVG.boxContains(supBB, x, y)) {
           section = 1;
-          console.log('sup click!');
           var midpoint = supBB.x + (supBB.width / 2.0);
           pos = (x < midpoint) ? 0 : 1;
 
@@ -3474,36 +3525,86 @@
         });
       },
 
+      moveIntoSup: function(sup, cursor) {
+        if (sup.cursorable) {
+          sup.moveCursorFromParent(cursor, RIGHT)
+        } else {
+          cursor.position.section = 1;
+          cursor.position.pos = 0;
+        }
+      },
+
+      moveIntoSub: function(sub, cursor) {
+        if (sub.cursorable) {
+          sub.moveCursorFromParent(cursor, RIGHT)
+        } else {
+          cursor.position.section = -1;
+          cursor.position.pos = 0;
+        }
+      },
+
       moveCursor: function(cursor, direction) {
         direction = getCursorValue(direction);
+        var base = this.data[0];
+        var sub = this.data[this.sub];
+        var subBB = sub ? sub.getUserBB() : null;
+        var sup = this.data[this.sup];
+        var supBB = sup ? sup.getUserBB() : null;
 
-        // position.section can be
-        // -1 = subscript
-        // 0 = main thing
-        // 1 = superscript
-        // position.pos is the index of the thing
-
-        if (cursor.position.section === -1) {
-          if (direction === LEFT && (cursor.position.pos == 0)) {
-            cursor.position.section = 0;
-
-            // If the base is cursorable, go into it
-            // otherwise, do this
-            cursor.position.pos = 1;
+        if (cursor.position.section === 0) {
+          // base
+          if (direction === UP) {
+            if (sup) this.moveIntoSup(sup, cursor);
+          } else if (direction === DOWN) {
+            if (sub) this.moveIntoSub(sub, cursor);
+          } else if (direction === LEFT) {
+            if (cursor.position.pos === 0) {
+              this.parent.moveCursorFromChild(cursor, LEFT, this);
+            } else if (cursor.position.pos === 1) {
+              if (base.cursorable) {
+                base.moveCursorFromParent(cursor, LEFT);
+              } else {
+                cursor.position.pos = 0;
+              }
+            }
+          } else if (direction === RIGHT) {
+            if (cursor.position.pos === 0) {
+              if (base.cursorable) {
+                base.moveCursorFromParent(cursor, RIGHT);
+              } else {
+                cursor.position.pos = 1;
+              }
+            } else if (cursor.position.pos === 1) {
+              if (sub) this.moveIntoSub(sub, cursor);
+              else if (sup) this.moveIntoSup(sup, cursor);
+              else this.parent.moveCursorFromChild(cursor, RIGHT, this);
+            }
           }
 
-        } else if (cursor.position.section === 0) {
-          // base
-
-
-        } else if (cursor.position.section === 1) {
-          // sup
-          if (direction === LEFT && (cursor.position.pos == 0)) {
-            cursor.position.section = 0;
-
-            // If the base is cursorable, go into it
-            // otherwise, do this
-            cursor.position.pos = 1;
+        } else if (cursor.position.section === 1 || cursor.position.section === -1) {
+          // sup or sub
+          if (
+            (cursor.position.section === 1 && (direction === DOWN) || (direction === LEFT && (cursor.position.pos == 0)))
+            || (cursor.position.section === -1 && (direction === UP) || (direction === LEFT && (cursor.position.pos == 0)))
+          ) {
+            if (base.cursorable) {
+              base.moveCursorFromParent(cursor, LEFT);
+            } else {
+              cursor.position.section = 0;
+              cursor.position.pos = 1;
+            }
+          } else if (direction === RIGHT) {
+            if (cursor.position.pos === 0) {
+              cursor.position.pos = 1;
+            } else {
+              this.parent.moveCursorFromChild(cursor, RIGHT, this);
+            }
+          } else if (direction === LEFT) {
+            if (cursor.position.pos === 1) {
+              cursor.position.pos = 0;
+            } else {
+              this.parent.moveCursorFromChild(cursor, LEFT, this);
+            }
           }
         }
       },
@@ -3713,12 +3814,11 @@
       cursorable: true,
 
       moveCursorFromParent: function(cursor, direction) {
-        console.error('TeXAtom moveCursorFromParent NOT IMPLEMENTED');
+        this.data[0].moveCursorFromParent(cursor, direction);
       },
 
       moveCursorFromChild: function(cursor, direction, child) {
-        console.error('TeXAtom moveCursorFromChild NOT IMPLEMENTED');
-
+        this.parent.moveCursorFromChild(cursor, direction, this);
       },
 
       moveCursorFromClick: function(cursor, x, y) {
