@@ -3546,11 +3546,7 @@
       },
 
       cursorable: true,
-      // position.section can be
-      // -1 = subscript
-      // 0 = main thing
-      // 1 = superscript
-      // position.pos is the index of the thing
+      // TODO: make cursoring less messy
 
       moveCursorFromParent: function(cursor, direction) {
         direction = getCursorValue(direction)
@@ -3688,6 +3684,8 @@
                 section: this.sub,
                 pos: 0,
               }
+            } else {
+              return this.parent.moveCursorFromChild(cursor, direction, this)
             }
           } else {
             if (direction === LEFT && cursor.position.pos === 0 || direction === RIGHT && cursor.position.pos === 1) {
