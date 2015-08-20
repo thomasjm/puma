@@ -324,6 +324,7 @@
 
         var cursor = globalCursor = globalCursor || new MathJax.Object.Cursor()
         lowestCursorableNode.moveCursorFromClick(cursor, cp.x, cp.y);
+        cursor.draw()
       };
 
       this.Mouseover = HOVER.Mouseover;
@@ -3969,10 +3970,16 @@
       this.width = 50
     },
 
+    refocus: function() {
+      if (!this.node || !this.node.EditableSVGelem || !this.node.EditableSVGelem.ownerSVGElement) return false
+      this.node.EditableSVGelem.ownerSVGElement.focus()
+      this.draw()
+    },
+
     moveTo: function(node, position) {
+      // Does NOT redraw
       this.node = node;
       this.position = position;
-      this.draw();
     },
 
     move: function(direction) {
