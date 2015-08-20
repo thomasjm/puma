@@ -2582,25 +2582,18 @@
     },
 
     screenCoordsToElemCoords: function(elem, x, y) {
-      if (!elem || !elem.ownerSVGElement) {
+      if (!elem) return
+      var svg = elem.nodeName === 'svg' ? elem : elem.ownerSVGElement
+      if (!svg) {
         console.error('No owner SVG element');
         return
       }
 
-      var pt = elem.ownerSVGElement.createSVGPoint();
+      var pt = svg.createSVGPoint();
       pt.x = x
       pt.y = y
 
       return pt.matrixTransform(elem.getScreenCTM().inverse());
-    },
-
-    screenCoordsToViewportCoords: function(svg, elem, x, y) {
-      var pt = svg.createSVGPoint();
-
-      pt.x = event.clientX;
-      pt.y = event.clientY;
-
-      return pt.matrixTransform(svg.getScreenCTM().inverse());
     },
 
     boxContains: function(bb, x, y) {
@@ -2621,48 +2614,6 @@
       TOUCH = MathJax.Extension.MathEvents.Touch;
       HOVER = MathJax.Extension.MathEvents.Hover;
       this.ContextMenu = EVENT.ContextMenu;
-      this.Mousedown = function(event) {
-        // TODO: if we're not rendered yet, ignore
-
-
-        var target = event.target;
-        var svg = target.nodeName === 'svg' ? target : target.ownerSVGElement;
-
-        if (!svg) return;
-
-        var cp = this.screenCoordsToViewportCoords(svg, event.target, event.clientX, event.clientY);
-
-        // Find the deepest cursorable node that was clicked
-        jax = MathJax.Hub.getAllJax('#' + event.target.parentNode.id)[0];
-        var chain = [jax.root];
-        while (true) {
-          var matchedItems = chain[0].data.filter(function(node) {
-            if (node === null) return false;
-            return this.nodeContainsScreenPoint(node, event.clientX, event.clientY);
-          }, this);
-          if (matchedItems.length > 1) {
-            console.error('huh? matched more than one child');
-          } else if (matchedItems.length === 0) {
-            console.log('Last thing WAS cursorable');
-            break;
-          }
-
-          var matched = matchedItems[0];
-          if (matched.cursorable) {
-            chain.unshift(matched);
-          } else {
-            break;
-          }
-        }
-        var lowestCursorableNode = chain[0];
-        // console.log('chain: ', chain);
-        console.log('lowest cursorable: ', lowestCursorableNode);
-
-        var cursor = globalCursor = globalCursor || new MathJax.Object.Cursor()
-        lowestCursorableNode.moveCursorFromClick(cursor, cp.x, cp.y);
-        cursor.draw()
-      };
-
       this.Mouseover = HOVER.Mouseover;
       this.Mouseout = HOVER.Mouseout;
       this.Mousemove = HOVER.Mousemove;
@@ -2890,6 +2841,20 @@
       state.SVGdelay = false;
     },
 
+    AddInputHandlers: function(math, span, div) {
+      math.cursor = new MathJax.Object.Cursor()
+      span.setAttribute('tabindex', '0')
+      var recall = math.toSVG.bind(math, span, div, true)
+      function handler(e) {
+        if (math.cursor[e.type]) {
+          math.cursor[e.type](e, recall)
+        }
+      }
+      span.addEventListener('keydown', handler)
+      span.addEventListener('keypress', handler)
+      span.addEventListener('mousedown', handler)
+    },
+
     Translate: function(script, state) {
       if (!script.parentNode) return;
 
@@ -2935,6 +2900,7 @@
         throw err;
       }
       span.removeChild(this.textSVG);
+      this.AddInputHandlers(math, span, div)
 
       //  Put it in place, and remove the processing marker
       if (jax.SVG.isHidden) {
@@ -6124,22 +6090,6 @@
           });
           box.removeable = false;
           var svg = this.SVG();
-          svg.element.setAttribute('tabindex', '0')
-          svg.element.addEventListener('keydown', function(e) {
-            var direction
-            switch (e.which) {
-            case 38: direction = UP; break
-            case 40: direction = DOWN; break
-            case 37: direction = LEFT; break
-            case 39: direction = RIGHT; break
-            case 8: globalCursor && globalCursor.backspace(e, recall); return;
-            }
-            if (globalCursor && direction) {
-              globalCursor.move(direction)
-              globalCursor.draw()
-              e.preventDefault()
-            }
-          })
 
           var recall = this.toSVG.bind(this, span, div, true)
           svg.element.addEventListener('keypress', function(e) {
@@ -6314,8 +6264,40 @@
 
     refocus: function() {
       if (!this.node || !this.node.EditableSVGelem || !this.node.EditableSVGelem.ownerSVGElement) return false
-      this.node.EditableSVGelem.ownerSVGElement.focus()
+      this.node.EditableSVGelem.ownerSVGElement.parentNode.focus()
       this.draw()
+    },
+
+    moveToClick: function(event) {
+      var target = event.target;
+      var svg = target.nodeName === 'svg' ? target : target.ownerSVGElement;
+
+      if (!svg) return;
+
+      var cp = SVG.screenCoordsToElemCoords(svg, event.clientX, event.clientY);
+
+      // Find the deepest cursorable node that was clicked
+      jax = MathJax.Hub.getAllJax('#' + event.target.parentNode.id)[0];
+      var current = jax.root
+      while (true) {
+        var matchedItems = current.data.filter(function(node) {
+          if (node === null) return false;
+          return SVG.nodeContainsScreenPoint(node, event.clientX, event.clientY);
+        });
+        if (matchedItems.length > 1) {
+          console.error('huh? matched more than one child');
+        } else if (matchedItems.length === 0) {
+          break;
+        }
+
+        var matched = matchedItems[0];
+        if (matched.cursorable) {
+          current = matched
+        } else {
+          break;
+        }
+      }
+      current.moveCursorFromClick(this, cp.x, cp.y);
     },
 
     moveTo: function(node, position) {
@@ -6330,6 +6312,28 @@
 
     draw: function() {
       this.node.drawCursor(this)
+    },
+
+    keydown: function(event, recall) {
+      var direction
+      switch (event.which) {
+        case 8: this.backspace(event, recall); break;
+        case 38: direction = UP; break
+        case 40: direction = DOWN; break
+        case 37: direction = LEFT; break
+        case 39: direction = RIGHT; break
+      }
+      if (direction) {
+        this.move(direction)
+        this.draw()
+        event.preventDefault()
+      }
+    },
+
+    mousedown: function(event, recall) {
+      event.preventDefault()
+      this.moveToClick(event)
+      this.refocus()
     },
 
     backspace: function(event, recall) {
@@ -6518,7 +6522,6 @@
 
       jax = MathJax.Hub.getAllJax('#' + svgelem.parentNode.id)[0];
       SVG.visualizeJax(jax, $('#mmlviz'));
-
     }
   })
 
