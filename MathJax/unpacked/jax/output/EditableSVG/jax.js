@@ -154,12 +154,44 @@
       this.require.push(MathJax.OutputJax.extensionDir + "/MathEvents.js");
     },
 
+    highlightBox: function(svg, bb) {
+      d = 100; // TODO: use proper units
+
+      drawLine = function(x1, y1, x2, y2) {
+        return d3.select(svg)
+          .insert('svg:line')
+          .attr('style', 'stroke:rgb(0,0,255);stroke-width:20')
+          .attr('x1', x1)
+          .attr('y1', y1)
+          .attr('x2', x2)
+          .attr('y2', y2)[0][0];
+      };
+
+      return [
+        // Top left
+        drawLine(bb.x, bb.y, bb.x + d, bb.y),
+        drawLine(bb.x, bb.y, bb.x, bb.y + d),
+        // Top right
+        drawLine(bb.x + bb.width, bb.y, bb.x + bb.width - d, bb.y),
+        drawLine(bb.x + bb.width, bb.y, bb.x + bb.width, bb.y + d),
+        // Bottom right
+        drawLine(bb.x, bb.y + bb.height, bb.x, bb.y + bb.height - d),
+        drawLine(bb.x, bb.y + bb.height, bb.x + d, bb.y + bb.height),
+
+        // Bottom right
+        drawLine(bb.x + bb.width, bb.y + bb.height, bb.x + bb.width - d, bb.y + bb.height),
+        drawLine(bb.x + bb.width, bb.y + bb.height, bb.x + bb.width, bb.y + bb.height - d)
+      ];
+    },
+
     /*
      * Append a visualization of the jax to a given div
      * Pass in the jax and a jQuery selector div
      */
     visualizeJax: function(jax, selector) {
       selector.empty();
+      var hb = this.highlightBox;
+
       var f = function(j, spacer) {
         var s;
         var end;
@@ -171,18 +203,20 @@
         }
         var item = $('<li><pre style="margin: 0;">' + s + '</pre></li>');
         item.appendTo(selector);
-        if (end) return
+        if (end) return;
         item.on('click', function() {
-          var bbox = j.getSVGBBox()
-          var svg = j.EditableSVGelem.ownerSVGElement
+          var bb = j.getSVGBBox();
+          var svg = j.EditableSVGelem.ownerSVGElement;
 
-          d3.select(svg)
-            .insert('svg:rect')
-            .attr('fill', 'red')
-            .attr('x', bbox.x)
-            .attr('y', bbox.y)
-            .attr('width', bbox.width)
-            .attr('height', bbox.height)
+          hb(svg, bb);
+
+          // d3.select(svg)
+          //   .insert('svg:rect')
+          //   .attr('fill', 'red')
+          //   .attr('x', bbox.x)
+          //   .attr('y', bbox.y)
+          //   .attr('width', bbox.width)
+          //   .attr('height', bbox.height);
 
         });
 
@@ -3852,20 +3886,47 @@
       this.id = Math.random().toString(36).substring(2)
       this.width = 50
     },
+
     moveTo: function(node, position) {
       this.node = node;
       this.position = position;
       this.draw();
     },
+
     renderedAt: function(x, y) {
       this.renderedPosition = {x: x, y: y}
     },
+
     move: function(direction) {
       this.node.moveCursor(this, direction)
     },
+
     draw: function() {
       this.node.drawCursor(this)
     },
+
+    highlightBoxes: function(svg) {
+      var cur = this.node;
+
+      if (typeof(boxes) !== 'undefined') {
+        boxes.forEach(function(elem) {
+          elem.remove();
+        });
+      }
+
+      boxes = [];
+
+      while (cur) {
+        console.log('type: ', cur.type);
+        if (cur.cursorable) {
+          var bb = cur.getSVGBBox();
+          if (!bb) return;
+          boxes = boxes.concat(SVG.highlightBox(svg, bb));
+        }
+        cur = cur.parent;
+      }
+    },
+
     drawAt: function(svgelem, x, y, height) {
       this.renderedPosition = {x: x, y: y, height: height}
       var celem = svgelem.getElementById('cursor-'+this.id)
@@ -3887,6 +3948,8 @@
       this.startBlink = setTimeout(function() {
         celem.setAttribute('class', celem.getAttribute('class') + ' blink')
       }.bind(this), 500)
+
+      this.highlightBoxes(svgelem);
     }
   })
 
