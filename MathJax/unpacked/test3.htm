@@ -18,6 +18,13 @@
                     visibility: visible;
                 }
             }
+
+         #mmlviz {
+             font-size: 5px;
+             ul {
+                 line-height: 5px;
+             }
+         }
         </style>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
@@ -40,9 +47,10 @@
 
         </script>
 
-        <h1>Here's a simple mrow:</h1>
-        <div id="all"><p>$$bx^O + (abcd)^{2} + (abcd)^{wxyz} + a^{wxyz} + \frac{1}{123}c + a^{b^{c^d}} = \left(\sqrt{x^2+y^2} + \sum^5_i 15\right)$$</p></div>
-        <h1>Here's the MML structure:</h1>
+        <h2>Here's the math:</h2>
+        <div id="all"><p>$$\alpha / bx^O + (abcd)^{2} + (abcd)^{wxyz} + a^{wxyz} + \frac{1}{123}c + a^{b^{c^d}} = \left(\sqrt{x^2+y^2} + \sum^5_i 15\right)$$</p></div>
+        <!-- <div id="all"><p>$$a + b * c / d! ~ x - y;"$$</p></div> -->
+        <h2>MML visualization:</h2>
         <ul id="mmlviz"></ul>
     </body>
 </html>

@@ -29,7 +29,12 @@
 
   var SVGNS = "http://www.w3.org/2000/svg";
   var XLINKNS = "http://www.w3.org/1999/xlink";
-  var globalCursor
+  var globalCursor;
+
+  var UP = 1;
+  var RIGHT = 2;
+  var DOWN = 3;
+  var LEFT = 4;
 
   SVG.Augment({
     config: {
@@ -294,10 +299,8 @@
 
         var cp = this.screenCoordsToViewportCoords(svg, event.target, event.clientX, event.clientY);
 
-        jax = MathJax.Hub.getAllJax('#' + event.target.parentElement.id)[0];
-        this.visualizeJax(jax, $('#mmlviz'));
-
         // Find the deepest cursorable node that was clicked
+        jax = MathJax.Hub.getAllJax('#' + event.target.parentNode.id)[0];
         var chain = [jax.root];
         while (true) {
           var matchedItems = chain[0].data.filter(function(node) {
@@ -493,16 +496,14 @@
         }
         div.className += " MathJax_SVG_Processing";
         script.parentNode.insertBefore(div, script);
-        //
+
         //  Add the test span for determining scales and linebreak widths
-        //
         script.parentNode.insertBefore(this.ExSpan.cloneNode(true), script);
         div.parentNode.insertBefore(this.linebreakSpan.cloneNode(true), div);
       }
-      //
+
       //  Determine the scaling factors for each script
       //  (this only requires one reflow rather than a reflow for each equation)
-      //
       for (i = 0; i < m; i++) {
         script = scripts[i];
         if (!script.parentNode) continue;
@@ -1747,11 +1748,6 @@
   HUB.Register.StartupHook("mml Jax Ready", function() {
 
     MML = MathJax.ElementJax.mml;
-
-    var UP = 1
-    var RIGHT = 2
-    var DOWN = 3
-    var LEFT = 4
 
     function getCursorValue(direction) {
       if (isNaN(direction)) {
@@ -3790,11 +3786,11 @@
           svg.element.addEventListener('keydown', function(e) {
             var direction
             switch (e.which) {
-                case 38: direction = UP; break
-                case 40: direction = DOWN; break
-                case 37: direction = LEFT; break
-                case 39: direction = RIGHT; break
-                case 8: e.preventDefault(); break
+            case 38: direction = UP; break
+            case 40: direction = DOWN; break
+            case 37: direction = LEFT; break
+            case 39: direction = RIGHT; break
+            case 8: globalCursor && globalCursor.backspace(e, recall); return;
             }
             if (globalCursor && direction) {
               globalCursor.move(direction)
@@ -3802,22 +3798,13 @@
               e.preventDefault()
             }
           })
+
           var recall = this.toSVG.bind(this, span, div, true)
           svg.element.addEventListener('keypress', function(e) {
-            var c = String.fromCharCode(e.charCode || e.keyCode || e.which)
-            var cursor = globalCursor
-            if (!cursor) return
-            if (cursor.node && cursor.node.type === 'mrow') {
-              var ident = new MML.mi()
-              ident.Append(c)
-              cursor.node.data.splice(cursor.position, 0, null)
-              cursor.node.SetData(cursor.position, ident)
-              recall()
-              cursor.move(RIGHT)
-              cursor.refocus()
-              e.preventDefault()
-            }
+            if (!globalCursor) return
+            globalCursor.keypress(event, recall);
           })
+
           svg.element.setAttribute("xmlns:xlink", XLINKNS);
           if (CONFIG.useFontCache && !CONFIG.useGlobalCache) {
             svg.element.appendChild(BBOX.GLYPH.defs)
@@ -3998,23 +3985,72 @@
       this.node.drawCursor(this)
     },
 
+    backspace: function(event, recall) {
+      event.preventDefault();
+      if (this.node && this.node.type === 'mrow') {
+        this.node.data.splice(this.position - 1, 1);
+        recall();
+        this.move(LEFT);
+        this.refocus();
+      }
+    },
+
+    makeEntityMo: function(unicode) {
+      var mo = new MML.mo();
+      var entity = new MML.entity();
+      entity.Append(unicode);
+      mo.Append(entity);
+      return mo;
+    },
+
+    keypress: function(event, recall) {
+      var code = event.charCode || event.keyCode || event.which;
+      var c = String.fromCharCode(code);
+      var toInsert;
+
+      if (this.node && this.node.type === 'mrow') {
+
+        if ((code > 47 && code < 58) || // numeric (0-9)
+            (code > 64 && code < 91) || // upper alpha (A-Z)
+            (code > 96 && code < 123)) { // lower alpha (a-z)
+          // Alphanumeric, insert an mi
+          toInsert = new MML.mi()
+          toInsert.Append(c)
+        } else if (c === '+' || c === '/') {
+          toInsert = new MML.mo();
+          toInsert.Append(c);
+        } else if (c === '*') {
+          toInsert = this.makeEntityMo('#x2217');
+        } else if (c === "-") {
+          toInsert = this.makeEntityMo('#x2212');
+        }
+      }
+
+      this.node.data.splice(this.position, 0, null)
+      this.node.SetData(this.position, toInsert)
+      recall()
+      this.move(RIGHT)
+      this.refocus()
+
+      event.preventDefault()
+    },
+
     highlightBoxes: function(svg) {
       var cur = this.node;
 
-      if (typeof(boxes) !== 'undefined') {
-        boxes.forEach(function(elem) {
+      if (typeof(this.boxes) !== 'undefined') {
+        this.boxes.forEach(function(elem) {
           elem.remove();
         });
       }
 
-      boxes = [];
+      this.boxes = [];
 
       while (cur) {
-        console.log('type: ', cur.type);
         if (cur.cursorable) {
           var bb = cur.getSVGBBox();
           if (!bb) return;
-          boxes = boxes.concat(SVG.highlightBox(svg, bb));
+          this.boxes = this.boxes.concat(SVG.highlightBox(svg, bb));
         }
         cur = cur.parent;
       }
@@ -4043,6 +4079,10 @@
       }.bind(this), 500)
 
       this.highlightBoxes(svgelem);
+
+      jax = MathJax.Hub.getAllJax('#' + svgelem.parentNode.id)[0];
+      SVG.visualizeJax(jax, $('#mmlviz'));
+
     }
   })
 
