@@ -246,6 +246,7 @@
     screenCoordsToElemCoords: function(elem, x, y) {
       if (!elem || !elem.ownerSVGElement) {
         console.error('No owner SVG element');
+        return
       }
 
       var pt = elem.ownerSVGElement.createSVGPoint();
@@ -271,6 +272,7 @@
     nodeContainsScreenPoint: function(node, x, y) {
       var bb = node.getBB && node.getBB()
       var p = this.screenCoordsToElemCoords(node.EditableSVGelem, x, y);
+      if (!bb || !p) return false
 
       return bb.x <= p.x && p.x <= bb.x+bb.width && bb.y <= p.y && p.y <= bb.y+bb.height;
     },
