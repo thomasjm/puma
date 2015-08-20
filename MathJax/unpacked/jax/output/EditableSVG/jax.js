@@ -1867,7 +1867,6 @@
         }
         this.SVGhandleColor(svg);
         this.SVGsaveData(svg);
-        this.EditableSVGelem = svg.element;
         return svg;
       },
 
@@ -1893,6 +1892,13 @@
       },
 
       SVGsaveData: function(svg) {
+        /*
+          SVGsaveData is called every time a new svg element wants to be rendered
+          SVGsaveData pushes CSS attributes etc. onto the actual svg elements
+          setting this.EditableSVGelem to this svg.element will keep the copy fresh even when the parent
+          re-renders the child's svg elements (e.g. with a stretch)
+         */
+        this.EditableSVGelem = svg.element
         if (!this.EditableSVGdata) {
           this.EditableSVGdata = {}
         }
@@ -2465,7 +2471,6 @@
         //  Finish up
         this.SVGhandleColor(svg);
         this.SVGsaveData(svg);
-        this.EditableSVGelem = svg.element;
 
         return svg;
       },
@@ -2848,8 +2853,6 @@
         this.SVGhandleColor(svg);
         this.SVGsaveData(svg);
 
-        this.EditableSVGelem = svg.element;
-
         return svg;
       },
 
@@ -2966,7 +2969,6 @@
         svg.Clean();
         this.SVGhandleColor(svg);
         this.SVGsaveData(svg);
-        this.EditableSVGelem = svg.element;
         return svg;
       },
       cursorable: true,
@@ -3070,7 +3072,6 @@
         this.SVGgetStyles();
         var svg = this.SVG(),
             scale = this.SVGgetScale(svg);
-        this.EditableSVGelem = svg.element
         this.SVGhandleSpace(svg);
         var base = this.SVGchildSVG(0),
             rule, surd;
@@ -3347,7 +3348,6 @@
         this.SVGgetStyles();
         var svg = this.SVG(),
             scale = this.SVGgetScale(svg);
-        this.EditableSVGelem = svg.element
         this.SVGhandleSpace(svg);
         var mu = this.SVGgetMu(svg);
         var base = svg.Add(this.EditableSVGdataStretched(this.base, HW, D));
