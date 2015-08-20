@@ -2831,8 +2831,15 @@
 
       cursorable: true,
 
+      isCursorPassthrough: function() {
+        return this.data.length === 1 && this.data[0].cursorable
+      },
+
       moveCursorFromParent: function(cursor, direction) {
         direction = getCursorValue(direction)
+        if (this.isCursorPassthrough()) {
+          return this.data[0].moveCursorFromParent(cursor, direction)
+        }
         if (direction === LEFT) {
           cursor.moveTo(this, this.data.length)
         } else if (direction === RIGHT) {
@@ -2847,7 +2854,7 @@
       },
 
       moveCursorFromChild: function(cursor, direction, child) {
-        if (direction === UP || direction === DOWN) {
+        if (this.isCursorPassthrough() || direction === UP || direction === DOWN) {
           return this.parent.moveCursorFromChild(cursor, direction, this)
         }
         direction = getCursorValue(direction)
