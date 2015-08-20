@@ -3948,20 +3948,19 @@
       cursorable: true,
 
       moveCursorFromParent: function(cursor, direction) {
-        this.data[0].moveCursorFromParent(cursor, direction);
+        return this.data[0].moveCursorFromParent(cursor, direction);
       },
 
       moveCursorFromChild: function(cursor, direction, child) {
-        this.parent.moveCursorFromChild(cursor, direction, this);
+        return this.parent.moveCursorFromChild(cursor, direction, this);
       },
 
       moveCursorFromClick: function(cursor, x, y) {
-        console.error('TeXAtom moveCursorFromClick NOT IMPLEMENTED');
+        return this.data[0].moveCursorFromClick(cursor, x, y)
       },
 
       moveCursor: function(cursor, direction) {
-        console.error('TeXAtom moveCursor NOT IMPLEMENTED');
-
+        return this.parent.moveCursorFromChild(cursor, direction, this)
       },
 
       drawCursor: function(cursor) {
