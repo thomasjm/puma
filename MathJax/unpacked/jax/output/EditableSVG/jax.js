@@ -3062,14 +3062,20 @@
       cursorable: true,
 
       moveCursorFromClick: function(cursor, x, y) {
-        var bb = this.getUserBB();
-        var midlineY = bb.y - (bb.height / 2.0);
+        var bb = this.getSVGBBox();
+        var midlineY = bb.y + (bb.height / 2.0);
         var midlineX = bb.x + (bb.width / 2.0);
 
         cursor.position = {
           position: (x < midlineX) ? 0 : 1,
-          half: (y < midlineY) ? 0 : 1
+          half: (y < midlineY) ? 0 : 1,
         }
+
+        if (this.data[cursor.position.half].cursorable) {
+          this.data[cursor.position.half].moveCursorFromClick(cursor, x, y)
+          return
+        }
+
         cursor.moveTo(this, cursor.position)
       },
 
@@ -3106,8 +3112,8 @@
         }
       },
       moveCursorIntoNumerator: function(cursor, direction) {
-        if (this.data[0].cursorable) {
-          return this.data[0].moveCursorFromParent(cursor, direction)
+        if (this.data[0].cursorable && this.data[0].moveCursorFromParent(cursor, direction)) {
+          return true
         }
         cursor.moveTo(this, {
           half: 0,
@@ -3116,8 +3122,8 @@
         return true
       },
       moveCursorIntoDenominator: function(cursor, direction) {
-        if (this.data[1].cursorable) {
-          return this.data[1].moveCursorFromParent(cursor, direction)
+        if (this.data[1].cursorable && this.data[1].moveCursorFromParent(cursor, direction)) {
+          return true
         }
         cursor.moveTo(this, {
           half: 1,
