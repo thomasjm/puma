@@ -184,6 +184,7 @@
             .attr('y', bbox.y)
             .attr('width', bbox.width)
             .attr('height', bbox.height)
+
         });
 
         if (!j) return;
@@ -195,63 +196,46 @@
       f(jax.root, "");
     },
 
-    getNodesAsFlatList: function(jax) {
-      var found = []
-      var use = function(jax) {
-        if (!jax) return
-        found.push(jax)
-        if (jax.data) jax.data.map(use)
-      }
-      use(jax)
-      return found
-    },
-
     // Convert coordinates in some arbitrary element's coordinate system to the viewport coordinate system
     elemCoordsToViewportCoords: function(elem, x, y) {
-      var svg = $(elem).closest('svg').get()[0];
-      var pt = svg.createSVGPoint();
+      if (!elem.ownerSVGElement) {
+        console.error('No owner SVG element');
+        return;
+      }
+
+      var pt = elem.ownerSVGElement.createSVGPoint();
       pt.x = x;
       pt.y = y;
 
-      return pt.matrixTransform(elem.getCTM());
+      return pt.matrixTransform(elem.getTransformToElement(elem.ownerSVGElement));
     },
 
     screenCoordsToElemCoords: function(elem, x, y) {
-      if (!elem || !elem.ownerSVGElement) return
-      var pt = elem.ownerSVGElement.createSVGPoint()
+      if (!elem || !elem.ownerSVGElement) {
+        console.error('No owner SVG element');
+      }
+
+      var pt = elem.ownerSVGElement.createSVGPoint();
       pt.x = x
       pt.y = y
 
-      return pt.matrixTransform(elem.getScreenCTM().inverse())
+      return pt.matrixTransform(elem.getScreenCTM().inverse());
     },
 
-    nodeContainsPoint: function(svg, node, point) {
-      if (!node.getBB) {
-        console.error("Node doesn't have getBB");
-        return false;
-      }
+    screenCoordsToViewportCoords: function(svg, elem, x, y) {
+      var pt = svg.createSVGPoint();
 
-      var bb = node.getBB();
-      if (!bb) {
-        // console.error("Didn't get a bb", node.EditableSVGelem);
-        return false;
-      }
+      pt.x = event.clientX;
+      pt.y = event.clientY;
 
-      var converted = this.elemCoordsToViewportCoords(node.EditableSVGelem, bb.x, bb.y);
-
-      console.log('considering bb: ', node.EditableSVGelem, converted.x, converted.y, bb.width, bb.height);
-      if (point.x < bb.x || point.x > bb.x + bb.width) return false;
-      if (point.y > bb.y || point.y < bb.y - bb.height) return false;
-      console.log('MATCHED');
-      return true;
+      return pt.matrixTransform(svg.getScreenCTM().inverse());
     },
 
     nodeContainsScreenPoint: function(node, x, y) {
       var bb = node.getBB && node.getBB()
-      var p = this.screenCoordsToElemCoords(node.EditableSVGelem, x, y)
-      if (!bb || !p) return false
+      var p = this.screenCoordsToElemCoords(node.EditableSVGelem, x, y);
 
-      return bb.x <= p.x && p.x <= bb.x+bb.width && bb.y <= p.y && p.y <= bb.y+bb.height
+      return bb.x <= p.x && p.x <= bb.x+bb.width && bb.y <= p.y && p.y <= bb.y+bb.height;
     },
 
     Startup: function() {
@@ -261,63 +245,42 @@
       HOVER = MathJax.Extension.MathEvents.Hover;
       this.ContextMenu = EVENT.ContextMenu;
       this.Mousedown = function(event) {
-        /* TODOTODOTODO
-           Note: use test3.htm!!!
-
-           What I'm trying to do here is detect which node has been clicked.
-
-           I did this by augmenting several classes (mfrac, mrow, etc.) with a property EditableSVGelem,
-           which is the SVG elem corresponding to that element.
-
-           Given a mouse event with some click coordinates, the code below tries to find all the element(s)
-           that the click overlaps. By finding the deepest such element in the tree, we can decide where to
-           render the cursor.
-
-           Something's wrong right now with how I transform coordinate systems: one or more of the
-           click coordinates or bounding box X and Y values is wrong; too tired to figure it out atm.
-
-           Note that this function also calls "visualizeJax" which renders a tree of what the jax looks like
-           to a special div I made. You can *click* the list items and they will print information about the node
-           in question; you can edit what information is printed inside the click handlers installed in
-           visualizeJax.
-         */
-        console.log('got mousedown!');
         // TODO: if we're not rendered yet, ignore
 
         var svg = $(event.target).closest('svg').get()[0];
         if (!svg) return;
 
-        // Convert the click coordinates to viewport coordinates
-        var pt = svg.createSVGPoint();
-        var offset = svg.getBoundingClientRect();
-        pt.x = event.clientX;
-        pt.y = event.clientY;
-        console.log('click in client coords: ', event.clientX, event.clientY);
-        var cp = pt.matrixTransform(svg.getScreenCTM().inverse());
-        console.log('cp: ', cp.x, cp.y);
+        var cp = this.screenCoordsToViewportCoords(svg, event.target, event.clientX, event.clientY);
 
         jax = MathJax.Hub.getAllJax('#' + event.target.parentElement.id)[0];
         this.visualizeJax(jax, $('#mmlviz'));
 
-        // Get a flat list of all nodes in the tree
-        var nodes = this.getNodesAsFlatList(jax.root);
-
-        // Filter the nodes to find the ones we want
-        var matchingNodes = nodes.filter(function(node) {
-          return this.nodeContainsScreenPoint(node, event.clientX, event.clientY)
-        }, this);
-
-        // TODO: this should be correct
-        console.log('matching nodes: ', matchingNodes);
-        var cursor = globalCursor = globalCursor || new MathJax.Object.Cursor()
-        matchingNodes.forEach(function(node) {
-          console.log(node.type, node)
-          if (node.parent && node.parent.cursorable) {
-            node.parent.moveCursorFromChild(cursor, 'left', node, true)
+        // Find the deepest cursorable node that was clicked
+        var chain = [jax.root];
+        while (true) {
+          var matchedItems = chain[0].data.filter(function(node) {
+            return this.nodeContainsScreenPoint(node, event.clientX, event.clientY);
+          }, this);
+          if (matchedItems.length > 1) {
+            console.error('huh? matched more than one child');
+          } else if (matchedItems.length === 0) {
+            console.log('Last thing WAS cursorable');
+            break;
           }
-          prev = node
-        })
-        cursor.draw()
+
+          var matched = matchedItems[0];
+          if (matched.cursorable) {
+            chain.unshift(matched);
+          } else {
+            break;
+          }
+        }
+        var lowestCursorableNode = chain[0];
+        // console.log('chain: ', chain);
+        console.log('lowest cursorable: ', lowestCursorableNode);
+
+        var cursor = globalCursor = globalCursor || new MathJax.Object.Cursor()
+        lowestCursorableNode.moveCursorFromClick(cursor, cp.x, cp.y);
       };
 
       this.Mouseover = HOVER.Mouseover;
@@ -1795,10 +1758,18 @@
         }
       },
 
+      getUserBB: function() {
+        var bb = this.getBB();
+        var converted = SVG.elemCoordsToViewportCoords(this.EditableSVGelem, bb.x, bb.y);
+        bb.x = converted.x;
+        bb.y = converted.y;
+        return bb;
+      },
+
       getBB: function(relativeTo) {
         var elem = this.EditableSVGelem;
         if (!elem) {
-          // console.log('Oh no! Couldn\'t find elem for ', this.type);
+          console.error('Oh no! Couldn\'t find elem for ', this.type);
           return;
         }
 
@@ -1814,6 +1785,10 @@
       },
 
       moveCursorFromParent: function(cursor, direction) {
+        return false
+      },
+
+      moveCursorFromClick: function(cursor, x, y) {
         return false
       },
 
@@ -2368,7 +2343,6 @@
         if (remap) {
           text = remap(text, chars)
         }
-        console.log('handling entity: ', text);
         return this.SVGhandleVariant(variant, scale, text);
       }
     });
@@ -2730,10 +2704,6 @@
     MML.mrow.Augment({
       SVG: BBOX.ROW,
 
-      focus: function() {
-        console.log('focus!')
-      },
-
       cursorable: true,
 
       moveCursorFromParent: function(cursor, direction) {
@@ -2765,6 +2735,27 @@
         }
         return true
       },
+
+      moveCursorFromClick: function(cursor, x, y) {
+        // Identify which child was clicked
+        for (childIdx = 0; childIdx < this.data.length; ++childIdx) {
+
+          var child = this.data[childIdx];
+          var childBB = child.getBB();
+          var converted = SVG.elemCoordsToViewportCoords(child.EditableSVGelem, childBB.x, childBB.y);
+          var midpoint = converted.x + (childBB.width / 2.0);
+
+          if (x < midpoint) {
+            cursor.moveTo(this, childIdx);
+            return true;
+          }
+        }
+
+        console.log('moving to last position!');
+        cursor.moveTo(this, this.data.length);
+        return true;
+      },
+
 
       moveCursor: function(cursor, direction) {
         direction = getCursorValue(direction)
@@ -2950,7 +2941,25 @@
         this.SVGsaveData(svg);
         return svg;
       },
+
       cursorable: true,
+
+      moveCursorFromClick: function(cursor, x, y) {
+        console.log('FRAC moveCursorFromClick', x, y);
+
+        var bb = this.getUserBB();
+        console.log('USER bb: ', bb);
+
+        var midlineY = bb.y - (bb.height / 2.0);
+        var midlineX = bb.x + (bb.width / 2.0);
+
+        cursor.position = {
+          position: (x < midlineX) ? 0 : 1,
+          half: (y < midlineY) ? 0 : 1
+        }
+        cursor.moveTo(this, cursor.position)
+      },
+
       moveCursor: function(cursor, direction) {
         if (cursor.position.half === undefined) throw new Error('Invalid cursor')
         if (cursor.position.position === 0 && direction === RIGHT) {
@@ -2966,6 +2975,7 @@
         }
         cursor.moveTo(this, cursor.position)
       },
+
       moveCursorFromChild: function(cursor, direction, child, keep) {
         var isNumerator = this.data[0] === child
         var isDenominator = this.data[1] === child
@@ -3594,8 +3604,9 @@
       this.width = 50
     },
     moveTo: function(node, position) {
-      this.node = node
-      this.position = position
+      this.node = node;
+      this.position = position;
+      this.draw();
     },
     renderedAt: function(x, y) {
       this.renderedPosition = {x: x, y: y}
