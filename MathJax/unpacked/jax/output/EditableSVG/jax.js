@@ -174,34 +174,16 @@
         if (end) return
         item.on('click', function() {
           // console.log('clicked this: ', j);
-          var bb = j.getBB();
-
-          // The bounding box x and y is in the transformed coordinates; convert to viewport coords
-          var svg = $(j.EditableSVGelem).closest('svg').get()[0];
-          var viewTransform = svg.getCTM().inverse().multiply(j.EditableSVGelem.getCTM())
-          var pt = svg.createSVGPoint();
-          var pt2 = svg.createSVGPoint();
-          pt.x = bb.x;
-          pt.y = bb.y;
-          pt2.x = bb.x + bb.width
-          pt2.y = bb.y + bb.height
-          var vp1 = pt.matrixTransform(viewTransform);
-          var vp2 = pt2.matrixTransform(viewTransform);
-          var rectMove = document.createElement('rect')
-
-          // console.log(j.EditableSVGelem.getCTM(), j.EditableSVGelem.getScreenCTM())
+          var bbox = j.getSVGBBox()
+          var svg = j.EditableSVGelem.ownerSVGElement
 
           d3.select(svg)
             .insert('svg:rect')
             .attr('fill', 'red')
-            .attr('x', Math.min(vp1.x, vp2.x))
-            .attr('y', Math.min(vp1.y, vp2.y))
-            .attr('width', Math.abs(vp1.x - vp2.x))
-            .attr('height', Math.abs(vp1.y - vp2.y))
-
-          // console.log(j.EditableSVGelem.getCTM(), vp1, vp2)
-
-          // console.log('bb: ', vp1.x, vp1.y, bb.width, bb.height);
+            .attr('x', bbox.x)
+            .attr('y', bbox.y)
+            .attr('width', bbox.width)
+            .attr('height', bbox.height)
         });
 
         if (!j) return;
