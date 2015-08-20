@@ -2952,11 +2952,7 @@
       cursorable: true,
 
       moveCursorFromClick: function(cursor, x, y) {
-        console.log('FRAC moveCursorFromClick', x, y);
-
         var bb = this.getUserBB();
-        console.log('USER bb: ', bb);
-
         var midlineY = bb.y - (bb.height / 2.0);
         var midlineX = bb.x + (bb.width / 2.0);
 
@@ -3717,23 +3713,25 @@
       cursorable: true,
 
       moveCursorFromParent: function(cursor, direction) {
-
+        console.error('TeXAtom moveCursorFromParent NOT IMPLEMENTED');
       },
 
       moveCursorFromChild: function(cursor, direction, child) {
+        console.error('TeXAtom moveCursorFromChild NOT IMPLEMENTED');
 
       },
 
       moveCursorFromClick: function(cursor, x, y) {
-
+        console.error('TeXAtom moveCursorFromClick NOT IMPLEMENTED');
       },
 
       moveCursor: function(cursor, direction) {
+        console.error('TeXAtom moveCursor NOT IMPLEMENTED');
 
       },
 
       drawCursor: function(cursor) {
-
+        console.error('TeXAtom drawCursor NOT IMPLEMENTED');
       }
     });
 
