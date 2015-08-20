@@ -2863,9 +2863,8 @@
         for (childIdx = 0; childIdx < this.data.length; ++childIdx) {
 
           var child = this.data[childIdx];
-          var childBB = child.getBB();
-          var converted = SVG.elemCoordsToViewportCoords(child.EditableSVGelem, childBB.x, childBB.y);
-          var midpoint = converted.x + (childBB.width / 2.0);
+          var bb = child.getSVGBBox();
+          var midpoint = bb.x + (bb.width / 2);
 
           if (x < midpoint) {
             cursor.moveTo(this, childIdx);
