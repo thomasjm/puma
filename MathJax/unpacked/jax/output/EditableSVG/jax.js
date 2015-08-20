@@ -1806,14 +1806,6 @@
         }
       },
 
-      getUserBB: function() {
-        var bb = this.getBB();
-        var converted = SVG.elemCoordsToViewportCoords(this.EditableSVGelem, bb.x, bb.y);
-        bb.x = converted.x;
-        bb.y = converted.y;
-        return bb;
-      },
-
       getBB: function(relativeTo) {
         var elem = this.EditableSVGelem;
         if (!elem) {
