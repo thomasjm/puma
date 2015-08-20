@@ -3960,6 +3960,11 @@
   });
 
   MathJax.Object.Cursor = MathJax.Object.Subclass({
+
+    BACKSlASH: 'backslash',
+    NORMAL: 'normal',
+    mode: 'normal',
+
     Init: function() {
       this.id = Math.random().toString(36).substring(2)
       this.width = 50
@@ -4004,12 +4009,68 @@
     },
 
     keypress: function(event, recall) {
+      event.preventDefault();
+
       var code = event.charCode || event.keyCode || event.which;
       var c = String.fromCharCode(code);
       var toInsert;
 
       if (this.node && this.node.type === 'mrow') {
 
+        // Backslash mode
+        if (c === "\\") {
+          if (this.mode !== this.BACKSLASH) {
+            // Enter backslash mode
+            console.log('backslash mode!')
+            this.mode = this.BACKSLASH;
+            toInsert = MML.mrow();
+            toInsert.Append(this.makeEntityMo('#x0005C'))
+
+            // Insert
+            this.node.data.splice(this.position, 0, null)
+            this.node.SetData(this.position, toInsert)
+            recall()
+            this.move(RIGHT)
+            this.refocus()
+
+            // Move into the mrow
+            this.node = toInsert;
+            this.position = 1;
+            this.draw();
+
+            return;
+          } else {
+            console.log('TODO: insert a \\')
+            // Just insert a \
+          }
+
+        } else if (c === " ") {
+          if (this.mode === this.BACKSLASH) {
+            // Exit backslash mode and enter the thing we had
+            console.log('Time to exit backslash mode!');
+            var latex = "\\";
+            for (var i = 1; i < this.node.data.length; i++) {
+              var mi = this.node.data[i];
+              if (mi.type !== 'mi') {
+                throw new Error('Found non-identifier in backslash expression');
+              }
+              var chars = mi.data[0];
+              var c = chars.data[0];
+              latex += c;
+            }
+
+            console.log('got latex: ', latex);
+
+            return;
+          } else {
+            // Ignore spaces otherwise
+            // TODO: in LyX, spaces move you up and out of the elem
+            e.preventDefault();
+            return;
+          }
+        }
+
+        // Insertion
         if ((code > 47 && code < 58) || // numeric (0-9)
             (code > 64 && code < 91) || // upper alpha (A-Z)
             (code > 96 && code < 123)) { // lower alpha (a-z)
@@ -4032,7 +4093,6 @@
       this.move(RIGHT)
       this.refocus()
 
-      event.preventDefault()
     },
 
     highlightBoxes: function(svg) {
