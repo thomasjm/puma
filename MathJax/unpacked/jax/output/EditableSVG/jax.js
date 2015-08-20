@@ -266,7 +266,7 @@
     },
 
     boxContains: function(bb, x, y) {
-      return bb.x <= x && x <= bb.x+bb.width && bb.y - bb.height <= y && y <= bb.y;
+      return bb && bb.x <= x && x <= bb.x+bb.width && bb.y <= y && y <= bb.y+bb.height;
     },
 
     nodeContainsScreenPoint: function(node, x, y) {
