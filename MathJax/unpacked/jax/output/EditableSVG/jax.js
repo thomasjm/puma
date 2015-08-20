@@ -1769,11 +1769,15 @@
     MML.mbase.Augment({
       SVG: BBOX,
 
-      getSVGBBox: function() {
-        var elem = this.EditableSVGelem
+      getSVGBBox: function(elem) {
+        var elem = elem || this.EditableSVGelem
         if (!elem || !elem.ownerSVGElement) return
 
         var bb = elem.getBBox()
+        if (elem.nodeName === 'use') {
+          bb.x += Number(elem.getAttribute('x'))
+          bb.y += Number(elem.getAttribute('y'))
+        }
         var transform = elem.getTransformToElement(elem.ownerSVGElement)
         var ptmp = elem.ownerSVGElement.createSVGPoint()
         var lx = 1/0, ly = 1/0, hx = -1/0, hy = -1/0
