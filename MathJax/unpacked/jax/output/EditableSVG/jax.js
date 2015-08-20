@@ -3982,10 +3982,6 @@
       this.draw();
     },
 
-    renderedAt: function(x, y) {
-      this.renderedPosition = {x: x, y: y}
-    },
-
     move: function(direction) {
       this.node.moveCursor(this, direction)
     },
