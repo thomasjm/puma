@@ -6494,7 +6494,7 @@
       var cp = SVG.screenCoordsToElemCoords(svg, event.clientX, event.clientY);
 
       // Find the deepest cursorable node that was clicked
-      jax = MathJax.Hub.getAllJax('#' + event.target.parentNode.id)[0];
+      var jax = SVG.getJaxFromMath(svg.parentNode)
       var current = jax.root
       while (true) {
         var matchedItems = current.data.filter(function(node) {
