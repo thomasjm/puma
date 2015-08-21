@@ -6717,7 +6717,7 @@
       }
     },
 
-    drawAt: function(svgelem, x, y, height) {
+    drawAt: function(svgelem, x, y, height, skipScroll) {
       this.renderedPosition = {x: x, y: y, height: height}
       var celem = svgelem.getElementById('cursor-'+this.id)
       if (!celem) {
@@ -6744,7 +6744,7 @@
       jax = MathJax.Hub.getAllJax('#' + svgelem.parentNode.id)[0];
       SVG.visualizeJax(jax, $('#mmlviz'));
 
-      this.scrollIntoView(svgelem)
+      if (!skipScroll) this.scrollIntoView(svgelem)
     },
 
     scrollIntoView: function(svgelem) {
