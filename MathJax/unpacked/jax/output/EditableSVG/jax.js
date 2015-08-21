@@ -4186,6 +4186,7 @@
 
     moveTo: function(node, position) {
       // Does NOT redraw
+      if (this.mode === this.BACKSLASH && !node.backslashRow) return false
       this.node = node;
       this.position = position;
       if (this.mode === this.SELECTION) {
@@ -4231,6 +4232,7 @@
       var direction
       switch (event.which) {
         case 8: this.backspace(event, recall); break;
+        case 27: this.exitBackslashMode(); recall(['refocus', this]); break
         case 38: direction = UP; break
         case 40: direction = DOWN; break
         case 37: direction = LEFT; break
@@ -4258,6 +4260,17 @@
         node.parent.SetData(rowindex, hole)
         hole.moveCursorFromParent(this)
       }
+    },
+
+    exitBackslashMode: function(replace) {
+      this.mode = this.NORMAL
+      var ppos = this.node.parent.data.indexOf(this.node)
+      if (!replace) {
+        this.node.parent.data.splice(ppos, 1)
+      } else {
+        this.node.parent.SetData(ppos++, replace)
+      }
+      this.moveTo(this.node.parent, ppos)
     },
 
     backspace: function(event, recall) {
@@ -4288,10 +4301,14 @@
         var prev = this.node.data[this.position - 1];
         if (!prev.cursorable) {
           // If it's not cursorable, just delete it
-          this.node.data.splice(this.position-1, 1);
-          this.position = this.position - 1;
+          if (this.mode === this.BACKSLASH && this.node.data.length === 1) {
+            this.exitBackslashMode()
+          } else {
+            this.node.data.splice(this.position-1, 1);
+            this.position = this.position - 1;
 
-          this.makeHoleIfNeeded(this.node);
+            this.makeHoleIfNeeded(this.node);
+          }
 
           recall(['refocus', this])
         } else {
@@ -4390,6 +4407,7 @@
 
             // Insert mrow
             var grayRow = MML.mrow(MML.mo(MML.entity('#x005C')));
+            grayRow.backslashRow = true
             this.node.data.splice(this.position, 0, null)
             this.node.SetData(this.position, grayRow)
             var oldClass = grayRow.class ? grayRow.class + ' ' : '';
@@ -4478,12 +4496,10 @@
             var mrow = this.node;
             var index = mrow.parent.data.indexOf(mrow)
 
-            this.node.parent.SetData(index, result)
-            result.moveCursor(this, RIGHT)
+            this.exitBackslashMode(result)
 
             recall([this, function() {
               this.refocus()
-              this.mode = this.NORMAL
             }]);
 
             return;
