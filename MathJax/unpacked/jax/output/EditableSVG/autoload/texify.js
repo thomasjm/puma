@@ -13,6 +13,12 @@ MathJax.Hub.Register.StartupHook("EditableSVG Jax Ready", function() {
         }
     });
 
+    MML.hole.Augment({
+        toTex: function() {
+            return '{ }'
+        },
+    })
+
     MML.math.Augment({
         loadTexify: function() {
         }

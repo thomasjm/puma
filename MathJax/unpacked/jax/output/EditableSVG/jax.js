@@ -2988,6 +2988,7 @@
 
           var child = this.data[childIdx];
           var bb = child.getSVGBBox();
+          if (!bb) continue
           var midpoint = bb.x + (bb.width / 2);
 
           if (x < midpoint) {
