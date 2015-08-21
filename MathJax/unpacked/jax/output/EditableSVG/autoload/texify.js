@@ -1,6 +1,8 @@
 MathJax.Hub.Register.StartupHook("EditableSVG Jax Ready", function() {
     var MML = MathJax.ElementJax.mml;
     var SVG = MathJax.OutputJax.EditableSVG;
+    var DEFS = MathJax.InputJax.TeX.Definitions
+    var entities
 
     MML.mbase.Augment({
         toTex: function() {
@@ -15,7 +17,6 @@ MathJax.Hub.Register.StartupHook("EditableSVG Jax Ready", function() {
         loadTexify: function() {
         }
     });
-
 
     MML.chars.Augment({
         toTex: function() {
@@ -37,8 +38,9 @@ MathJax.Hub.Register.StartupHook("EditableSVG Jax Ready", function() {
 
     MML.entity.Augment({
         toTex: function() {
-            return '';
-            throw new Error('Get Tex entity from html');
+            var value = this.data[0].substring(2)
+            if (!entities) makeEntities()
+            return entities[value] || this.toString();
         }
     });
 
@@ -92,6 +94,27 @@ MathJax.Hub.Register.StartupHook("EditableSVG Jax Ready", function() {
             return '{'+tex+'}';
         } else {
             return tex;
+        }
+    }
+
+    function forEachInObj(obj, fn) {
+        Object.keys(obj).forEach(function(key) {
+            fn(obj[key], key)
+        })
+    }
+
+    function makeEntities() {
+        entities = {}
+        forEachInObj(DEFS.mathchar0mi, addEscapeEntity)
+        forEachInObj(DEFS.mathchar0mo, addEscapeEntity)
+        forEachInObj(DEFS.mathchar7, addEscapeEntity)
+        forEachInObj(DEFS.remap, function(value, key) {
+            entities[value] = key
+        })
+
+        function addEscapeEntity(value, key) {
+            var lookup = (typeof value === 'string') ? value : value[0]
+            entities[lookup] = '\\' + key
         }
     }
 
