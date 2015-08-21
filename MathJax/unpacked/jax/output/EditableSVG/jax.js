@@ -2423,6 +2423,7 @@
         }
         return scale * this.mscale;
       },
+
       SVGgetMu: function(svg) {
         var mu = 1,
             values = this.getValues("scriptlevel", "scriptsizemultiplier");
@@ -4639,6 +4640,9 @@
           this.selectionEnd.node.drawCursorHighlight(this);
         }
       }
+
+      jax = MathJax.Hub.getAllJax('#' + svgelem.parentNode.id)[0];
+      SVG.visualizeJax(jax, $('#mmlviz'), this);
 
       if (!skipScroll) this.scrollIntoView(svgelem)
     },

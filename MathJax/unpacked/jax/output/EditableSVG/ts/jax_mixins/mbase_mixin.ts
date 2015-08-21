@@ -8,12 +8,23 @@ interface ElementJax {
 
 class MBaseMixin implements ElementJax {
     SVG = BBOX;
+    HUB: any;
+    MML: any;
 
     public SVGsaveData(svg: any): any;
     data: any;
+    base: any;
     EditableSVGdata: any;
     EditableSVGelem: any;
+    mscale: any;
     toSVG(): any;
+
+    style: any;
+    styles: any;
+    fontWeight: any;
+    hasValue: any;
+    getValues(): any;
+    Get(): any;
 
     getBB(relativeTo) {
         var elem = this.EditableSVGelem;
@@ -23,6 +34,10 @@ class MBaseMixin implements ElementJax {
         }
 
         return elem.getBBox();
+    }
+
+    static getMethods() {
+        // TODO: return a dict suitable for using with Mathjax Augment method
     }
 
     toSVG() {
@@ -55,7 +70,7 @@ class MBaseMixin implements ElementJax {
     }
 
     SVGchildSVG(i) {
-        return (this.data[i] ? this.data[i].toSVG() : new BBOX());
+        return (this.data[i] ? this.data[i].toSVG() : new BBOX(this.HUB));
     }
 
     EditableSVGdataStretched(i, HW, D) {
@@ -64,7 +79,7 @@ class MBaseMixin implements ElementJax {
             D: D
         };
         if (!this.data[i]) {
-            return new BBOX();
+            return new BBOX(this.HUB);
         }
         if (D != null) {
             return this.data[i].SVGstretchV(HW, D)
@@ -170,9 +185,9 @@ class MBaseMixin implements ElementJax {
         //
         if (this.attrNames) {
             var copy = this.attrNames,
-            skip = MML.nocopyAttributes,
-            ignore = HUB.config.ignoreMMLattributes;
-            var defaults = (this.type === "mstyle" ? MML.math.prototype.defaults : this.defaults);
+            skip = this.MML.nocopyAttributes,
+            ignore = this.HUB.config.ignoreMMLattributes;
+            var defaults = (this.type === "mstyle" ? this.MML.math.prototype.defaults : this.defaults);
             for (var i = 0, m = copy.length; i < m; i++) {
                 var id = copy[i];
                 if (ignore[id] == false || (!skip[id] && !ignore[id] &&
@@ -219,25 +234,25 @@ class MBaseMixin implements ElementJax {
             delete styles.padding
         }
         if (style.fontSize) {
-            styles.fontSize = style.fontSize
+            styles['fontSize'] = style.fontSize
         }
         if (style.color) {
-            styles.color = style.color
+            styles['color'] = style.color
         }
         if (style.backgroundColor) {
-            styles.background = style.backgroundColor
+            styles['background'] = style.backgroundColor
         }
         if (style.fontStyle) {
-            styles.fontStyle = style.fontStyle
+            styles['fontStyle'] = style.fontStyle
         }
         if (style.fontWeight) {
-            styles.fontWeight = style.fontWeight
+            styles['fontWeight'] = style.fontWeight
         }
         if (style.fontFamily) {
-            styles.fontFamily = style.fontFamily
+            styles['fontFamily'] = style.fontFamily
         }
-        if (styles.fontWeight && styles.fontWeight.match(/^\d+$/)) {
-            styles.fontWeight = (parseInt(styles.fontWeight) > 600 ? "bold" : "normal")
+        if (styles['fontWeight'] && styles['fontWeight'].match(/^\d+$/)) {
+            styles['fontWeight'] = (parseInt(styles['fontWeight']) > 600 ? "bold" : "normal")
         }
         return styles;
     }
@@ -293,13 +308,13 @@ class MBaseMixin implements ElementJax {
         pleft = ((padding || {}).left || 0),
         id;
         values.background = (this.mathbackground || this.background ||
-                             (this.styles || {}).background || MML.COLOR.TRANSPARENT);
+                             (this.styles || {}).background || this.MML.COLOR.TRANSPARENT);
         if (bleft + pleft) {
             //
             //  Make a box and move the contents of svg to it,
             //    then add it back into svg, but offset by the left amount
             //
-            var dup = BBOX();
+            var dup = new BBOX(this.HUB);
             for (id in svg) {
                 if (svg.hasOwnProperty(id)) {
                     dup[id] = svg[id]
@@ -327,7 +342,7 @@ class MBaseMixin implements ElementJax {
         //
         //  Add background color
         //
-        if (values.background !== MML.COLOR.TRANSPARENT) {
+        if (values.background !== this.MML.COLOR.TRANSPARENT) {
             var nodeName = svg.element.nodeName.toLowerCase();
             if (nodeName !== "g" && nodeName !== "svg") {
                 var g = EditableSVG.Element("g");
@@ -413,36 +428,36 @@ class MBaseMixin implements ElementJax {
         }
         if (values.weight === "bold") {
             variant = {
-                normal: MML.VARIANT.BOLD,
-                italic: MML.VARIANT.BOLDITALIC,
-                fraktur: MML.VARIANT.BOLDFRAKTUR,
-                script: MML.VARIANT.BOLDSCRIPT,
-                "sans-serif": MML.VARIANT.BOLDSANSSERIF,
-                "sans-serif-italic": MML.VARIANT.SANSSERIFBOLDITALIC
+                normal: this.MML.VARIANT.BOLD,
+                italic: this.MML.VARIANT.BOLDITALIC,
+                fraktur: this.MML.VARIANT.BOLDFRAKTUR,
+                script: this.MML.VARIANT.BOLDSCRIPT,
+                "sans-serif": this.MML.VARIANT.BOLDSANSSERIF,
+                "sans-serif-italic": this.MML.VARIANT.SANSSERIFBOLDITALIC
             }[variant] || variant;
         } else if (values.weight === "normal") {
             variant = {
-                bold: MML.VARIANT.normal,
-                "bold-italic": MML.VARIANT.ITALIC,
-                "bold-fraktur": MML.VARIANT.FRAKTUR,
-                "bold-script": MML.VARIANT.SCRIPT,
-                "bold-sans-serif": MML.VARIANT.SANSSERIF,
-                "sans-serif-bold-italic": MML.VARIANT.SANSSERIFITALIC
+                bold: this.MML.VARIANT.normal,
+                "bold-italic": this.MML.VARIANT.ITALIC,
+                "bold-fraktur": this.MML.VARIANT.FRAKTUR,
+                "bold-script": this.MML.VARIANT.SCRIPT,
+                "bold-sans-serif": this.MML.VARIANT.SANSSERIF,
+                "sans-serif-bold-italic": this.MML.VARIANT.SANSSERIFITALIC
             }[variant] || variant;
         }
         if (values.style === "italic") {
             variant = {
-                normal: MML.VARIANT.ITALIC,
-                bold: MML.VARIANT.BOLDITALIC,
-                "sans-serif": MML.VARIANT.SANSSERIFITALIC,
-                "bold-sans-serif": MML.VARIANT.SANSSERIFBOLDITALIC
+                normal: this.MML.VARIANT.ITALIC,
+                bold: this.MML.VARIANT.BOLDITALIC,
+                "sans-serif": this.MML.VARIANT.SANSSERIFITALIC,
+                "bold-sans-serif": this.MML.VARIANT.SANSSERIFBOLDITALIC
             }[variant] || variant;
         } else if (values.style === "normal") {
             variant = {
-                italic: MML.VARIANT.NORMAL,
-                "bold-italic": MML.VARIANT.BOLD,
-                "sans-serif-italic": MML.VARIANT.SANSSERIF,
-                "sans-serif-bold-italic": MML.VARIANT.BOLDSANSSERIF
+                italic: this.MML.VARIANT.NORMAL,
+                "bold-italic": this.MML.VARIANT.BOLD,
+                "sans-serif-italic": this.MML.VARIANT.SANSSERIF,
+                "sans-serif-bold-italic": this.MML.VARIANT.BOLDSANSSERIF
             }[variant] || variant;
         }
         if (!(variant in EditableSVG.FONTDATA.VARIANT)) {
@@ -542,11 +557,11 @@ class MBaseMixin implements ElementJax {
     // TODO: these two go in the second argument to Augment
     SVGautoload() {
         var file = EditableSVG.autoloadDir + "/" + this.type + ".js";
-        HUB.RestartAfter(AJAX.Require(file));
+        this.HUB.RestartAfter(AJAX.Require(file));
     }
 
     SVGautoloadFile(name) {
         var file = EditableSVG.autoloadDir + "/" + name + ".js";
-        HUB.RestartAfter(AJAX.Require(file));
+        this.HUB.RestartAfter(AJAX.Require(file));
     }
 }

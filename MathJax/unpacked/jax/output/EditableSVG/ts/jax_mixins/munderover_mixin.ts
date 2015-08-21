@@ -6,9 +6,9 @@ class MUnderOverMixin extends MBaseMixin {
         var values = this.getValues("displaystyle", "accent", "accentunder", "align");
         if (!values.displaystyle && this.data[this.base] != null &&
             this.data[this.base].CoreMO().Get("movablelimits")) {
-            return MML.msubsup.prototype.toSVG.call(this)
+            return this.MML.msubsup.prototype.toSVG.call(this)
         }
-        var svg = this.SVG(),
+        var svg  = new this.SVG(),
         scale = this.SVGgetScale(svg);
         this.SVGhandleSpace(svg);
         var boxes = [],

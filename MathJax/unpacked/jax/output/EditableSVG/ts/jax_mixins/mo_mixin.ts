@@ -3,7 +3,7 @@
 class MoMixin extends MBaseMixin {
     toSVG(HW, D) {
         this.SVGgetStyles();
-        var svg = this.svg = this.SVG();
+        var svg = this.svg  = new this.SVG();
         var scale = this.SVGgetScale(svg);
         this.SVGhandleSpace(svg);
         if (this.data.length == 0) {
@@ -149,7 +149,7 @@ class MoMixin extends MBaseMixin {
         // FIXME:  should take style="font-weight:bold" into account as well
         if ((values.fontweight === "bold" || parseInt(values.fontweight) >= 600) &&
             !this.Get("mathvariant", true)) {
-            values.mathvariant = MML.VARIANT.BOLD
+            values.mathvariant = this.MML.VARIANT.BOLD
         }
         values.maxsize = Util.length2em(values.maxsize, mu, svg.w);
         values.minsize = Util.length2em(values.minsize, mu, svg.w);

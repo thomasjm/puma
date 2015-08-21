@@ -10,6 +10,10 @@ class BBOX {
     defs = null; // the SVG <defs> element where glyphs are stored
     n = 0; // the ID for local <defs> for self-contained SVG elements
 
+    HUB: any;
+
+    svg: any;
+
     h: number;
     w: number;
     d: number;
@@ -30,7 +34,7 @@ class BBOX {
 
     hasIndent: boolean;
 
-    constructor(def) {
+    constructor(HUB, def = null) {
         this.h = this.d = -Util.BIGDIMEN;
         this.H = this.D = 0;
         this.w = this.r = 0;
@@ -38,13 +42,14 @@ class BBOX {
         this.x = this.y = 0;
         this.scale = 1;
         this.n = 0;
+        this.HUB = hub;
         if (this.type) {
             this.element = EditableSVG.Element(this.type, def);
         }
     }
 
     With(def) {
-        return HUB.Insert(this, def);
+        return this.HUB.Insert(this, def);
     }
 
     Add(svg, dx, dy, forcew?, infront?) {

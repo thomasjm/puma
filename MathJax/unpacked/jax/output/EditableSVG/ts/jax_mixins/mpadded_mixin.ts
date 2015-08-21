@@ -5,7 +5,7 @@ class MPaddedMixin extends MBaseMixin {
 
     toSVG(HW, D) {
         this.SVGgetStyles();
-        var svg = this.SVG();
+        var svg  = new this.SVG();
         if (this.data[0] != null) {
             this.SVGgetScale(svg);
             this.SVGhandleSpace(svg);

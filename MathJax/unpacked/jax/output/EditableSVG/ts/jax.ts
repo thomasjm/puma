@@ -37,8 +37,42 @@ class EditableSVG implements OutputJax {
     HTML = MathJax.HTML;
     SVG = MathJax.OutputJax.EditableSVG;
 
+
+
     SVGNS = "http://www.w3.org/2000/svg";
     XLINKNS = "http://www.w3.org/1999/xlink";
+
+    // Bunch of properties being added to make the build happy
+    ContextMenu: any;
+    EVENT: any;
+    FONTDATA: any;
+    Mousedown: any;
+    Mousemove: any;
+    ExSpan: any;
+    Mouseout: any;
+    Mouseover: any;
+    SUPER: any;
+    static FONTDATA: any;
+    cwidth: any;
+    defaultEx: any;
+    defaultWidth: any;
+    em: any;
+    ex: any;
+    fontDir: any;
+    fontInUse: any;
+    hiddenDiv: any;
+    id: any;
+    idPostfix: any;
+    length2em: any;
+    linebreakSpan: any;
+    linebreakWidth: any;
+    mathDIV: any;
+    mathDiv: any;
+    operaZoomRefresh: any;
+    pxPerInch: any;
+    require: any;
+    textSVG: any;
+    zoomScale: any;
 
     config = EditableSVGConfig.config;
 
@@ -47,13 +81,13 @@ class EditableSVG implements OutputJax {
     fontNames = ["TeX", "STIX", "STIX-Web", "Asana-Math",
                  "Gyre-Termes", "Gyre-Pagella", "Latin-Modern", "Neo-Euler"];
 
-    TextNode = HTML.TextNode;
-    addText = HTML.addText;
-    ucMatch = HTML.ucMatch;
+    TextNode = this.HTML.TextNode;
+    addText = this.HTML.addText;
+    ucMatch = this.HTML.ucMatch;
 
     Config() {
         this.SUPER(arguments).Config.apply(this, arguments);
-        var settings = HUB.config.menuSettings,
+        var settings = this.HUB.config.menuSettings,
         config = this.config,
         font = settings.font;
         if (settings.scale) {
@@ -157,7 +191,7 @@ class EditableSVG implements OutputJax {
         EVENT = MathJax.Extension.MathEvents.Event;
         TOUCH = MathJax.Extension.MathEvents.Touch;
         HOVER = MathJax.Extension.MathEvents.Hover;
-        this.ContextMenu = EVENT.ContextMenu;
+        this.ContextMenu = this.EVENT.ContextMenu;
         this.Mousedown = function(event) {
             /* TODOTODOTODO
                Note: use test3.htm!!!
@@ -218,7 +252,7 @@ class EditableSVG implements OutputJax {
         this.Mousemove = HOVER.Mousemove;
 
         // Make hidden div for doing tests and storing global SVG <defs>
-        this.hiddenDiv = HTML.Element("div", {
+        this.hiddenDiv = this.HTML.Element("div", {
             style: {
                 visibility: "hidden",
                 overflow: "hidden",
@@ -242,12 +276,12 @@ class EditableSVG implements OutputJax {
         } else {
             document.body.insertBefore(this.hiddenDiv, document.body.firstChild);
         }
-        this.hiddenDiv = HTML.addElement(this.hiddenDiv, "div", {
+        this.hiddenDiv = this.HTML.addElement(this.hiddenDiv, "div", {
             id: "MathJax_SVG_Hidden"
         });
 
         // Determine pixels-per-inch and em-size
-        var div = HTML.addElement(this.hiddenDiv, "div", {
+        var div = this.HTML.addElement(this.hiddenDiv, "div", {
             style: {
                 width: "5in"
             }
@@ -265,7 +299,7 @@ class EditableSVG implements OutputJax {
                                           });
 
         // Used in preTranslate to get scaling factors
-        this.ExSpan = HTML.Element("span", {
+        this.ExSpan = this.HTML.Element("span", {
             style: {
                 position: "absolute",
                 "font-size-adjust": "none"
@@ -277,7 +311,7 @@ class EditableSVG implements OutputJax {
         ]);
 
         // Used in preTranslate to get linebreak width
-        this.linebreakSpan = HTML.Element("span", null, [
+        this.linebreakSpan = this.HTML.Element("span", null, [
             ["hr", {
                 style: {
                     width: "auto",
@@ -290,14 +324,13 @@ class EditableSVG implements OutputJax {
         ]);
 
         // Set up styles
-        return AJAX.Styles(this.config.styles, ["InitializeSVG", this]);
+        return this.AJAX.Styles(this.config.styles, ["InitializeSVG", this]);
     }
 
     //  Handle initialization that requires styles to be set up
     InitializeSVG() {
-        //
+
         //  Get the default sizes (need styles in place to do this)
-        //
         document.body.appendChild(this.ExSpan);
         document.body.appendChild(this.linebreakSpan);
         this.defaultEx = this.ExSpan.firstChild.offsetHeight / 60;
@@ -345,7 +378,7 @@ class EditableSVG implements OutputJax {
             jax.SVG = {
                 display: (jax.root.Get("display") === "block")
             }
-            span = div = HTML.Element("span", {
+            span = div = this.HTML.Element("span", {
                 style: {
                     "font-size": this.config.scale + "%",
                     display: "inline-block"
@@ -354,20 +387,20 @@ class EditableSVG implements OutputJax {
                 id: jax.inputID + "-Frame",
                 isMathJax: true,
                 jaxID: this.id,
-                oncontextmenu: EVENT.Menu,
-                onmousedown: EVENT.Mousedown,
-                onmouseover: EVENT.Mouseover,
-                onmouseout: EVENT.Mouseout,
-                onmousemove: EVENT.Mousemove,
-                onclick: EVENT.Click,
-                ondblclick: EVENT.DblClick
+                oncontextmenu: this.EVENT.Menu,
+                onmousedown: this.EVENT.Mousedown,
+                onmouseover: this.EVENT.Mouseover,
+                onmouseout: this.EVENT.Mouseout,
+                onmousemove: this.EVENT.Mousemove,
+                onclick: this.EVENT.Click,
+                ondblclick: this.EVENT.DblClick
             });
             if (HUB.Browser.noContextMenu) {
                 span.ontouchstart = TOUCH.start;
                 span.ontouchend = TOUCH.end;
             }
             if (jax.SVG.display) {
-                div = HTML.Element("div", {
+                div = this.HTML.Element("div", {
                     className: "MathJax_SVG_Display"
                 });
                 div.appendChild(span);
@@ -439,7 +472,7 @@ class EditableSVG implements OutputJax {
         //  If we are supposed to do a chunk delay, do it
         if (state.SVGdelay) {
             state.SVGdelay = false;
-            HUB.RestartAfter(MathJax.Callback.Delay(this.config.EqnChunkDelay));
+            this.HUB.RestartAfter(MathJax.Callback.Delay(this.config.EqnChunkDelay));
         }
 
         //  Get the data about the math
@@ -451,7 +484,7 @@ class EditableSVG implements OutputJax {
         if (!div) return;
 
         //  Set the font metrics
-        this.em = MML.mbase.prototype.em = jax.SVG.em;
+        this.em = this.MML.mbase.prototype.em = jax.SVG.em;
 
         this.ex = jax.SVG.ex;
         this.linebreakWidth = jax.SVG.lineWidth;
@@ -485,21 +518,18 @@ class EditableSVG implements OutputJax {
             script.parentNode.insertBefore(div, script);
         }
         div.className = div.className.split(/ /)[0];
-        //
+
         //  Check if we are hiding the math until more is processed
-        //
         if (this.hideProcessedMath) {
-            //
+
             //  Hide the math and don't let its preview be removed
-            //
             div.className += " MathJax_SVG_Processed";
             if (script.MathJax.preview) {
                 jax.SVG.preview = script.MathJax.preview;
                 delete script.MathJax.preview;
             }
-            //
+
             //  Check if we should show this chunk of equations
-            //
             state.SVGeqn += (state.i - state.SVGi);
             state.SVGi = state.i;
             if (state.SVGeqn >= state.SVGlast + state.SVGchunk) {
@@ -513,20 +543,17 @@ class EditableSVG implements OutputJax {
     postTranslate(state, partial) {
         var scripts = state.jax[this.id];
         if (!this.hideProcessedMath) return;
-        //
+
         //  Reveal this chunk of math
-        //
         for (var i = state.SVGlast, m = state.SVGeqn; i < m; i++) {
             var script = scripts[i];
             if (script && script.MathJax.elementJax) {
-                //
+
                 //  Remove the processed marker
-                //
                 script.previousSibling.className = script.previousSibling.className.split(/ /)[0];
                 var data = script.MathJax.elementJax.SVG;
-                //
+
                 //  Remove the preview, if any
-                //
                 if (data.preview) {
                     data.preview.innerHTML = "";
                     script.MathJax.preview = data.preview;
@@ -534,9 +561,8 @@ class EditableSVG implements OutputJax {
                 }
             }
         }
-        //
+
         //  Save our place so we know what is revealed
-        //
         state.SVGlast = state.SVGeqn;
     }
 
@@ -557,10 +583,8 @@ class EditableSVG implements OutputJax {
         }
     }
 
-    //
     //  Return the containing HTML element rather than the SVG element, since
     //  most browsers can't position to an SVG element properly.
-    //
     hashCheck(target) {
         if (target && target.nodeName.toLowerCase() === "g") {
             do {
@@ -577,7 +601,7 @@ class EditableSVG implements OutputJax {
         do {
             math = math.nextSibling;
         } while (math && math.nodeName.toLowerCase() !== "script");
-        return HUB.getJaxFor(math);
+        return this.HUB.getJaxFor(math);
     }
 
     getHoverSpan(jax, math) {
@@ -586,24 +610,20 @@ class EditableSVG implements OutputJax {
     }
 
     getHoverBBox(jax, span, math) {
-        var bbox = EVENT.getBBox(span.parentNode);
+        var bbox = this.EVENT.getBBox(span.parentNode);
         bbox.h += 2;
         bbox.d -= 2; // bbox seems to be a bit off, so compensate (FIXME)
         return bbox;
     }
 
     Zoom(jax, span, math, Mw, Mh) {
-        //
         //  Re-render at larger size
-        //
         span.className = "MathJax_SVG";
 
-        //
         //  get em size (taken from this.preTranslate)
-        //
         var emex = span.appendChild(this.ExSpan.cloneNode(true));
         var ex = emex.firstChild.offsetHeight / 60;
-        this.em = MML.mbase.prototype.em = ex / Util.TeX.x_height * 1000;
+        this.em = this.MML.mbase.prototype.em = ex / Util.TeX.x_height * 1000;
         this.ex = ex;
         this.linebreakWidth = jax.SVG.lineWidth;
         this.cwidth = jax.SVG.cwidth;
@@ -620,9 +640,7 @@ class EditableSVG implements OutputJax {
         this.zoomScale = 1;
         span.removeChild(this.textSVG);
 
-        //
         //  Don't allow overlaps on any edge
-        //
         var svg = span.getElementsByTagName("svg")[0].style;
         svg.marginTop = svg.marginRight = svg.marginLeft = 0;
         if (svg.marginBottom.charAt(0) === "-")
@@ -634,23 +652,20 @@ class EditableSVG implements OutputJax {
             }, 1);
         }
 
-        //
         // WebKit bug (issue #749)
-        //
         if (span.offsetWidth < span.firstChild.offsetWidth) {
             span.style.minWidth = span.firstChild.offsetWidth + "px";
             math.style.minWidth = math.firstChild.offsetWidth + "px";
         }
-        //
+
         //  Get height and width of zoomed math and original math
-        //
         span.style.position = math.style.position = "absolute";
         var zW = span.offsetWidth,
         zH = span.offsetHeight,
         mH = math.offsetHeight,
         mW = math.offsetWidth;
         span.style.position = math.style.position = "";
-        //
+
         return {
             Y: -EVENT.getBBox(span).h,
             mW: mW,
@@ -842,7 +857,7 @@ class EditableSVG implements OutputJax {
                 c = BBOX.G();
                 c.Add(box);
                 svg.Add(c, svg.w, 0);
-                HUB.signal.Post(["SVG Jax - unknown char", n, variant]);
+                this.HUB.signal.Post(["SVG Jax - unknown char", n, variant]);
             }
 
             return svg;
@@ -913,7 +928,7 @@ class EditableSVG implements OutputJax {
     }
 
     loadFont(file) {
-        HUB.RestartAfter(AJAX.Require(this.fontDir + "/" + file));
+        this.HUB.RestartAfter(AJAX.Require(this.fontDir + "/" + file));
     }
 
     createDelimiter(code, HW, scale, font) {
@@ -945,7 +960,7 @@ class EditableSVG implements OutputJax {
             }
         }
         if (delim.load) {
-            HUB.RestartAfter(AJAX.Require(this.fontDir + "/fontdata-" + delim.load + ".js"))
+            this.HUB.RestartAfter(AJAX.Require(this.fontDir + "/fontdata-" + delim.load + ".js"))
         }
         for (var i = 0, m = delim.HW.length; i < m; i++) {
             if (delim.HW[i][0] * scale >= HW - 10 - SVG.config.blacker || (i == m - 1 && !delim.stretch)) {
@@ -972,7 +987,7 @@ class EditableSVG implements OutputJax {
             fonts: [data[1]],
             noRemap: true
         };
-        if (font && font === MML.VARIANT.BOLD) {
+        if (font && font === this.MML.VARIANT.BOLD) {
             variant.fonts = [data[1] + "-bold", data[1]]
         }
         if (typeof(data[1]) !== "string") {
@@ -1092,41 +1107,54 @@ class EditableSVG implements OutputJax {
         svg.isMultiChar = true;
     }
 
+  static Element(type, def) {
+    var obj = (typeof(type) === "string" ? document.createElement("svg:" + type) : type);
+    obj.isMathJax = true;
+    if (def) {
+      for (var id in def) {
+        if (def.hasOwnProperty(id)) {
+          obj.setAttribute(id, def[id].toString())
+        }
+      }
+    }
+    return obj;
+  }
+
     constructor() {
 
-        HUB.Register.StartupHook("mml Jax Ready", function() {
+        this.HUB.Register.StartupHook("mml Jax Ready", function() {
 
             MML = MathJax.ElementJax.mml;
 
-            MML.mbase.Augment(MBaseMixin.getMethods());
-            MML.chars.Augment(CharsMixin.getMethods());
-            MML.entity.Augment(EntityMixin.getMethods());
-            MML.mo.Augment(MoMixin.getMethods());
-            MML.mtext.Augment(MTextMixin.getMethods());
-            MML.merror.Augment(MErrorMixin.getMethods());
-            MML.ms.Augment(MsMixin.getMethods());
-            MML.mglyph.Augment(MGlyphMixin.getMethods());
-            MML.mspace.Augment(MSpaceMixin.getMethods());
-            MML.mphantom.Augment(MPhantomMixin.getMethods());
-            MML.mpadded.Augment(MPaddedMixin.getMethods());
-            MML.mrow.Augment(MRowMixin.getMethods());
-            MML.mstyle.Augment(MStyleMixin.getMethods());
-            MML.mfrac.Augment(MFracMixin.getMethods());
-            MML.msqrt.Augment(MSqrtMixin.getMethods());
-            MML.mroot.Augment(MRootMixin.getMethods());
-            MML.mfenced.Augment(MFencedMixin.getMethods());
-            MML.menclose.Augment(MEncloseMixin.getMethods());
-            MML.maction.Augment(MActionMixin.getMethods());
-            MML.semantics.Augment(SemanticsMixin.getMethods());
-            MML.munderover.Augment(MUnderOverMixin.getMethods());
-            MML.msubsup.Augment(MSubSupMixin.getMethods());
-            MML.mmultiscripts.Augment(MMultiScriptsMixin.getMethods());
-            MML.mtable.Augment(MTableMixin.getMethods());
-            MML.math.Augment(MathMixin.getMethods());
-            MML.TeXAtom.Augment(TeXAtomMixin.getMethods());
+            this.MML.mbase.Augment(MBaseMixin.getMethods());
+            this.MML.chars.Augment(CharsMixin.getMethods());
+            this.MML.entity.Augment(EntityMixin.getMethods());
+            this.MML.mo.Augment(MoMixin.getMethods());
+            this.MML.mtext.Augment(MTextMixin.getMethods());
+            this.MML.merror.Augment(MErrorMixin.getMethods());
+            this.MML.ms.Augment(MsMixin.getMethods());
+            this.MML.mglyph.Augment(MGlyphMixin.getMethods());
+            this.MML.mspace.Augment(MSpaceMixin.getMethods());
+            this.MML.mphantom.Augment(MPhantomMixin.getMethods());
+            this.MML.mpadded.Augment(MPaddedMixin.getMethods());
+            this.MML.mrow.Augment(MRowMixin.getMethods());
+            this.MML.mstyle.Augment(MStyleMixin.getMethods());
+            this.MML.mfrac.Augment(MFracMixin.getMethods());
+            this.MML.msqrt.Augment(MSqrtMixin.getMethods());
+            this.MML.mroot.Augment(MRootMixin.getMethods());
+            this.MML.mfenced.Augment(MFencedMixin.getMethods());
+            this.MML.menclose.Augment(MEncloseMixin.getMethods());
+            this.MML.maction.Augment(MActionMixin.getMethods());
+            this.MML.semantics.Augment(SemanticsMixin.getMethods());
+            this.MML.munderover.Augment(MUnderOverMixin.getMethods());
+            this.MML.msubsup.Augment(MSubSupMixin.getMethods());
+            this.MML.mmultiscripts.Augment(MMultiScriptsMixin.getMethods());
+            this.MML.mtable.Augment(MTableMixin.getMethods());
+            this.MML.math.Augment(MathMixin.getMethods());
+            this.MML.TeXAtom.Augment(TeXAtomMixin.getMethods());
 
             MML["annotation-xml"].Augment({
-                toSVG: MML.mbase.SVGautoload
+                toSVG: this.MML.mbase.SVGautoload
             });
 
 
@@ -1137,12 +1165,12 @@ class EditableSVG implements OutputJax {
             //
             //  We also need to wait for the onload handler to run, since the loadComplete
             //  will call Config and Startup, which need to modify the body.
-            HUB.Register.StartupHook("onLoad", function() {
+            this.HUB.Register.StartupHook("onLoad", function() {
                 setTimeout(MathJax.Callback(["loadComplete", SVG, "jax.js"]), 0);
             });
         });
 
-        HUB.Browser.Select({
+        this.HUB.Browser.Select({
             Opera: function(browser) {
                 SVG.Augment({
                     operaZoomRefresh: true // Opera needs a kick to redraw zoomed equations
@@ -1150,9 +1178,9 @@ class EditableSVG implements OutputJax {
             }
         });
 
-        HUB.Register.StartupHook("End Cookie", function() {
+        this.HUB.Register.StartupHook("End Cookie", function() {
             if (HUB.config.menuSettings.zoom !== "None") {
-                AJAX.Require("[MathJax]/extensions/MathZoom.js")
+              this.AJAX.Require("[MathJax]/extensions/MathZoom.js")
             }
         });
 
@@ -1164,20 +1192,6 @@ class EditableSVG implements OutputJax {
             if (!document.namespaces.svg) {
                 document.namespaces.add("svg", SVGNS)
             }
-            SVG.Augment({
-                Element: function(type, def) {
-                    var obj = (typeof(type) === "string" ? document.createElement("svg:" + type) : type);
-                    obj.isMathJax = true;
-                    if (def) {
-                        for (var id in def) {
-                            if (def.hasOwnProperty(id)) {
-                                obj.setAttribute(id, def[id].toString())
-                            }
-                        }
-                    }
-                    return obj;
-                }
-            });
         }
     }
 }

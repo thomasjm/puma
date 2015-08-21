@@ -8,39 +8,39 @@ class MFracMixin extends MBaseMixin {
         console.log('mfrac toSVG called!');
 
         this.SVGgetStyles();
-        var svg = this.SVG();
+        var svg  = new this.SVG();
         var scale = this.SVGgetScale(svg);
-        var frac = BBOX();
+        var frac = new BBOX(this.HUB);
         frac.scale = svg.scale;
         this.SVGhandleSpace(frac);
         var num = this.SVGchildSVG(0),
         den = this.SVGchildSVG(1);
         var values = this.getValues("displaystyle", "linethickness", "numalign", "denomalign", "bevelled");
         var isDisplay = values.displaystyle;
-        var a = SVG.TeX.axis_height * scale;
+        var a = Util.TeX.axis_height * scale;
         if (values.bevelled) {
             var delta = (isDisplay ? 400 : 150);
             var H = Math.max(num.h + num.d, den.h + den.d) + 2 * delta;
-            var bevel = SVG.createDelimiter(0x2F, H);
+            var bevel = this.SVG.createDelimiter(0x2F, H);
             frac.Add(num, 0, (num.d - num.h) / 2 + a + delta);
             frac.Add(bevel, num.w - delta / 2, (bevel.d - bevel.h) / 2 + a);
             frac.Add(den, num.w + bevel.w - delta, (den.d - den.h) / 2 + a - delta);
         } else {
             var W = Math.max(num.w, den.w);
-            var t = SVG.thickness2em(values.linethickness, this.scale) * this.mscale,
+            var t = this.SVG.thickness2em(values.linethickness, this.scale) * this.mscale,
             p, q, u, v;
-            var mt = SVG.TeX.min_rule_thickness / SVG.em * 1000;
+            var mt = Util.TeX.min_rule_thickness / this.SVG.em * 1000;
             if (isDisplay) {
-                u = SVG.TeX.num1;
-                v = SVG.TeX.denom1
+                u = Util.TeX.num1;
+                v = Util.TeX.denom1
             } else {
-                u = (t === 0 ? SVG.TeX.num3 : SVG.TeX.num2);
-                v = SVG.TeX.denom2
+                u = (t === 0 ? Util.TeX.num3 : Util.TeX.num2);
+                v = Util.TeX.denom2
             }
             u *= scale;
             v *= scale;
             if (t === 0) { // \atop
-                p = Math.max((isDisplay ? 7 : 3) * SVG.TeX.rule_thickness, 2 * mt); // force to at least 2 px
+                p = Math.max((isDisplay ? 7 : 3) * Util.TeX.rule_thickness, 2 * mt); // force to at least 2 px
                 q = (u - num.d) - (den.h - v);
                 if (q < p) {
                     u += (p - q) / 2;
@@ -83,7 +83,7 @@ class MFracMixin extends MBaseMixin {
             //  Add nulldelimiterspace around the fraction
             //   (TeXBook pg 150 and Appendix G rule 15e)
             //
-            svg.x = svg.X = SVG.TeX.nulldelimiterspace * this.mscale;
+            svg.x = svg.X = Util.TeX.nulldelimiterspace * this.mscale;
         }
 
         super.SVGhandleSpace(svg);

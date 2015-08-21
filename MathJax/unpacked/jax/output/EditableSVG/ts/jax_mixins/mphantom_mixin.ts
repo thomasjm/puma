@@ -3,7 +3,7 @@
 class MPhantomMixin extends MBaseMixin {
     toSVG(HW, D) {
         this.SVGgetStyles();
-        var svg = this.SVG();
+        var svg  = new this.SVG();
         this.SVGgetScale(svg);
         if (this.data[0] != null) {
             this.SVGhandleSpace(svg);

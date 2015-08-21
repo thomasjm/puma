@@ -2,6 +2,9 @@
 
 class BBOX_ROW extends BBOX {
 
+    sh: number;
+    sd: number;
+
     constructor() {
         super.apply(arguments); // TODO: typescript apply super
         this.svg = [];

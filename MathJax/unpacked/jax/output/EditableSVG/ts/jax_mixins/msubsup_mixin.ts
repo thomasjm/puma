@@ -3,10 +3,11 @@
 class MSubSupMixin extends MBaseMixin implements ElementJax {
     base: any;
     sup: any;
+    sub: any;
 
     toSVG(HW, D) {
         this.SVGgetStyles();
-        var svg = this.SVG(),
+        var svg = new this.SVG(),
         scale = this.SVGgetScale(svg);
         this.SVGhandleSpace(svg);
         var mu = this.SVGgetMu(svg);

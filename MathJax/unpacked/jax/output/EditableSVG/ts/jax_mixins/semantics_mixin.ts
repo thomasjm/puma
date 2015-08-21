@@ -4,7 +4,7 @@
 class SemanticsMixin extends MBaseMixin {
     toSVG() {
         this.SVGgetStyles();
-        var svg = this.SVG();
+        var svg  = new this.SVG();
         if (this.data[0] != null) {
             this.SVGhandleSpace(svg);
             svg.Add(this.data[0].toSVG());

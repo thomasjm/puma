@@ -2,6 +2,8 @@
 /// <reference path="util.ts" />
 
 class Util {
+    static MML: any;
+
     // TODO: this needs to be set by the code in Translate
     em: number;
 
@@ -40,13 +42,13 @@ class Util {
         if (length === "") {
             return "";
         }
-        if (length === MML.SIZE.NORMAL) {
+        if (length === this.MML.SIZE.NORMAL) {
             return 1000;
         }
-        if (length === MML.SIZE.BIG) {
+        if (length === this.MML.SIZE.BIG) {
             return 2000;
         }
-        if (length === MML.SIZE.SMALL) {
+        if (length === this.MML.SIZE.SMALL) {
             return 710;
         }
         if (length === "infinity") {
@@ -55,7 +57,7 @@ class Util {
         if (length.match(/mathspace$/)) {
             return 1000 * this.MATHSPACE[length];
         }
-        var emFactor = (this.zoomScale || 1) / EditableSVG.em;
+        var emFactor = (this.zoomScale || 1) / Util.em;
         var match = length.match(/^\s*([-+]?(?:\.\d+|\d+(?:\.\d*)?))?(pt|em|ex|mu|px|pc|in|mm|cm|%)?/);
         var m = parseFloat(match[1] || "1") * 1000,
         unit = match[2];
@@ -98,15 +100,15 @@ class Util {
         return m * size / 1000; // relative to given size (or 1em as default)
     }
 
-    thickness2em(length, mu) {
+    static thickness2em(length, mu) {
         var thick = Util.TeX.rule_thickness;
-        if (length === MML.LINETHICKNESS.MEDIUM) {
+        if (length === this.MML.LINETHICKNESS.MEDIUM) {
             return thick;
         }
-        if (length === MML.LINETHICKNESS.THIN) {
+        if (length === this.MML.LINETHICKNESS.THIN) {
             return 0.67 * thick;
         }
-        if (length === MML.LINETHICKNESS.THICK) {
+        if (length === this.MML.LINETHICKNESS.THICK) {
             return 1.67 * thick;
         }
         return this.length2em(length, mu, thick);

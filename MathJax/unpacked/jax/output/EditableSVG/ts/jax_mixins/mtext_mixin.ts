@@ -4,7 +4,7 @@ class MTextMixin extends MBaseMixin {
     toSVG() {
         if (SVG.config.mtextFontInherit || this.Parent().type === "merror") {
             this.SVGgetStyles();
-            var svg = this.SVG(),
+            var svg  = new this.SVG(),
             scale = this.SVGgetScale(svg);
             this.SVGhandleSpace(svg);
             var variant = this.SVGgetVariant(),
@@ -23,7 +23,7 @@ class MTextMixin extends MBaseMixin {
             } else if (variant.match(/sans-serif/)) {
                 def["class"] = "MJX-sans-serif"
             }
-            svg.Add(BBOX.TEXT(scale * 100 / SVG.config.scale, this.data.join(""), def));
+            svg.Add(BBOX.TEXT(scale * 100 / this.SVG.config.scale, this.data.join(""), def));
             svg.Clean();
             this.SVGhandleColor(svg);
             this.SVGsaveData(svg);
