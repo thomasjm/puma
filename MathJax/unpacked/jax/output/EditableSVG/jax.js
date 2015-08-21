@@ -4323,12 +4323,7 @@
 
       getBB: function(relativeTo) {
         var elem = this.EditableSVGelem;
-        if (!elem) {
-          console.error('Oh no! Couldn\'t find elem for ', this.type);
-          return;
-        }
-
-        return elem.getBBox();
+        return elem && elem.getBBox();
       },
 
       moveCursor: function(cursor, direction) {
