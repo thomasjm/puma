@@ -4381,17 +4381,20 @@
             var result = new MML.mfrac(new MML.hole(), new MML.hole())
             result.moveCursorAfter = [result.data[0], 0]
             return this.result = result
-          } else if (DEFS.macros[cs]) {
+          }
+          if (DEFS.macros[cs]) {
             console.log(DEFS.macros[cs])
             var namedOp = DEFS.macros[cs] === 'NamedOp'
             var namedFn = DEFS.macros[cs][0] && DEFS.macros[cs][0] === 'NamedFn'
-            var value
-            if (namedFn && DEFS.macros[cs][1]) {
-              value = DEFS.macros[cs][1]
-            } else {
-              value = cs
+            if (namedOp || namedFn) {
+              var value
+              if (namedFn && DEFS.macros[cs][1]) {
+                value = DEFS.macros[cs][1]
+              } else {
+                value = cs
+              }
+              return this.result = new MML.mo(new MML.chars(value))
             }
-            return this.result = new MML.mo(new MML.chars(value))
           }
         },
 
