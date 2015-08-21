@@ -6553,7 +6553,7 @@
 
   MathJax.Object.Cursor = MathJax.Object.Subclass({
 
-    BACKSlASH: 'backslash',
+    BACKSLASH: 'backslash',
     NORMAL: 'normal',
     mode: 'normal',
 
