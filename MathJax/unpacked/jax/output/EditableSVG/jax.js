@@ -6743,7 +6743,29 @@
 
       jax = MathJax.Hub.getAllJax('#' + svgelem.parentNode.id)[0];
       SVG.visualizeJax(jax, $('#mmlviz'));
-    }
+
+      this.scrollIntoView(svgelem)
+    },
+
+    scrollIntoView: function(svgelem) {
+      if (!this.renderedPosition) return false
+      var x = this.renderedPosition.x
+      var y = this.renderedPosition.y
+      var height = this.renderedPosition.height
+      var clientPoint = SVG.elemCoordsToScreenCoords(svgelem, x, y+height/2)
+      var clientWidth = document.body.clientWidth
+      var clientHeight = document.body.clientHeight
+      var sx = 0, sy = 0
+      if (clientPoint.x < 0 || clientPoint.x > clientWidth) {
+        sx = clientPoint.x - clientWidth / 2
+      }
+      if (clientPoint.y < 0 || clientPoint.y > clientHeight) {
+        sy = clientPoint.y - clientHeight / 2
+      }
+      if (sx || sy) {
+        window.scrollBy(sx, sy)
+      }
+    },
   })
 
   HUB.Browser.Select({
