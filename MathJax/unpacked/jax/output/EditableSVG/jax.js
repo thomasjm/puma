@@ -2770,27 +2770,42 @@
       f(jax.root, "");
     },
 
-    // Convert coordinates in some arbitrary element's coordinate system to the viewport coordinate system
-    elemCoordsToViewportCoords: function(elem, x, y) {
-      if (!elem.ownerSVGElement) {
-        console.error('No owner SVG element');
-        return;
-      }
-
-      var pt = elem.ownerSVGElement.createSVGPoint();
-      pt.x = x;
-      pt.y = y;
-
-      return pt.matrixTransform(elem.getTransformToElement(elem.ownerSVGElement));
-    },
-
-    screenCoordsToElemCoords: function(elem, x, y) {
+    getSVGElem: function(elem) {
       if (!elem) return
       var svg = elem.nodeName === 'svg' ? elem : elem.ownerSVGElement
       if (!svg) {
         console.error('No owner SVG element');
         return
       }
+      return svg
+    },
+
+    elemCoordsToScreenCoords: function(elem, x, y) {
+      var svg = this.getSVGElem(elem)
+      if (!svg) return
+
+      var pt = svg.createSVGPoint()
+      pt.x = x
+      pt.y = y
+
+      return pt.matrixTransform(elem.getScreenCTM())
+    },
+
+    // Convert coordinates in some arbitrary element's coordinate system to the viewport coordinate system
+    elemCoordsToViewportCoords: function(elem, x, y) {
+      var svg = this.getSVGElem(elem)
+      if (!svg) return
+
+      var pt = svg.createSVGPoint();
+      pt.x = x;
+      pt.y = y;
+
+      return pt.matrixTransform(elem.getTransformToElement(svg));
+    },
+
+    screenCoordsToElemCoords: function(elem, x, y) {
+      var svg = this.getSVGElem(elem)
+      if (!svg) return
 
       var pt = svg.createSVGPoint();
       pt.x = x
