@@ -1,9 +1,7 @@
 
-# MathJax editing capability
+# MathJax editing
 
-# Introdution
-
-We added text editing capability to MathJax! Inspired by [Lyx](www.lyx.org).
+We added text editing capability to MathJax! Inspired by [LyX](www.lyx.org).
 
 # Examples
 
