@@ -4378,8 +4378,16 @@
 
         checkSpecialCS: function(cs) {
           if (cs === 'frac') {
-            var result = new MML.mfrac(new MML.hole(), new MML.hole())
-            result.moveCursorAfter = [result.data[0], 0]
+            var hole = new MML.hole()
+            var result = new MML.mfrac(hole, new MML.hole())
+            result.moveCursorAfter = [hole, 0]
+            return this.result = result
+          }
+          if (cs === 'sqrt') {
+            var result = new MML.msqrt()
+            var hole = new MML.hole()
+            result.SetData(0, hole)
+            result.moveCursorAfter = [hole, 0]
             return this.result = result
           }
           if (DEFS.macros[cs]) {
