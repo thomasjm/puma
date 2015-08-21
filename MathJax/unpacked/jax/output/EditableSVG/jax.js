@@ -2749,15 +2749,6 @@
           var svg = j.EditableSVGelem.ownerSVGElement;
 
           hb(svg, bb);
-
-          // d3.select(svg)
-          //   .insert('svg:rect')
-          //   .attr('fill', 'red')
-          //   .attr('x', bbox.x)
-          //   .attr('y', bbox.y)
-          //   .attr('width', bbox.width)
-          //   .attr('height', bbox.height);
-
         });
 
         if (!j) return;
@@ -2768,34 +2759,36 @@
       };
       f(jax.root, "");
 
-
       cursorInfo = cursor ? JSON.stringify({
         type: cursor.node.type,
-        position: cursor.position
+        position: cursor.position,
+        mode: cursor.mode,
+        selectionStart: cursor.selectionStart ? cursor.selectionStart.node.type : "null",
+        selectionEnd: cursor.selectionEnd ? cursor.selectionEnd.node.type : "null"
       }) : "(no cursor)";
       selector.prepend('<pre>' + cursorInfo + '</pre>');
 
     },
 
     getSVGElem: function(elem) {
-      if (!elem) return
-      var svg = elem.nodeName === 'svg' ? elem : elem.ownerSVGElement
+      if (!elem) return;
+      var svg = elem.nodeName === 'svg' ? elem : elem.ownerSVGElement;
       if (!svg) {
         console.error('No owner SVG element');
-        return
+        return;
       }
-      return svg
+      return svg;
     },
 
     elemCoordsToScreenCoords: function(elem, x, y) {
-      var svg = this.getSVGElem(elem)
-      if (!svg) return
+      var svg = this.getSVGElem(elem);
+      if (!svg) return;
 
-      var pt = svg.createSVGPoint()
-      pt.x = x
-      pt.y = y
+      var pt = svg.createSVGPoint();
+      pt.x = x;
+      pt.y = y;
 
-      return pt.matrixTransform(elem.getScreenCTM())
+      return pt.matrixTransform(elem.getScreenCTM());
     },
 
     // Convert coordinates in some arbitrary element's coordinate system to the viewport coordinate system
@@ -4438,6 +4431,13 @@
         throw new Error('Unable to draw cursor')
       },
 
+      // If this function is called on a node, it means the selectionEnd is inside that node
+      drawCursorHighlight: function(cursor) {
+        var bb = this.getSVGBBox();
+        var svgelem = this.EditableSVGelem.ownerSVGElement;
+        cursor.drawHighlightAt(svgelem, bb.x, bb.y, bb.width, bb.height);
+      },
+
       toSVG: function() {
         this.SVGgetStyles();
         var variant = this.SVGgetVariant();
@@ -5498,8 +5498,17 @@
           return
         }
         var childPosition = direction === LEFT ? cursor.position - 1 : cursor.position
-        if (this.data[childPosition].moveCursorFromParent(cursor, direction)) return
 
+        // If we're in selection mode, hop over cursorable children
+        if (cursor.mode === cursor.SELECTION) {
+          cursor.moveTo(this, newPosition);
+          return;
+        }
+
+        // If we manage to move into a child, return
+        if (this.data[childPosition].moveCursorFromParent(cursor, direction)) return;
+
+        // Otherwise, jump over the child
         cursor.moveTo(this, newPosition)
       },
 
@@ -5553,6 +5562,54 @@
         this.SVGsaveData(svg);
 
         return svg;
+      },
+
+      drawCursorHighlight: function(cursor) {
+        var bb = this.getSVGBBox();
+        var svgelem = this.EditableSVGelem.ownerSVGElement;
+
+        // For now, assume both of these are in the same mrow
+        if (cursor.selectionStart.node !== this) {
+          // If selectionStart is a child of ours, we can figure out what to do
+          var cur = cursor.selectionStart.node;
+          var success = false;
+          while (cur) {
+            if (cur.parent === this) {
+              // Aha, change the selection to be the index of cur
+              cursor.selectionStart = {
+                node: this,
+                position: this.data.indexOf(cur) + 1
+              };
+              success = true;
+              break;
+            }
+            cur = cur.parent;
+          }
+
+          if (!success) {
+            throw new Error("Don't know how to deal with selectionStart not in mrow");
+          }
+        }
+        if (cursor.selectionEnd.node !== this) {
+          throw new Error("Don't know how to deal with selectionStart not in mrow");
+        }
+
+        var pos1 = Math.min(cursor.selectionStart.position, cursor.selectionEnd.position);
+        var pos2 = Math.max(cursor.selectionStart.position, cursor.selectionEnd.position);
+
+        if (pos1 === pos2) {
+          cursor.clearHighlight();
+          return;
+        }
+
+        var x1 = this.data[pos1].getSVGBBox().x;
+        var pos2bb = this.data[pos2-1].getSVGBBox();
+        var x2 = pos2bb.x + pos2bb.width;
+        var width = x2 - x1;
+
+        var bb = this.getSVGBBox();
+        var svgelem = this.EditableSVGelem.ownerSVGElement;
+        cursor.drawHighlightAt(svgelem, x1, bb.y, width, bb.height);
       },
 
       SVGlineBreaks: function(svg) {
@@ -6563,7 +6620,11 @@
 
     BACKSLASH: 'backslash',
     NORMAL: 'normal',
+    SELECTION: 'selection',
     mode: 'normal',
+
+    selectionStart: null,
+    selectionEnd: null,
 
     Init: function() {
       this.id = Math.random().toString(36).substring(2)
@@ -6613,9 +6674,38 @@
       // Does NOT redraw
       this.node = node;
       this.position = position;
+      if (this.mode === this.SELECTION) {
+        this.selectionEnd = {
+          node: this.node,
+          position: this.position
+        }
+      }
     },
 
-    move: function(direction) {
+    updateSelection: function(shiftKey) {
+      if (shiftKey && this.mode === this.NORMAL) {
+        this.mode = this.SELECTION;
+        this.selectionStart = {
+          node: this.node,
+          position: this.position
+        };
+      } else if (this.mode === this.SELECTION) {
+        if (shiftKey) {
+          this.selectionEnd = {
+            node: this.node,
+            position: this.position
+          };
+        } else {
+          this.mode = this.NORMAL;
+          this.selectionStart = this.selectionEnd = null;
+          this.clearHighlight();
+        }
+      }
+    },
+
+    move: function(direction, shiftKey) {
+      this.updateSelection(shiftKey);
+
       this.node.moveCursor(this, direction)
     },
 
@@ -6633,34 +6723,77 @@
         case 39: direction = RIGHT; break
       }
       if (direction) {
-        this.move(direction)
+        this.move(direction, event.shiftKey);
         this.draw()
         event.preventDefault()
       }
     },
 
     mousedown: function(event, recall) {
-      event.preventDefault()
-      this.moveToClick(event)
-      this.refocus()
+      event.preventDefault();
+      this.updateSelection(event.shiftKey);
+      this.moveToClick(event);
+      this.refocus();
+    },
+
+    makeHoleIfNeeded: function(node) {
+      if (node.data.length === 0) {
+        // The mrow has become empty; make a hole
+        var hole = MML.hole();
+        var rowindex = node.parent.data.indexOf(node)
+        node.parent.SetData(rowindex, hole)
+        hole.moveCursorFromParent(this)
+      }
     },
 
     backspace: function(event, recall) {
       event.preventDefault();
       if (!this.node) return;
 
-      if (this.node.type === 'mrow') {
-        this.move(LEFT);
-        this.node.data.splice(this.position, 1);
-        if (this.node.data.length === 0) {
-          // The mrow has become empty; make a hole
-          var hole = MML.hole();
-          var rowindex = this.node.parent.data.indexOf(this.node)
-          this.node.parent.SetData(rowindex, hole)
-          hole.moveCursorFromParent(this)
+      if (this.mode === this.SELECTION) {
+        if (this.selectionStart.node.type === 'mrow' &&
+            this.selectionStart.node === this.selectionEnd.node) {
+
+          var pos1 = Math.min(this.selectionStart.position, this.selectionEnd.position);
+          var pos2 = Math.max(this.selectionStart.position, this.selectionEnd.position);
+
+          this.selectionStart.node.data.splice(pos1, pos2 - pos1);
+          this.moveTo(this.node, pos1);
+          this.clearHighlight();
+          this.makeHoleIfNeeded(this.node);
+
+          recall(['refocus', this])
+        } else {
+          throw new Error("Don't know how to do this backspace");
         }
 
-        recall(['refocus', this])
+        return;
+      }
+
+      if (this.node.type === 'mrow') {
+        var prev = this.node.data[this.position - 1];
+        if (!prev.cursorable) {
+          // If it's not cursorable, just delete it
+          this.node.data.splice(this.position-1, 1);
+          this.position = this.position - 1;
+
+          this.makeHoleIfNeeded(this.node);
+
+          recall(['refocus', this])
+        } else {
+          // Otherwise, highlight it
+          this.mode = this.SELECTION;
+          this.selectionStart = {
+            node: this.node,
+            position: this.position
+          };
+          this.selectionEnd = {
+            node: this.node,
+            position: this.position-1
+          };
+
+          recall(['refocus', this])
+        }
       } else if (this.node.type === 'hole') {
         console.log('backspace on hole!');
       }
@@ -6795,8 +6928,10 @@
             if (!unicode) {
               unicode = SVG.latexToUnicode[latex];
 
-              if (!unicode)
-                throw new Error("Couldn't find unicode: ", latex);
+              if (!unicode) {
+                // Couldn't find the right unicode so just render a question mark
+                unicode = "#x003f";
+              }
             }
 
             var mrow = this.node;
@@ -6831,8 +6966,14 @@
 
             return;
           } else {
-            // Ignore spaces otherwise
-            // TODO: in LyX, spaces move you up and out of the elem
+            // Spaces help us jump out of boxes
+            this.node.moveCursor(this, 'r');
+
+            recall([this, function() {
+              this.refocus()
+              this.mode = this.NORMAL
+            }]);
+
             return;
           }
         }
@@ -6886,7 +7027,11 @@
     },
 
     findElement: function() {
-      return document.getElementById('cursor-'+this.id)
+      return document.getElementById('cursor-' + this.id)
+    },
+
+    findHighlight: function() {
+      return document.getElementById('cursor-highlight-' + this.id)
     },
 
     drawAt: function(svgelem, x, y, height, skipScroll) {
@@ -6917,7 +7062,43 @@
 
       SVG.visualizeJax(jax, $('#mmlviz'), this);
 
+      if (this.mode === this.SELECTION) {
+        if (this.selectionEnd.node.type === 'mrow') {
+          this.selectionEnd.node.drawCursorHighlight(this);
+        }
+      }
+
       if (!skipScroll) this.scrollIntoView(svgelem)
+    },
+
+    clearHighlight: function() {
+      this.mode = this.NORMAL;
+      this.selectionStart = null;
+      this.selectionEnd = null;
+      this.hideHighlight();
+    },
+
+    hideHighlight: function() {
+      var celem = this.findHighlight();
+      if (celem) {
+        celem.remove();
+      }
+    },
+
+    drawHighlightAt: function(svgelem, x, y, w, h) {
+      var celem = this.findHighlight()
+      if (!celem) {
+        celem = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+        celem.setAttribute('fill', 'rgba(173, 216, 250, 0.5)')
+        celem.setAttribute('class', 'math-cursor-highlight')
+        celem.id = 'cursor-highlight-' + this.id
+        svgelem.appendChild(celem)
+      }
+
+      celem.setAttribute('x', x);
+      celem.setAttribute('y', y);
+      celem.setAttribute('width', w);
+      celem.setAttribute('height', h);
     },
 
     scrollIntoView: function(svgelem) {
