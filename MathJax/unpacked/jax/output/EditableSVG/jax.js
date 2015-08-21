@@ -26,6 +26,7 @@
  */
 (function(AJAX, HUB, HTML, SVG) {
   var MML;
+  var DEFS;
 
   var SVGNS = "http://www.w3.org/2000/svg";
   var XLINKNS = "http://www.w3.org/1999/xlink";
@@ -271,7 +272,7 @@
           f(j.data[i], spacer + " ");
         }
       };
-      f(jax.root, "");
+      f(jax.root || jax, "");
 
       cursorInfo = cursor ? JSON.stringify({
         type: cursor.node.type,
@@ -1803,8 +1804,9 @@
   });
 
   HUB.Register.StartupHook("mml Jax Ready", function() {
-
     MML = MathJax.ElementJax.mml;
+    DEFS = MathJax.InputJax.TeX.Definitions
+    console.log(DEFS)
 
     MML.hole = MML.mbase.Subclass({
       SVG: BBOX.ROW,
@@ -4379,6 +4381,17 @@
             var result = new MML.mfrac(new MML.hole(), new MML.hole())
             result.moveCursorAfter = [result.data[0], 0]
             return this.result = result
+          } else if (DEFS.macros[cs]) {
+            console.log(DEFS.macros[cs])
+            var namedOp = DEFS.macros[cs] === 'NamedOp'
+            var namedFn = DEFS.macros[cs][0] && DEFS.macros[cs][0] === 'NamedFn'
+            var value
+            if (namedFn && DEFS.macros[cs][1]) {
+              value = DEFS.macros[cs][1]
+            } else {
+              value = cs
+            }
+            return this.result = new MML.mo(new MML.chars(value))
           }
         },
 
@@ -4531,8 +4544,6 @@
             return;
           }
         }
-
-        var DEFS = MathJax.InputJax.TeX.Definitions
 
         // Insertion
         // TODO: actually insert numbers

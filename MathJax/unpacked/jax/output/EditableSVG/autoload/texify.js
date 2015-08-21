@@ -26,6 +26,10 @@ MathJax.Hub.Register.StartupHook("EditableSVG Jax Ready", function() {
 
     MML.chars.Augment({
         toTex: function() {
+            var alphad = this.data[0].replace(/[^a-z]/i, '')
+            if (DEFS.macros[alphad]) {
+                return '\\'+alphad
+            }
             return this.data[0];
         }
     });
@@ -96,7 +100,7 @@ MathJax.Hub.Register.StartupHook("EditableSVG Jax Ready", function() {
     });
 
     function wrapInBraces(tex) {
-        if (tex.length > 1) {
+        if (!/^\\[a-z]$/i.test(tex) && tex.length > 1) {
             return '{'+tex+'}';
         } else {
             return tex;
