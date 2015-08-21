@@ -60,7 +60,12 @@
           "min-height": 0,
           border: 0,
           padding: 0,
-          margin: 0
+          margin: 0,
+          outline: 'none',
+        },
+
+        '.MathJax_SVG:focus': {
+          'background-color': '#fffffe0',
         },
 
         ".MathJax_SVG_Display": {
