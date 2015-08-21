@@ -4516,22 +4516,21 @@
           }
         }
 
+        var DEFS = MathJax.InputJax.TeX.Definitions
+
         // Insertion
-        if ((code > 47 && code < 58) || // numeric (0-9)
-            (code > 64 && code < 91) || // upper alpha (A-Z)
-            (code > 96 && code < 123)) { // lower alpha (a-z)
-          // Alphanumeric, insert an mi
-          toInsert = new MML.mi()
-          toInsert.Append(c)
-        } else if (c === '+' || c === '/' || c === '=') {
-          toInsert = new MML.mo();
-          toInsert.Append(c);
-        } else if (c === '*') {
-          toInsert = this.makeEntityMo('#x2217');
-        } else if (c === "-") {
-          toInsert = this.makeEntityMo('#x2212');
+        // TODO: actually insert numbers
+        if (DEFS.letter.test(c) || DEFS.number.test(c)) {
+          // Alpha, insert an mi
+          toInsert = new MML.mi(new MML.chars(c))
+        } else if (DEFS.remap[c]) {
+          toInsert = new MML.mo(new MML.entity('#x' + DEFS.remap[c]));
+        } else if (c === '+' || c === '/' || c === '=' || c === '.') {
+          toInsert = new MML.mo(new MML.chars(c))
         }
       }
+
+      if (!toInsert) return
 
       this.node.data.splice(this.position, 0, null)
       this.node.SetData(this.position, toInsert)
