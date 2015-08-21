@@ -4596,10 +4596,6 @@
 
       this.highlightBoxes(svgelem);
 
-      jax = MathJax.Hub.getAllJax('#' + svgelem.parentNode.id)[0];
-
-      SVG.visualizeJax(jax, $('#mmlviz'), this);
-
       if (this.mode === this.SELECTION) {
         if (this.selectionEnd.node.type === 'mrow') {
           this.selectionEnd.node.drawCursorHighlight(this);
