@@ -3071,6 +3071,8 @@
       span.addEventListener('keydown', handler)
       span.addEventListener('keypress', handler)
       span.addEventListener('mousedown', handler)
+      span.addEventListener('blur', handler)
+      span.addEventListener('focus', handler)
     },
 
     Translate: function(script, state) {
@@ -6696,16 +6698,18 @@
 
     },
 
-    highlightBoxes: function(svg) {
-      var cur = this.node;
-
-      if (typeof(this.boxes) !== 'undefined') {
+    clearBoxes: function() {
+      if (this.boxes) {
         this.boxes.forEach(function(elem) {
           elem.remove();
-        });
+        })
       }
+      this.boxes = []
+    },
 
-      this.boxes = [];
+    highlightBoxes: function(svg) {
+      var cur = this.node;
+      this.clearBoxes()
 
       while (cur) {
         if (cur.cursorable) {
@@ -6717,9 +6721,13 @@
       }
     },
 
+    findElement: function() {
+      return document.getElementById('cursor-'+this.id)
+    },
+
     drawAt: function(svgelem, x, y, height, skipScroll) {
       this.renderedPosition = {x: x, y: y, height: height}
-      var celem = svgelem.getElementById('cursor-'+this.id)
+      var celem = this.findElement()
       if (!celem) {
         celem = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
         celem.setAttribute('fill', '#777777')
@@ -6765,6 +6773,20 @@
       if (sx || sy) {
         window.scrollBy(sx, sy)
       }
+    },
+
+    remove: function() {
+      var cursor = this.findElement()
+      if (cursor) cursor.remove()
+    },
+
+    blur: function(event) {
+      this.remove()
+      this.clearBoxes()
+    },
+
+    focus: function() {
+      this.draw()
     },
   })
 
