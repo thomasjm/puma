@@ -2623,6 +2623,19 @@
           stroke: "gray"
         },
 
+        '.backslash-mode.invalid use': {
+          fill: '#ff0000',
+          stroke: '#ff0000',
+        },
+
+        '.math-cursor.blink': {
+          'animation': 'blink 1.06s steps(2, start) infinite',
+          '-webkit-animation': 'blink 1.06s steps(2, start) infinite',
+        },
+
+        '@keyframes blink': 'to {visibility: hidden}',
+        '@-webkit-keyframes blink': 'to {visibility: hidden}',
+
         "#MathJax_SVG_Tooltip": {
           position: "absolute",
           left: 0,
