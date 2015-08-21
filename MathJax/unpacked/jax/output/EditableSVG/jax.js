@@ -4303,20 +4303,21 @@
       cursorable: true,
 
       moveCursorFromParent: function(cursor, direction) {
-        console.error('HOLE NOT IMPLEMENTED');
+        cursor.moveTo(this, 0)
+        return true
       },
 
       moveCursorFromChild: function(cursor, direction, child) {
-        console.error('HOLE NOT IMPLEMENTED');
+        throw new Error('Hole does not have a child')
       },
 
       moveCursorFromClick: function(cursor, x, y) {
         cursor.moveTo(this, 0);
-        cursor.draw();
+        return true
       },
 
       moveCursor: function(cursor, direction) {
-        console.error('HOLE MOVECURSOR NOT IMPLEMENTED');
+        return this.parent.moveCursorFromChild(cursor, direction, this)
       },
 
       drawCursor: function(cursor) {
@@ -6650,9 +6651,9 @@
         if (this.node.data.length === 0) {
           // The mrow has become empty; make a hole
           var hole = MML.hole();
-          this.node.SetData(0, hole);
-          this.node = hole;
-          this.position = 0;
+          var rowindex = this.node.parent.data.indexOf(this.node)
+          this.node.parent.SetData(rowindex, hole)
+          hole.moveCursorFromParent(this)
         }
 
         recall(['refocus', this])
@@ -6693,9 +6694,9 @@
         // function inserts something into the mrow
         var parent = this.node.parent;
         var holeIndex = parent.data.indexOf(this.node);
-        parent.data.splice(holeIndex, 1);
-        this.node = parent;
-        this.position = holeIndex;
+        var row = MML.mrow()
+        parent.SetData(holeIndex, row)
+        row.moveCursorFromParent(this, RIGHT)
       }
 
       if (this.node.type === 'mrow') {
@@ -6735,13 +6736,10 @@
 
           var createAndMoveIntoHole = function(msubsup, index) {
             // Create the thing
-            var thing = MML.mrow();
             var hole = MML.hole();
-            thing.Append(hole);
-            msubsup.SetData(index, thing);
+            msubsup.SetData(index, hole);
             // Move into it
-            this.position = 0;
-            this.node = hole;
+            this.moveTo(hole, 0)
           }.bind(this);
 
           var index = (c === "_") ? MML.msubsup().sub : MML.msubsup().sup;
@@ -6752,14 +6750,12 @@
               var thing = prev.data[index];
 
               if (thing.cursorable) {
-                this.node = thing;
-                this.position = thing.data.length;
+                thing.moveCursorFromParent(this, LEFT)
               } else {
-                this.node = prev;
-                this.position = {
+                this.moveTo(prev, {
                   section: index,
-                  pos: 1
-                }
+                  pos: 1,
+                })
               }
             } else {
               // Create a new thing and move into it
@@ -6768,7 +6764,7 @@
           } else {
             // Convert the predecessor to an msubsup
             var msubsup = MML.msubsup();
-            msubsup.SetData(0, prev);
+            msubsup.SetData(msubsup.base, prev);
             this.node.SetData(this.position - 1, msubsup);
             createAndMoveIntoHole(msubsup, index);
           }
