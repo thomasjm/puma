@@ -29,7 +29,6 @@
 
   var SVGNS = "http://www.w3.org/2000/svg";
   var XLINKNS = "http://www.w3.org/1999/xlink";
-  var globalCursor;
 
   var UP = 1;
   var RIGHT = 2;
@@ -3070,10 +3069,21 @@
     AddInputHandlers: function(math, span, div) {
       math.cursor = new MathJax.Object.Cursor()
       span.setAttribute('tabindex', '0')
-      var recall = math.toSVG.bind(math, span, div, true)
+      function rerender(callback) {
+        try {
+          math.toSVG(span, div, true)
+        } catch (err) {
+          if (err.restart) {
+            MathJax.Callback.After([rerender, callback], err.restart)
+            return
+          }
+          throw err;
+        }
+        MathJax.Callback(callback)()
+      }
       function handler(e) {
         if (math.cursor[e.type]) {
-          math.cursor[e.type](e, recall)
+          math.cursor[e.type](e, rerender)
         }
       }
       span.addEventListener('keydown', handler)
@@ -6391,12 +6401,6 @@
           box.removeable = false;
           var svg = this.SVG();
 
-          var recall = this.toSVG.bind(this, span, div, true)
-          svg.element.addEventListener('keypress', function(e) {
-            if (!globalCursor) return
-            globalCursor.keypress(event, recall);
-          })
-
           svg.element.setAttribute("xmlns:xlink", XLINKNS);
           if (CONFIG.useFontCache && !CONFIG.useGlobalCache) {
             svg.element.appendChild(BBOX.GLYPH.defs)
@@ -6651,8 +6655,7 @@
           this.position = 0;
         }
 
-        recall();
-        this.refocus();
+        recall(['refocus', this])
       } else if (this.node.type === 'hole') {
         console.log('backspace on hole!');
       }
@@ -6710,9 +6713,10 @@
             this.node.SetData(this.position, grayRow)
             var oldClass = grayRow.class ? grayRow.class + ' ' : '';
             grayRow.class = oldClass + "backslash-mode";
-            recall()
-            this.moveTo(grayRow, 1)
-            this.refocus()
+            recall([this, function() {
+              this.moveTo(grayRow, 1)
+              this.refocus()
+            }])
 
             return;
           } else {
@@ -6769,9 +6773,7 @@
             createAndMoveIntoHole(msubsup, index);
           }
 
-          recall();
-          this.refocus();
-          this.draw();
+          recall(['refocus', this])
 
           return;
 
@@ -6822,9 +6824,10 @@
             this.node = parent;
             this.position = myIndex + 1;
 
-            recall();
-            this.refocus();
-            this.mode = this.NORMAL;
+            recall([this, function() {
+              this.refocus()
+              this.mode = this.NORMAL
+            }]);
 
             return;
           } else {
@@ -6853,10 +6856,10 @@
 
       this.node.data.splice(this.position, 0, null)
       this.node.SetData(this.position, toInsert)
-      recall()
-      this.move(RIGHT)
-      this.refocus()
-
+      recall([this, function() {
+        this.move(RIGHT)
+        this.refocus()
+      }])
     },
 
     clearBoxes: function() {
