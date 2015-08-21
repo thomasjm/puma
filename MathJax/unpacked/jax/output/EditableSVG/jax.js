@@ -2729,7 +2729,7 @@
      * Append a visualization of the jax to a given div
      * Pass in the jax and a jQuery selector div
      */
-    visualizeJax: function(jax, selector) {
+    visualizeJax: function(jax, selector, cursor) {
       selector.empty();
       var hb = this.highlightBox;
 
@@ -2768,6 +2768,14 @@
         }
       };
       f(jax.root, "");
+
+
+      cursorInfo = cursor ? JSON.stringify({
+        type: cursor.node.type,
+        position: cursor.position
+      }) : "(no cursor)";
+      selector.prepend('<pre>' + cursorInfo + '</pre>');
+
     },
 
     // Convert coordinates in some arbitrary element's coordinate system to the viewport coordinate system
@@ -3641,6 +3649,16 @@
       HUB.RestartAfter(AJAX.Require(this.fontDir + "/" + file));
     },
 
+    createHole: function(w, h) {
+      var svg = BBOX.RECT(h, 0, w, {
+        fill: 'white',
+        stroke: 'blue',
+        "stroke-width": '20'
+      });
+
+      return svg;
+    },
+
     createDelimiter: function(code, HW, scale, font) {
       if (!scale) {
         scale = 1
@@ -4250,6 +4268,66 @@
   HUB.Register.StartupHook("mml Jax Ready", function() {
 
     MML = MathJax.ElementJax.mml;
+
+    MML.hole = MML.mbase.Subclass({
+      SVG: BBOX.ROW,
+      type: "hole",
+
+      cursorable: true,
+
+      moveCursorFromParent: function(cursor, direction) {
+        console.error('HOLE NOT IMPLEMENTED');
+      },
+
+      moveCursorFromChild: function(cursor, direction, child) {
+        console.error('HOLE NOT IMPLEMENTED');
+      },
+
+      moveCursorFromClick: function(cursor, x, y) {
+        cursor.moveTo(this, 0);
+        cursor.draw();
+      },
+
+      moveCursor: function(cursor, direction) {
+        console.error('HOLE MOVECURSOR NOT IMPLEMENTED');
+      },
+
+      drawCursor: function(cursor) {
+        var bbox = this.getSVGBBox()
+        var x = bbox.x + (bbox.width / 2.0);
+        var y = bbox.y;
+        var height = bbox.height;
+        cursor.drawAt(this.EditableSVGelem.ownerSVGElement, x, y, height);
+      },
+
+      toSVG: function(h, d) {
+        this.SVGgetStyles();
+        var svg = this.SVG();
+        this.SVGhandleSpace(svg);
+
+        if (d != null) {
+          svg.sh = h;
+          svg.sd = d
+        }
+        for (var i = 0, m = this.data.length; i < m; i++) {
+          if (this.data[i]) {
+            svg.Check(this.data[i]);
+          }
+        }
+
+        svg.Clean();
+
+        var hole = SVG.createHole(300, 400);
+        svg.Add(hole, 0, 0);
+
+        svg.Clean();
+
+        this.SVGhandleColor(svg);
+        this.SVGsaveData(svg);
+
+        return svg;
+      }
+    });
 
     function getCursorValue(direction) {
       if (isNaN(direction)) {
@@ -6541,11 +6619,23 @@
 
     backspace: function(event, recall) {
       event.preventDefault();
-      if (this.node && this.node.type === 'mrow') {
-        this.node.data.splice(this.position - 1, 1);
-        recall();
+      if (!this.node) return;
+
+      if (this.node.type === 'mrow') {
         this.move(LEFT);
+        this.node.data.splice(this.position, 1);
+        if (this.node.data.length === 0) {
+          // The mrow has become empty; make a hole
+          var hole = MML.hole();
+          this.node.SetData(0, hole);
+          this.node = hole;
+          this.position = 0;
+        }
+
+        recall();
         this.refocus();
+      } else if (this.node.type === 'hole') {
+        console.log('backspace on hole!');
       }
     },
 
@@ -6572,10 +6662,24 @@
       var c = String.fromCharCode(code);
       var toInsert;
 
-      if (this.node && this.node.type === 'mrow') {
+      if (!this.node) return;
 
-        // Backslash mode
+      if (this.node.type === 'hole') {
+        // Convert this hole into an empty mrow so the rest of this function
+        // can proceed to put something in it
+        // NOTE: depends on the assumption that every code path through the rest of this
+        // function inserts something into the mrow
+        var parent = this.node.parent;
+        var holeIndex = parent.data.indexOf(this.node);
+        parent.data.splice(holeIndex, 1);
+        this.node = parent;
+        this.position = holeIndex;
+      }
+
+      if (this.node.type === 'mrow') {
+
         if (c === "\\") {
+          // Backslash mode
           if (this.mode !== this.BACKSLASH) {
             // Enter backslash mode
             this.mode = this.BACKSLASH;
@@ -6601,6 +6705,61 @@
             console.log('TODO: insert a \\')
             // Just insert a \
           }
+
+        } else if (c === "^" || c === "_") {
+          // Superscript or subscript
+
+          if (this.position === 0) {
+            return; // Do nothing if we're at the beginning of the mbox
+          }
+
+          var prev = this.node.data[this.position - 1];
+
+          var createAndMoveIntoHole = function(msubsup, index) {
+            // Create the thing
+            var thing = MML.mrow();
+            var hole = MML.hole();
+            thing.Append(hole);
+            msubsup.SetData(index, thing);
+            // Move into it
+            this.position = 0;
+            this.node = hole;
+          }.bind(this);
+
+          var index = (c === "_") ? MML.msubsup().sub : MML.msubsup().sup;
+
+          if (prev.type === "msubsup") {
+            if (prev.data[index]) {
+              // Move into thing
+              var thing = prev.data[index];
+
+              if (thing.cursorable) {
+                this.node = thing;
+                this.position = thing.data.length;
+              } else {
+                this.node = prev;
+                this.position = {
+                  section: index,
+                  pos: 1
+                }
+              }
+            } else {
+              // Create a new thing and move into it
+              createAndMoveIntoHole(prev, index);
+            }
+          } else {
+            // Convert the predecessor to an msubsup
+            var msubsup = MML.msubsup();
+            msubsup.SetData(0, prev);
+            this.node.SetData(this.position - 1, msubsup);
+            createAndMoveIntoHole(msubsup, index);
+          }
+
+          recall();
+          this.refocus();
+          this.draw();
+
+          return;
 
         } else if (c === " ") {
           if (this.mode === this.BACKSLASH) {
@@ -6629,6 +6788,11 @@
             var myIndex = parent.data.indexOf(mrow);
 
             // TODO: make sure this is loaded
+            // Code looks something like this:
+            // if (delim.load) {
+            //   HUB.RestartAfter(AJAX.Require(this.fontDir + "/fontdata-" + delim.load + ".js"))
+            // }
+
             var def = MathJax.InputJax.TeX.Definitions;
             var withoutSlash = latex.substr(1);
 
@@ -6727,7 +6891,7 @@
       this.highlightBoxes(svgelem);
 
       jax = MathJax.Hub.getAllJax('#' + svgelem.parentNode.id)[0];
-      SVG.visualizeJax(jax, $('#mmlviz'));
+      SVG.visualizeJax(jax, $('#mmlviz'), this);
     }
   })
 
