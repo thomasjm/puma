@@ -65,7 +65,7 @@
         },
 
         '.MathJax_SVG:focus': {
-          'background-color': '#fffffe0',
+          'background-color': '#ffffe0',
         },
 
         ".MathJax_SVG_Display": {
