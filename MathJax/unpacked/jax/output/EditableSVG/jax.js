@@ -5335,7 +5335,9 @@
       cursorable: true,
 
       isCursorPassthrough: function() {
-        return this.data.length === 1 && this.data[0].cursorable
+        // TODO: implement cursor navigation better
+        // return this.data.length === 1 && this.data[0].cursorable
+        return false
       },
 
       moveCursorFromParent: function(cursor, direction) {
