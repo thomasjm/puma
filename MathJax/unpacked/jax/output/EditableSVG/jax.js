@@ -4641,8 +4641,8 @@
         }
       }
 
-      jax = MathJax.Hub.getAllJax('#' + svgelem.parentNode.id)[0];
-      SVG.visualizeJax(jax, $('#mmlviz'), this);
+      // jax = MathJax.Hub.getAllJax('#' + svgelem.parentNode.id)[0];
+      // SVG.visualizeJax(jax, $('#mmlviz'), this);
 
       if (!skipScroll) this.scrollIntoView(svgelem)
     },
