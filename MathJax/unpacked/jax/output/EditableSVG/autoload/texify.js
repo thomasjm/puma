@@ -28,7 +28,7 @@ MathJax.Hub.Register.StartupHook("EditableSVG Jax Ready", function() {
         toTex: function() {
             var alphad = this.data[0].replace(/[^a-z]/i, '')
             if (DEFS.macros[alphad]) {
-                return '\\'+alphad
+                return '\\'+alphad+' '
             }
             return this.data[0];
         }

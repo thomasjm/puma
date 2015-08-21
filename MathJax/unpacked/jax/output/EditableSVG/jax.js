@@ -580,7 +580,7 @@
       span.setAttribute('tabindex', '0')
       function rerender(callback) {
         try {
-          math.toSVG(span, div, true)
+          SVG.preprocessElementJax(math).toSVG(span, div, true)
 
           math.cursor.refocus()
         } catch (err) {
@@ -4392,12 +4392,12 @@
           }
           if (DEFS.macros[cs]) {
             console.log(DEFS.macros[cs])
-            var namedOp = DEFS.macros[cs] === 'NamedOp'
-            var namedFn = DEFS.macros[cs][0] && DEFS.macros[cs][0] === 'NamedFn'
-            if (namedOp || namedFn) {
+            var namedDirectly = DEFS.macros[cs] === 'NamedOp' || DEFS.macros[cs] === 'NamedFn'
+            var namedArray = DEFS.macros[cs][0] && (DEFS.macros[cs][0] === 'NamedFn' || DEFS.macros[cs][0] === 'NamedOp')
+            if (namedDirectly || namedArray) {
               var value
-              if (namedFn && DEFS.macros[cs][1]) {
-                value = DEFS.macros[cs][1]
+              if (namedArray && DEFS.macros[cs][1]) {
+                value = DEFS.macros[cs][1].replace(/&thinsp;/,"\u2006")
               } else {
                 value = cs
               }
@@ -4563,7 +4563,7 @@
           toInsert = new MML.mi(new MML.chars(c))
         } else if (DEFS.remap[c]) {
           toInsert = new MML.mo(new MML.entity('#x' + DEFS.remap[c]));
-        } else if (c === '+' || c === '/' || c === '=' || c === '.') {
+        } else if (c === '+' || c === '/' || c === '=' || c === '.' || c === '(' || c === ')') {
           toInsert = new MML.mo(new MML.chars(c))
         }
       }
