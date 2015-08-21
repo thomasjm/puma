@@ -6840,7 +6840,7 @@
           // Alphanumeric, insert an mi
           toInsert = new MML.mi()
           toInsert.Append(c)
-        } else if (c === '+' || c === '/') {
+        } else if (c === '+' || c === '/' || c === '=') {
           toInsert = new MML.mo();
           toInsert.Append(c);
         } else if (c === '*') {
