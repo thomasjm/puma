@@ -213,13 +213,14 @@
       d = 100; // TODO: use proper units
 
       drawLine = function(x1, y1, x2, y2) {
-        return d3.select(svg)
-          .insert('svg:line')
-          .attr('style', 'stroke:rgb(0,0,255);stroke-width:20')
-          .attr('x1', x1)
-          .attr('y1', y1)
-          .attr('x2', x2)
-          .attr('y2', y2)[0][0];
+        var line = document.createElementNS(SVGNS, 'line')
+        svg.appendChild(line)
+        line.setAttribute('style', 'stroke:rgb(0,0,255);stroke-width:20')
+        line.setAttribute('x1', x1)
+        line.setAttribute('y1', y1)
+        line.setAttribute('x2', x2)
+        line.setAttribute('y2', y2)
+        return line
       };
 
       return [
