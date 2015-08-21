@@ -12,7 +12,7 @@ MathJax.Hub.Register.StartupHook("EditableSVG Jax Ready", function() {
     })
     MML.math.Augment({
         loadTexify: function() {
-        }
+        },
     })
 
     MML.chars.Augment({
@@ -28,13 +28,14 @@ MathJax.Hub.Register.StartupHook("EditableSVG Jax Ready", function() {
     }
 
     MML.TeXAtom.Augment(oneChildNoBrace)
+    MML.math.Augment(oneChildNoBrace)
     MML.mn.Augment(oneChildNoBrace)
     MML.mo.Augment(oneChildNoBrace)
     MML.mi.Augment(oneChildNoBrace)
 
     MML.entity.Augment({
         toTex: function() {
-            return '?'
+            return ''
             throw new Error('Get Tex entity from html')
         },
     })

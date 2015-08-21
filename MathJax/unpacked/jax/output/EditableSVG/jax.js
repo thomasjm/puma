@@ -3068,10 +3068,13 @@
 
     AddInputHandlers: function(math, span, div) {
       math.cursor = new MathJax.Object.Cursor()
+      math.rerender = rerender
       span.setAttribute('tabindex', '0')
       function rerender(callback) {
         try {
           math.toSVG(span, div, true)
+
+          math.cursor.refocus()
         } catch (err) {
           if (err.restart) {
             MathJax.Callback.After([rerender, callback], err.restart)
@@ -6568,7 +6571,8 @@
     },
 
     refocus: function() {
-      if (!this.node || !this.node.EditableSVGelem || !this.node.EditableSVGelem.ownerSVGElement) return false
+      if (!this.node || !this.node.EditableSVGelem || !this.node.EditableSVGelem.ownerSVGElement
+        || !this.node.EditableSVGelem.ownerSVGElement.parentNode) return false
       this.node.EditableSVGelem.ownerSVGElement.parentNode.focus()
       this.draw()
     },

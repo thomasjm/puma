@@ -41,14 +41,33 @@
          });
 
          MathJax.Hub.Register.StartupHook("End", function() {
-             // TODO
+             var texarea = $('#tex')
+             var svgarea = $('.MathJax_SVG')
+             var inputID = MathJax.OutputJax.EditableSVG.getJaxFromMath(svgarea[0]).inputID
+             svgarea.on('keyup', function() {
+                var found = MathJax.OutputJax.EditableSVG.getJaxFromMath(svgarea[0]).root
+                try {
+                    texarea.val(found.toTex())
+                } catch (e) {
+                    texarea.val('INVALID')
+                }
+             })
+             texarea.on('keyup', function() {
+                var $script = $('#'+inputID)
+                $script.text(texarea.val())
+                var math2 = MathJax.InputJax.TeX.Translate($script[0])
+                var found = MathJax.OutputJax.EditableSVG.getJaxFromMath(svgarea[0])
+                found.root.data = math2.root.data
+                Object.keys(math2).forEach(function(k) {
+                    if (k !== 'root') found[k] = math2[k]
+                })
+                found.root.rerender()
+             })
          });
-
-
         </script>
 
         <h2>Here's the math:</h2>
-        <div id="all"><p>$$\square\left(\alpha\Gamma\theta\right) / bx^O + (abc)^{2} + (abc)^{wxyz} < a^{wxz} + \frac{1}{123}c + a^{b^{c^d}} = \left(\sqrt{x^2+y^2} + \sum^5_i 15\right)$$</p></div>
+        <div id="all"><p>$$x = \frac{-b + \sqrt{b^2 - 4ac}}{2a}$$</p><textarea id="tex" cols="100"></textarea></div>
         <!-- <div id="all"><p>$$a + b * c / d! ~ x - y;"$$</p></div> -->
         <h2>MML visualization:</h2>
         <ul id="mmlviz"></ul>
