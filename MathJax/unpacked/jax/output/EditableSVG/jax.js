@@ -6728,7 +6728,7 @@
 
           var index = (c === "_") ? MML.msubsup().sub : MML.msubsup().sup;
 
-          if (prev.type === "msubsup") {
+          if (prev.type === "msubsup" || prev.type === "munderover") {
             if (prev.data[index]) {
               // Move into thing
               var thing = prev.data[index];
