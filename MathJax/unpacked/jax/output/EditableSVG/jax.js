@@ -6357,11 +6357,16 @@
       }),
       // TODO actually implement cursor
       cursorable: false,
+      loadTexify: function() {
+        MML.mbase.SVGautoloadFile('texify')
+      },
       moveCursorFromChild: function(cursor, direction, child) {
         return false
       },
       toSVG: function(span, div, replace) {
         var CONFIG = SVG.config;
+
+        this.loadTexify()
 
         //  All the data should be in an inferred row
         if (this.data[0]) {
@@ -6706,13 +6711,8 @@
             var oldClass = grayRow.class ? grayRow.class + ' ' : '';
             grayRow.class = oldClass + "backslash-mode";
             recall()
-            this.move(RIGHT)
+            this.moveTo(grayRow, 1)
             this.refocus()
-
-            // Move into the mrow
-            this.node = grayRow;
-            this.position = 1;
-            this.draw();
 
             return;
           } else {
