@@ -4271,7 +4271,12 @@
       } else {
         this.node.parent.SetData(ppos++, replace)
       }
-      this.moveTo(this.node.parent, ppos)
+
+      if (replace && replace.moveCursorAfter) {
+        this.moveTo.apply(this, replace.moveCursorAfter)
+      } else {
+        this.moveTo(this.node.parent, ppos)
+      }
     },
 
     backspace: function(event, recall) {
@@ -4357,6 +4362,7 @@
         },
         noop: function() {},
         parseControlSequence: function(cs) {
+          if (this.checkSpecialCS(cs)) return this.result
           this.cs = cs
           this.csUndefined = this.csFindMacro = this.noop
           this.ControlSequence()
@@ -4367,6 +4373,15 @@
         GetCS: function() {
           return this.cs
         },
+
+        checkSpecialCS: function(cs) {
+          if (cs === 'frac') {
+            var result = new MML.mfrac(new MML.hole(), new MML.hole())
+            result.moveCursorAfter = [result.data[0], 0]
+            return this.result = result
+          }
+        },
+
         stack: {env: {}},
       }
       obj.__proto__ = MathJax.InputJax.TeX.Parse.prototype
