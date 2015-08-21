@@ -2778,27 +2778,42 @@
 
     },
 
-    // Convert coordinates in some arbitrary element's coordinate system to the viewport coordinate system
-    elemCoordsToViewportCoords: function(elem, x, y) {
-      if (!elem.ownerSVGElement) {
-        console.error('No owner SVG element');
-        return;
-      }
-
-      var pt = elem.ownerSVGElement.createSVGPoint();
-      pt.x = x;
-      pt.y = y;
-
-      return pt.matrixTransform(elem.getTransformToElement(elem.ownerSVGElement));
-    },
-
-    screenCoordsToElemCoords: function(elem, x, y) {
+    getSVGElem: function(elem) {
       if (!elem) return
       var svg = elem.nodeName === 'svg' ? elem : elem.ownerSVGElement
       if (!svg) {
         console.error('No owner SVG element');
         return
       }
+      return svg
+    },
+
+    elemCoordsToScreenCoords: function(elem, x, y) {
+      var svg = this.getSVGElem(elem)
+      if (!svg) return
+
+      var pt = svg.createSVGPoint()
+      pt.x = x
+      pt.y = y
+
+      return pt.matrixTransform(elem.getScreenCTM())
+    },
+
+    // Convert coordinates in some arbitrary element's coordinate system to the viewport coordinate system
+    elemCoordsToViewportCoords: function(elem, x, y) {
+      var svg = this.getSVGElem(elem)
+      if (!svg) return
+
+      var pt = svg.createSVGPoint();
+      pt.x = x;
+      pt.y = y;
+
+      return pt.matrixTransform(elem.getTransformToElement(svg));
+    },
+
+    screenCoordsToElemCoords: function(elem, x, y) {
+      var svg = this.getSVGElem(elem)
+      if (!svg) return
 
       var pt = svg.createSVGPoint();
       pt.x = x
@@ -3064,6 +3079,8 @@
       span.addEventListener('keydown', handler)
       span.addEventListener('keypress', handler)
       span.addEventListener('mousedown', handler)
+      span.addEventListener('blur', handler)
+      span.addEventListener('focus', handler)
     },
 
     Translate: function(script, state) {
@@ -4384,12 +4401,7 @@
 
       getBB: function(relativeTo) {
         var elem = this.EditableSVGelem;
-        if (!elem) {
-          console.error('Oh no! Couldn\'t find elem for ', this.type);
-          return;
-        }
-
-        return elem.getBBox();
+        return elem && elem.getBBox();
       },
 
       moveCursor: function(cursor, direction) {
@@ -5401,7 +5413,9 @@
       cursorable: true,
 
       isCursorPassthrough: function() {
-        return this.data.length === 1 && this.data[0].cursorable
+        // TODO: implement cursor navigation better
+        // return this.data.length === 1 && this.data[0].cursorable
+        return false
       },
 
       moveCursorFromParent: function(cursor, direction) {
@@ -6558,7 +6572,7 @@
       var cp = SVG.screenCoordsToElemCoords(svg, event.clientX, event.clientY);
 
       // Find the deepest cursorable node that was clicked
-      jax = MathJax.Hub.getAllJax('#' + event.target.parentNode.id)[0];
+      var jax = SVG.getJaxFromMath(svg.parentNode)
       var current = jax.root
       while (true) {
         var matchedItems = current.data.filter(function(node) {
@@ -6845,16 +6859,18 @@
 
     },
 
-    highlightBoxes: function(svg) {
-      var cur = this.node;
-
-      if (typeof(this.boxes) !== 'undefined') {
+    clearBoxes: function() {
+      if (this.boxes) {
         this.boxes.forEach(function(elem) {
           elem.remove();
-        });
+        })
       }
+      this.boxes = []
+    },
 
-      this.boxes = [];
+    highlightBoxes: function(svg) {
+      var cur = this.node;
+      this.clearBoxes()
 
       while (cur) {
         if (cur.cursorable) {
@@ -6866,9 +6882,13 @@
       }
     },
 
-    drawAt: function(svgelem, x, y, height) {
+    findElement: function() {
+      return document.getElementById('cursor-'+this.id)
+    },
+
+    drawAt: function(svgelem, x, y, height, skipScroll) {
       this.renderedPosition = {x: x, y: y, height: height}
-      var celem = svgelem.getElementById('cursor-'+this.id)
+      var celem = this.findElement()
       if (!celem) {
         celem = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
         celem.setAttribute('fill', '#777777')
@@ -6891,8 +6911,45 @@
       this.highlightBoxes(svgelem);
 
       jax = MathJax.Hub.getAllJax('#' + svgelem.parentNode.id)[0];
+
       SVG.visualizeJax(jax, $('#mmlviz'), this);
-    }
+
+      if (!skipScroll) this.scrollIntoView(svgelem)
+    },
+
+    scrollIntoView: function(svgelem) {
+      if (!this.renderedPosition) return false
+      var x = this.renderedPosition.x
+      var y = this.renderedPosition.y
+      var height = this.renderedPosition.height
+      var clientPoint = SVG.elemCoordsToScreenCoords(svgelem, x, y+height/2)
+      var clientWidth = document.body.clientWidth
+      var clientHeight = document.body.clientHeight
+      var sx = 0, sy = 0
+      if (clientPoint.x < 0 || clientPoint.x > clientWidth) {
+        sx = clientPoint.x - clientWidth / 2
+      }
+      if (clientPoint.y < 0 || clientPoint.y > clientHeight) {
+        sy = clientPoint.y - clientHeight / 2
+      }
+      if (sx || sy) {
+        window.scrollBy(sx, sy)
+      }
+    },
+
+    remove: function() {
+      var cursor = this.findElement()
+      if (cursor) cursor.remove()
+    },
+
+    blur: function(event) {
+      this.remove()
+      this.clearBoxes()
+    },
+
+    focus: function() {
+      this.draw()
+    },
   })
 
   HUB.Browser.Select({
