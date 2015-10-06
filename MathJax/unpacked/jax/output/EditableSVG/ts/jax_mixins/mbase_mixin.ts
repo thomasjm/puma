@@ -19,12 +19,31 @@ class MBaseMixin implements ElementJax {
     mscale: any;
     toSVG(): any;
 
+    Core: any;
+    Get(): any;
+    Parent: any;
+    attr: any;
+    attrNames: any;
+    background: any;
+    defaults: any;
+    fontWeight: any;
+    forceStretch: any;
+    getValues(): any;
+    hasValue: any;
+    href: any;
+    id: any;
+    isEmbellished: any;
+    isToken: any;
+    mathbackground: any;
+    mathcolor: any;
+    mathsize: any;
+    scale: any;
     style: any;
     styles: any;
-    fontWeight: any;
-    hasValue: any;
-    getValues(): any;
-    Get(): any;
+    texSpacing: any;
+    type: any;
+    useMMLspacing: any;
+    variantForm: any;
 
     getBB(relativeTo) {
         var elem = this.EditableSVGelem;

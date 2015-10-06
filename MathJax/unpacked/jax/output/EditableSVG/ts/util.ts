@@ -5,7 +5,9 @@ class Util {
     static MML: any;
 
     // TODO: this needs to be set by the code in Translate
-    em: number;
+    static em: number;
+    static ex: number;
+    static pxPerInch: number;
 
     Em(m) {
         if (Math.abs(m) < 0.0006) {
@@ -71,7 +73,7 @@ class Util {
             return m;
         }
         if (unit === "ex") {
-            return m * Util.TeX.x_height / 1000;
+            return m * this.TeX.x_height / 1000;
         }
         if (unit === "%") {
             return m / 100 * size / 1000;
@@ -101,7 +103,7 @@ class Util {
     }
 
     static thickness2em(length, mu) {
-        var thick = Util.TeX.rule_thickness;
+        var thick = this.TeX.rule_thickness;
         if (length === this.MML.LINETHICKNESS.MEDIUM) {
             return thick;
         }
@@ -149,7 +151,7 @@ class Util {
 
         min_rule_thickness: 1.25, // in pixels
         min_root_space: 1.5 // in pixels
-    }
+    };
 
     static MATHSPACE = {
         veryverythinmathspace: 1 / 18,

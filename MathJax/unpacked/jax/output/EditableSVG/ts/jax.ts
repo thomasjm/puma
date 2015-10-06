@@ -115,40 +115,40 @@ class EditableSVG implements OutputJax {
      * Append a visualization of the jax to a given div
      * Pass in the jax and a jQuery selector div
      */
-    visualizeJax(jax, selector) {
-        selector.empty();
-        var f = function(j, spacer) {
-            var s = spacer + (j ? j.type : "null") + "\n";
-            var item = $('<li><pre>' + s + '</pre></li>');
-            item.appendTo(selector);
-            item.on('click', function() {
-                console.log('clicked this: ', j);
-                var bb = j.getBB();
+    // visualizeJax(jax, selector) {
+    //     selector.empty();
+    //     var f = function(j, spacer) {
+    //         var s = spacer + (j ? j.type : "null") + "\n";
+    //         var item = $('<li><pre>' + s + '</pre></li>');
+    //         item.appendTo(selector);
+    //         item.on('click', function() {
+    //             console.log('clicked this: ', j);
+    //             var bb = j.getBB();
 
-                // The bounding box x and y is in the transformed coordinates; convert to viewport coords
-                var svg = $(j.EditableSVGelem).closest('svg').get()[0];
-                var pt = svg.createSVGPoint();
-                pt.x = bb.x;
-                pt.y = bb.y;
-                var vpCoords = pt.matrixTransform(j.EditableSVGelem.getCTM());
+    //             // The bounding box x and y is in the transformed coordinates; convert to viewport coords
+    //             var svg = $(j.EditableSVGelem).closest('svg').get()[0];
+    //             var pt = svg.createSVGPoint();
+    //             pt.x = bb.x;
+    //             pt.y = bb.y;
+    //             var vpCoords = pt.matrixTransform(j.EditableSVGelem.getCTM());
 
-                // Something wrong here...
-                console.log('bb: ', vpCoords.x, vpCoords.y, bb.width, bb.height);
-            });
+    //             // Something wrong here...
+    //             console.log('bb: ', vpCoords.x, vpCoords.y, bb.width, bb.height);
+    //         });
 
-            if (!j) return;
+    //         if (!j) return;
 
-            if (_.isString(j)) {
-                s = spacer + j + "\n";
-                selector.append('<li><pre>' + s + '</pre></li>');
-            } else {
-                for (var i = 0; i < j.data.length; i++) {
-                    f(j.data[i], spacer + " ");
-                }
-            }
-        };
-        f(jax.root, "");
-    }
+    //         if (_.isString(j)) {
+    //             s = spacer + j + "\n";
+    //             selector.append('<li><pre>' + s + '</pre></li>');
+    //         } else {
+    //             for (var i = 0; i < j.data.length; i++) {
+    //                 f(j.data[i], spacer + " ");
+    //             }
+    //         }
+    //     };
+    //     f(jax.root, "");
+    // }
 
     getNodesAsFlatList(jax) {
         var rest = jax.data ? _.flatten(_.map(jax.data, this.getNodesAsFlatList)) : [];
@@ -229,7 +229,7 @@ class EditableSVG implements OutputJax {
             console.log('cp: ', cp.x, cp.y);
 
             jax = MathJax.Hub.getAllJax('#' + event.target.parentElement.id)[0];
-            this.visualizeJax(jax, $('#mmlviz'));
+            // this.visualizeJax(jax, $('#mmlviz'));
 
             // Get a flat list of all nodes in the tree
             var nodes = this.getNodesAsFlatList(jax.root);
@@ -286,14 +286,14 @@ class EditableSVG implements OutputJax {
                 width: "5in"
             }
         });
-        this.pxPerInch = div.offsetWidth / 5;
+        Util.pxPerInch = div.offsetWidth / 5;
         this.hiddenDiv.removeChild(div);
 
         // Used for measuring text sizes
         this.textSVG = this.Element("svg");
 
         // Global defs for font glyphs
-        BBOX.GLYPH.defs = this.addElement(this.addElement(this.hiddenDiv.parentNode, "svg"),
+        BBOX_GLYPH.defs = this.addElement(this.addElement(this.hiddenDiv.parentNode, "svg"),
                                           "defs", {
                                               id: "MathJax_SVG_glyphs"
                                           });
@@ -568,7 +568,7 @@ class EditableSVG implements OutputJax {
 
     resetGlyphs(reset) {
         if (this.config.useFontCache) {
-            var GLYPH = BBOX.GLYPH;
+            var GLYPH = BBOX_GLYPH;
             if (this.config.useGlobalCache) {
                 GLYPH.defs = document.getElementById("MathJax_SVG_glyphs");
                 GLYPH.defs.innerHTML = "";
@@ -756,13 +756,13 @@ class EditableSVG implements OutputJax {
     }
 
     HandleVariant(variant, scale, text) {
-        var svg = BBOX.G();
+        var svg = new BBOX_G();
         var n, N, c, font, VARIANT, i, m, id, M, RANGES;
         if (!variant) {
             variant = this.FONTDATA.VARIANT[MML.VARIANT.NORMAL];
         }
         if (variant.forceFamily) {
-            text = BBOX.TEXT(scale, text, variant.font);
+            text = new BBOX_TEXT(scale, text, variant.font);
             if (variant.h !== null) {
                 text.h = variant.h;
             }
@@ -831,7 +831,7 @@ class EditableSVG implements OutputJax {
                     svg.w += c[2];
                 } else {
                     c = [scale, font.id + "-" + n.toString(16).toUpperCase()].concat(c);
-                    svg.Add(BBOX.GLYPH.apply(BBOX, c), svg.w, 0);
+                    svg.Add(BBOX_GLYPH.apply(BBOX, c), svg.w, 0);
                 }
             } else if (this.FONTDATA.DELIMITERS[n]) {
                 c = this.createDelimiter(n, 0, 1, font);
@@ -843,7 +843,7 @@ class EditableSVG implements OutputJax {
                     N = n - 0x10000;
                     c = String.fromCharCode((N >> 10) + 0xD800) + String.fromCharCode((N & 0x3FF) + 0xDC00);
                 }
-                var box = BBOX.TEXT(scale * 100 / SVG.config.scale, c, {
+                var box = new BBOX_TEXT(scale * 100 / SVG.config.scale, c, {
                     "font-family": variant.defaultFamily || SVG.config.undefinedFamily,
                     "font-style": (variant.italic ? "italic" : ""),
                     "font-weight": (variant.bold ? "bold" : "")
@@ -854,7 +854,7 @@ class EditableSVG implements OutputJax {
                 if (variant.d !== null) {
                     box.d = variant.d;
                 }
-                c = BBOX.G();
+                c = new BBOX_G();
                 c.Add(box);
                 svg.Add(c, svg.w, 0);
                 this.HUB.signal.Post(["SVG Jax - unknown char", n, variant]);
@@ -935,7 +935,7 @@ class EditableSVG implements OutputJax {
         if (!scale) {
             scale = 1
         };
-        var svg = BBOX.G();
+        var svg = new BBOX_G();
         if (!code) {
             svg.Clean();
             delete svg.element;
